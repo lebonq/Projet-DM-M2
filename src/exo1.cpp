@@ -98,7 +98,7 @@ int main()
     glimac::Sphere earth(1,32,16);
 
     //Bind Shaders
-    glimac::Program program = glimac::loadProgram("TP6/shaders/sphere3D.vs.glsl","TP6/shaders/tex3D.fs.glsl");
+    glimac::Program program = glimac::loadProgram("src/shaders/sphere3D.vs.glsl","src/shaders/tex3D.fs.glsl");
     program.use();
 
     std::unique_ptr<glimac::Image> earth_tex = glimac::loadImage("assets/EarthMap.jpg");
