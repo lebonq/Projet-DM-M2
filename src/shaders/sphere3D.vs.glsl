@@ -32,7 +32,7 @@ void main() {
     vec4 vertexNormal = vec4(aVertexNormal, 0);
 
     // Calcul des valeurs de sortie
-    vPosition_vs = vec3(uMMatrix * uVMatrix * vertexPosition);
+    vPosition_vs = vec3(uVMatrix * uMMatrix * vertexPosition);
     vNormal_vs = vec3(transpose(inverse(uMMatrix*uVMatrix)) * vertexNormal);
     vTexCoords = aVertexTexCoords;
 
