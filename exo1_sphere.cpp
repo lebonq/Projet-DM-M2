@@ -1,12 +1,12 @@
 #define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
-#include <glad/glad.h>
-#include <glimac/glm.hpp>
-#include <glimac/Program.hpp>
-#include <glimac/FilePath.hpp>
-#include <glimac/Image.hpp>
-#include <glimac/Sphere.hpp>
-#include <glimac/FreeflyCamera.hpp>
+#include "glimac/FilePath.hpp"
+#include "glimac/FreeflyCamera.hpp"
+#include "glimac/Image.hpp"
+#include "glimac/Program.hpp"
+#include "glimac/Sphere.hpp"
+#include "glimac/glm.hpp"
+#include "third-party/glad/include/glad/glad.h"
+#include "third-party/glfw/include/GLFW/glfw3.h"
 
 int window_width  = 1920;
 int window_height = 1080;

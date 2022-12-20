@@ -1,0 +1,11 @@
+//
+// Created by lebonq on 20/12/22.
+//
+
+#ifndef PROJET_DM_QUENTIN_LEBON_MODELSMANAGER_HPP
+#define PROJET_DM_QUENTIN_LEBON_MODELSMANAGER_HPP
+
+class ModelsManager {
+};
+
+#endif // PROJET_DM_QUENTIN_LEBON_MODELSMANAGER_HPP

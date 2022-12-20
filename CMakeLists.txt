@@ -8,7 +8,6 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
 # Include glimac
 add_subdirectory(glimac)
 
-
 set(TARGET_NAME ${PROJECT_NAME}_exe)
 add_executable(${TARGET_NAME})
 target_compile_features(${TARGET_NAME} PRIVATE cxx_std_11)

@@ -1,0 +1,11 @@
+//
+// Created by lebonq on 20/12/22.
+//
+
+#ifndef PROJET_DM_QUENTIN_LEBON_TEXTURESMANAGER_HPP
+#define PROJET_DM_QUENTIN_LEBON_TEXTURESMANAGER_HPP
+
+class TexturesManager {
+};
+
+#endif // PROJET_DM_QUENTIN_LEBON_TEXTURESMANAGER_HPP

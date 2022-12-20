@@ -16,3 +16,7 @@ target_link_libraries(glimac PUBLIC glad)
 # ---Add glm---
 add_subdirectory(third-party/glm)
 target_link_libraries(glimac PUBLIC glm)
+# ---Add ppmio---
+add_library(ppmio third-party/ppmio/ppm_io.cpp)
+target_include_directories(ppmio PUBLIC third-party/ppmio/include)
+target_link_libraries(glimac PUBLIC ppmio)
