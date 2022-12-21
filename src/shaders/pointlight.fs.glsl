@@ -3,7 +3,6 @@
 in vec3 vPosition_vs; // Position du sommet transformé dans l'espace View
 in vec3 vNormal_vs; // Normale du sommet transformé dans l'espace View
 in vec2 vTexCoords; // Coordonnées de texture du sommet
-in vec3 vPosition_ms;
 
 out vec3 fFragColor;
 
@@ -27,5 +26,5 @@ vec3 blinnPhong(){
 
 void main() {
     vec4 tex = texture(uTex_data,vTexCoords);
-    fFragColor = tex.xyz * blinnPhong();
+    fFragColor = vPosition_vs;
 }

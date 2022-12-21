@@ -19,7 +19,7 @@ private:
     };
 public:
     FreeflyCamera(){
-        this->m_Position = glm::vec3(0,0,-5);
+        this->m_Position = glm::vec3(0,0,-1);
         this->m_fPhi = 0.0f;
         this->m_fTheta = 0.0f;
         computeDirectionVectors();
@@ -47,6 +47,14 @@ public:
         this->m_fTheta += radian;
         computeDirectionVectors();
     };
+
+    glm::vec3 getFrontVector(){
+        return m_FrontVector;
+    }
+
+    glm::vec3 getPosition(){
+        return m_Position;
+    }
 
     glm::mat4 getViewMatrix() const{
         return glm::lookAt(this->m_Position,this->m_Position+this->m_FrontVector, this->m_UpVector);
