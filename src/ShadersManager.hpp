@@ -7,6 +7,7 @@
 
 #include <glimac/Program.hpp>
 #include <vector>
+#include "Util.hpp"
 
 class ShadersManager {
 private:
@@ -26,6 +27,7 @@ private:
 public:
     ShadersManager();
     ~ShadersManager();
+    void use(){this->m_shaderProgram.use();};
     GLuint getMMatrix() const { return m_uMMatrix; }
     GLuint getVMatrix() const { return m_uVMatrix; }
     GLuint getPMatrix() const { return m_uPMatrix; }

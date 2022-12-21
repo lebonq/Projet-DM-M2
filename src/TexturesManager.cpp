@@ -22,9 +22,6 @@ TexturesManager::TexturesManager()
         this->m_texIds.push_back(tex_id);
         tex_image.release();
     }
-
-
-
 }
 
 TexturesManager::~TexturesManager()

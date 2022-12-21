@@ -5,6 +5,7 @@
 #include "ShadersManager.hpp"
 ShadersManager::ShadersManager()
 {
+    DEBUG_PRINT("Build ShaderManager");
     this->m_shaderProgram = glimac::loadProgram("src/shaders/sphere3D.vs.glsl","src/shaders/pointlight.fs.glsl");
     //get our uniform vairable fromt the shader
     this->m_uMMatrix = glGetUniformLocation(this->m_shaderProgram.getGLId(),"uMMatrix");
@@ -21,4 +22,5 @@ ShadersManager::ShadersManager()
 }
 ShadersManager::~ShadersManager()
 {
+    DEBUG_PRINT("Delete ShaderManager");
 }

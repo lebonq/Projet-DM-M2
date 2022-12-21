@@ -6,6 +6,8 @@
 #define PROJET_DM_QUENTIN_LEBON_DATA_HPP
 
 #include "glad/glad.h"
+#include <vector>
+#include <string>
 
 const GLuint VERTEX_ATTR_POSITION = 0;
 const GLuint VERTEX_ATTR_NORMAL = 1;

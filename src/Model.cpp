@@ -4,13 +4,15 @@
 
 #include "Model.hpp"
 #include <iostream>
-Model::Model(glimac::ShapeVertex* vertices, const std::vector<unsigned int> ibo, const int nb_vertices, const GLuint texID)
+Model::Model(glimac::ShapeVertex* vertices, const std::vector<unsigned int> ibo, const int nb_vertices, const GLuint texID, ShadersManager& mShaderProgram)
+    : m_shaderProgram(mShaderProgram)
 {
     DEBUG_PRINT("Build a Model " << std::endl);
     this->m_Vertices = vertices;
     this->m_ibos = ibo;
     this->m_nVertexCount = nb_vertices;
     this->m_textureId = texID;
+    this->m_MMatrix = glm::mat4(1);
 
     glGenBuffers(1,&this->m_vbo);
     glGenVertexArrays(1,&this->m_vao);
@@ -63,8 +65,15 @@ Model::~Model()
 }
 void Model::draw()
 {
+    this->m_shaderProgram.use();
     glBindVertexArray(this->m_vao);
+    glUniform3fv(this->m_shaderProgram.getKd(),1,glm::value_ptr(this->m_kd));
+    glUniform3fv(this->m_shaderProgram.getKs(),1,glm::value_ptr(this->m_ks));
+    glUniform1fv(this->m_shaderProgram.getShininess(),1,&this->m_shininess);
+    glUniformMatrix4fv(this->m_shaderProgram.getMMatrix(),1,GL_FALSE,glm::value_ptr(this->m_MMatrix));
+    glUniform1i(this->m_shaderProgram.getTexLoc(),0);
     glBindTexture(GL_TEXTURE_2D, this->m_textureId);
     glDrawElements(GL_TRIANGLES,this->m_ibos.size(),GL_UNSIGNED_INT,0);
+    glBindTexture(GL_TEXTURE_2D, 0);
     glBindVertexArray(0);
 }

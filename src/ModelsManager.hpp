@@ -19,6 +19,7 @@ public:
     ModelsManager();
     ~ModelsManager();
     Model* getRefModel(const int ID){return m_listModels[ID];}
+    ShadersManager& getShaderManager(){return this->m_shaderManager;};
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_MODELSMANAGER_HPP
