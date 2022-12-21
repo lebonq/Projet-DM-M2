@@ -6,6 +6,7 @@
 
 Map::Map(const std::string nameLevel)
 {
+    DEBUG_PRINT("Create a Map " << std::endl);
     int width,height;
     std::vector<uint> image_data = Util::readImageFile(nameLevel + ".ppm",&width,&height);
     this->m_width = width;
@@ -41,5 +42,5 @@ Map::Map(const std::string nameLevel)
 
 Map::~Map()
 {
-
+    DEBUG_PRINT("Delete a Map " << std::endl);
 }

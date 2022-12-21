@@ -12,13 +12,13 @@
 
 class ModelsManager {
 private:
-    std::vector<Model> m_listModels;
+    std::vector<Model*> m_listModels;
     TexturesManager m_texManager;
     ShadersManager m_shaderManager;
 public:
     ModelsManager();
     ~ModelsManager();
-    Model& getRefModel(const int ID){return m_listModels[ID];}
+    Model* getRefModel(const int ID){return m_listModels[ID];}
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_MODELSMANAGER_HPP

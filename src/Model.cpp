@@ -3,8 +3,10 @@
 //
 
 #include "Model.hpp"
+#include <iostream>
 Model::Model(glimac::ShapeVertex* vertices, const std::vector<unsigned int> ibo, const int nb_vertices, const GLuint texID)
 {
+    DEBUG_PRINT("Build a Model " << std::endl);
     this->m_Vertices = vertices;
     this->m_ibos = ibo;
     this->m_nVertexCount = nb_vertices;
@@ -54,13 +56,15 @@ GLsizei Model::getVertexCount() const {
 
 Model::~Model()
 {
-    /*glDeleteVertexArrays(1, &this->m_vao);
+    DEBUG_PRINT("Delete a Model " << std::endl);
+    glDeleteVertexArrays(1, &this->m_vao);
     glDeleteBuffers(1, &this->m_vbo);
-    glDeleteBuffers(1, &this->m_ibo);*/
+    glDeleteBuffers(1, &this->m_ibo);
 }
 void Model::draw()
 {
     glBindVertexArray(this->m_vao);
-    glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
+    glBindTexture(GL_TEXTURE_2D, this->m_textureId);
+    glDrawElements(GL_TRIANGLES,this->m_ibos.size(),GL_UNSIGNED_INT,0);
     glBindVertexArray(0);
 }

@@ -180,7 +180,7 @@ int main()
 
     ModelsManager m_ModelManager;
 
-    Model wall = m_ModelManager.getRefModel(DM_PROJECT_ID_MANAGER_WALL);
+    Model* wall = m_ModelManager.getRefModel(DM_PROJECT_ID_MANAGER_WALL);
 
     //float rotate = 0.f;
     /* Loop until the user closes the window */
@@ -211,7 +211,19 @@ int main()
         MMatrix = glm::translate(glm::mat4(1), glm::vec3(0,0,5));
         glUniformMatrix4fv(uMMatrix,1,GL_FALSE,glm::value_ptr(MMatrix));
 
-        wall.draw();
+        wall->draw();
+        glUniform1i(tex_loc,0);
+
+        MMatrix = glm::translate(glm::mat4(1), glm::vec3(-1,0,5));
+        glUniformMatrix4fv(uMMatrix,1,GL_FALSE,glm::value_ptr(MMatrix));
+
+        wall->draw();
+        glUniform1i(tex_loc,0);
+        MMatrix = glm::translate(glm::mat4(1), glm::vec3(-1.5,0,4.5));
+        MMatrix = glm::rotate(MMatrix,M_PI_2f,glm::vec3(0,-1,0));
+        glUniformMatrix4fv(uMMatrix,1,GL_FALSE,glm::value_ptr(MMatrix));
+
+        wall->draw();
         glUniform1i(tex_loc,0);
         //Earth render
         /*glBindTexture(GL_TEXTURE_2D,tex_earth);

@@ -9,6 +9,7 @@
 #include "glad/glad.h"
 #include "glimac/common.hpp"
 #include "Data.hpp"
+#include "Util.hpp"
 
 class Model {
 private:

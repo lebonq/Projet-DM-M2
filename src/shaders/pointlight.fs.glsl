@@ -26,5 +26,5 @@ vec3 blinnPhong(){
 
 void main() {
     vec4 tex = texture(uTex_data,vTexCoords);
-    fFragColor = vPosition_vs;
+    fFragColor = tex.xyz * blinnPhong();
 }

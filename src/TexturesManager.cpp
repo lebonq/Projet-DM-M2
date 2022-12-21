@@ -7,6 +7,7 @@
 
 TexturesManager::TexturesManager()
 {
+    DEBUG_PRINT("Build TextureManager " << std::endl);
     for (auto image : DM_PROJECT_TEX) {
          std::unique_ptr<glimac::Image> tex_image = glimac::loadImage(image);
          //Generate texture
@@ -20,7 +21,6 @@ TexturesManager::TexturesManager()
         //Add texture into the manage at the right index
         this->m_texIds.push_back(tex_id);
         tex_image.release();
-        PRINT("Yo");
     }
 
 
@@ -29,7 +29,7 @@ TexturesManager::TexturesManager()
 
 TexturesManager::~TexturesManager()
 {
-
+    DEBUG_PRINT("Delete TextureManager " << std::endl);
 }
 GLuint TexturesManager::getTexId(const int ID)
 {
