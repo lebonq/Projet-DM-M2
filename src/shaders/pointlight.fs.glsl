@@ -17,14 +17,14 @@ uniform sampler2D uTex_data;
 
 vec3 blinnPhong(){
     vec3 w0 = normalize(-vPosition_vs);
-    vec3 halfVector = (w0+(normalize(uLightPos_vs - vPosition_vs)))/2;
+    vec3 halfVector = (w0+normalize(uLightPos_vs - vPosition_vs))/2.0f;
     float d = distance(uLightPos_vs,vPosition_vs);
-    vec3 corrected_intensity = clamp(uLightIntensity/(d*d),0.0f,1.0f);
-    vec3 color = corrected_intensity*(uKd*(dot((normalize(uLightPos_vs - vPosition_vs)),vNormal_vs))+uKs*pow(dot(halfVector,vNormal_vs),uShininess));
+    vec3 corrected_intensity = clamp(uLightIntensity/(d*d),0.0,1.0);
+    vec3 color = clamp(corrected_intensity*(uKd * max(dot(normalize(uLightPos_vs - vPosition_vs), vNormal_vs), 0.0) + uKs * pow(max(dot(halfVector, vNormal_vs), 0.0), uShininess)),0.0,1.0);
     return color;
 }
 
 void main() {
     vec4 tex = texture(uTex_data,vTexCoords);
-    fFragColor = tex.xyz * blinnPhong();
+    fFragColor = clamp(tex.xyz * blinnPhong(),0.0f,1.0f);
 }

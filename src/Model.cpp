@@ -4,13 +4,14 @@
 
 #include "Model.hpp"
 #include <iostream>
-Model::Model(glimac::ShapeVertex* vertices, const std::vector<unsigned int> ibo, const int nb_vertices, const GLuint texID, ShadersManager& mShaderProgram)
+Model::Model(const int ID, const GLuint texID, ShadersManager& mShaderProgram)
     : m_shaderProgram(mShaderProgram)
 {
     DEBUG_PRINT("Build a Model " << std::endl);
-    this->m_Vertices = vertices;
-    this->m_ibos = ibo;
-    this->m_nVertexCount = nb_vertices;
+    this->m_ID = ID;
+    this->m_Vertices = DM_PROJECT_MODEL_VERTICES[this->m_ID];
+    this->m_ibos = DM_PROJECT_MODEL_INDICES[this->m_ID];
+    this->m_nVertexCount = m_Vertices.size();
     this->m_textureId = texID;
     this->m_MMatrix = glm::mat4(1);
 
@@ -19,7 +20,7 @@ Model::Model(glimac::ShapeVertex* vertices, const std::vector<unsigned int> ibo,
     glGenBuffers(1, &this->m_ibo);
 
     glBindBuffer(GL_ARRAY_BUFFER,this->m_vbo);
-    glBufferData(GL_ARRAY_BUFFER,this->m_nVertexCount*sizeof(glimac::ShapeVertex), this->m_Vertices,GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER,this->m_nVertexCount*sizeof(glimac::ShapeVertex), this->getDataPointer(),GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER,0);//Un-bind our VBO from the arra_buffer
 
     // Generate an index buffer object (IBO) and bind it
@@ -70,9 +71,9 @@ void Model::draw()
     glUniform3fv(this->m_shaderProgram.getKd(),1,glm::value_ptr(this->m_kd));
     glUniform3fv(this->m_shaderProgram.getKs(),1,glm::value_ptr(this->m_ks));
     glUniform1fv(this->m_shaderProgram.getShininess(),1,&this->m_shininess);
-    glUniformMatrix4fv(this->m_shaderProgram.getMMatrix(),1,GL_FALSE,glm::value_ptr(this->m_MMatrix));
-    glUniform1i(this->m_shaderProgram.getTexLoc(),0);
     glBindTexture(GL_TEXTURE_2D, this->m_textureId);
+    glUniform1i(this->m_shaderProgram.getTexLoc(),0);
+    glUniformMatrix4fv(this->m_shaderProgram.getMMatrix(),1,GL_FALSE,glm::value_ptr(this->m_MMatrix));
     glDrawElements(GL_TRIANGLES,this->m_ibos.size(),GL_UNSIGNED_INT,0);
     glBindTexture(GL_TEXTURE_2D, 0);
     glBindVertexArray(0);

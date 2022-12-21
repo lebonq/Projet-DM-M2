@@ -19,8 +19,8 @@ private:
     };
 public:
     FreeflyCamera(){
-        this->m_Position = glm::vec3(0,0,-1);
-        this->m_fPhi = 0.0f;
+        this->m_Position = glm::vec3(1,1,5);
+        this->m_fPhi = M_PI_2f*2;
         this->m_fTheta = 0.0f;
         computeDirectionVectors();
     };

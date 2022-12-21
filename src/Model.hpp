@@ -14,7 +14,8 @@
 
 class Model {
 private:
-    glimac::ShapeVertex* m_Vertices;
+    int m_ID;
+    std::vector<glimac::ShapeVertex> m_Vertices;
     std::vector<unsigned int> m_ibos;
 
     GLsizei m_nVertexCount; // Nombre de sommets
@@ -22,8 +23,8 @@ private:
     int m_textureId;
     ShadersManager& m_shaderProgram; //Not owning pointer
 
-    glm::vec3 m_kd = glm::vec3(2,2,2);
-    glm::vec3 m_ks = glm::vec3(0,0,0);
+    glm::vec3 m_kd = glm::vec3(1);
+    glm::vec3 m_ks = glm::vec3(0.2);
     GLfloat m_shininess = 2.0f;
 
     glm::mat4 m_MMatrix;
@@ -32,13 +33,16 @@ private:
     GLuint m_vao;
     GLuint m_ibo;
 public:
-    Model(glimac::ShapeVertex* vertices, const std::vector<unsigned int> ibo, const int nb_vertices, const GLuint texID, ShadersManager& mShaderProgram);
+    Model(const int ID, const GLuint texID, ShadersManager& mShaderProgram);
     ~Model();
     void draw();
     void resetPos(){this->m_MMatrix = glm::mat4(1);};
     void translate(const glm::vec3 vec){this->m_MMatrix = glm::translate(this->m_MMatrix,vec);};
-    void rotate();
-    void scale();
+    /*
+     * Rotate Model byt given angle on the given axis
+     */
+    void rotate(const float angle,const glm::vec3 axis){this->m_MMatrix = glm::rotate(this->m_MMatrix, glm::radians(angle), axis);}; // Translation * Rotation};
+    void scale(const glm::vec3 vec){this->m_MMatrix = glm::scale(this->m_MMatrix, vec);};
     const glimac::ShapeVertex* getDataPointer() const;
     GLsizei                    getVertexCount() const;
 };

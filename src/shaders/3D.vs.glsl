@@ -10,7 +10,6 @@ uniform mat4 uVMatrix;
 uniform mat4 uPMatrix;
 
 out vec3 vPosition_vs; // Position du sommet transformé dans l'espace View
-out vec3 vPosition_ms;
 out vec3 vNormal_vs; // Normale du sommet transformé dans l'espace View
 out vec2 vTexCoords; // Coordonnées de texture du sommet
 
@@ -30,13 +29,13 @@ mat3 rotation(float alpha) {
 void main() {
     // Passage en coordonnées homogènes
     vec4 vertexPosition = vec4(aVertexPosition, 1);
-    vec4 vertexNormal = vec4(aVertexNormal, 0);
+    vec4 vertexNormal = vec4(normalize(aVertexNormal), 0);
+
+    mat4 normalMatrix = transpose(inverse(uVMatrix*uMMatrix));
 
     // Calcul des valeurs de sortie
     vPosition_vs = vec3(uVMatrix * uMMatrix * vertexPosition);
-    vNormal_vs = vec3(transpose(inverse(uVMatrix*uMMatrix)) * vertexNormal);
-    vTexCoords = aVertexTexCoords;
-    vPosition_ms = vertexPosition.xyz;
+    vNormal_vs = vec3(normalMatrix * vertexNormal);
 
     // Calcul de la position projetée
     gl_Position = uPMatrix * uVMatrix * uMMatrix * vertexPosition;

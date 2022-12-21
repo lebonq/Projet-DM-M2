@@ -7,8 +7,9 @@
 
 #include <string>
 #include <vector>
-#include "Util.hpp"
 #include "Data.hpp"
+#include "ModelsManager.hpp"
+#include "Util.hpp"
 
 class Map {
 private:
@@ -16,8 +17,12 @@ private:
     int m_height;
     std::vector<int> m_terrain; //used to store the type of every "chunck" of the map
 
+    ModelsManager m_ModelsManager;
+
 public:
     Map(const std::string nameLevel);
+    void draw();
+    ShadersManager& getShadersManager(){return this->m_ModelsManager.getShaderManager();};
     ~Map();
 };
 

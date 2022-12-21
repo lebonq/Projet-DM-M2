@@ -23,9 +23,9 @@ std::vector<uint> Util::readImageFile(const std::string filePath,int * width, in
             G = pImage[i+1];
             B = pImage[i+2];
             data.push_back(Util::RGB_to_hexa(R,G,B));
-            if((i/3)%10 == 0)DEBUG_PRINT(std::endl);
+            if((i/3)%10 == 0){DEBUG_PRINT(std::endl)}
             DEBUG_PRINT(std::hex << std::setw(6) << std::setfill('0')
-              << data[i/3] << "|");
+              << data[i/3] << "|")
     }
     return data;
 }

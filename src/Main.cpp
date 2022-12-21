@@ -21,29 +21,29 @@ FreeflyCamera camera;
 static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/)
 {
     if(key == GLFW_KEY_W && action == GLFW_PRESS){
-        camera.moveFront(2.0f);
+        camera.moveFront(0.5f);
     }
 
     if(key == GLFW_KEY_S && action == GLFW_PRESS){
-        camera.moveFront(-2.0f);
+        camera.moveFront(-0.5f);
     }
 
     if(key == GLFW_KEY_D && action == GLFW_PRESS){
-        camera.moveLeft(-2.0f);
+        camera.moveLeft(-0.5f);
     }
 
     if(key == GLFW_KEY_A && action == GLFW_PRESS){
-        camera.moveLeft(2.0f);
+        camera.moveLeft(0.5f);
     }
     if(key == GLFW_KEY_ESCAPE){
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 }
 
-static void mouse_button_callback(GLFWwindow* /*window*/, int button, int action, int /*mods*/)
+static void mouse_button_callback(GLFWwindow* window, int button, int action, int /*mods*/)
 {
     if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS){
-        //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
 }
 
@@ -114,12 +114,11 @@ int main()
     //For 3D
     glEnable(GL_DEPTH_TEST);
 
-    ModelsManager m_ModelManager;
-    ShadersManager& shadersMana = m_ModelManager.getShaderManager();
-    Model* wall = m_ModelManager.getRefModel(DM_PROJECT_ID_MANAGER_WALL);
+    Map map("assets/map1");
+    ShadersManager& shadersMana = map.getShadersManager();
 
-    //float rotate = 0.f;
-    /* Loop until the user closes the window */
+        //float rotate = 0.f;
+    // Loop until the user closes the window
     while (!glfwWindowShouldClose(window)) {
         glClearColor(0.0f, 0.0f, 0.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -131,21 +130,16 @@ int main()
 
 
         glm::vec3 lightPos = camera.getPosition();
-        glm::vec3 lightIntensity = glm::vec3(50,50,50);
+        glm::vec3 lightIntensity = glm::vec3(1);
 
-        glUniform3fv(shadersMana.getLightPosVs(),1,glm::value_ptr(VMatrix*glm::vec4(lightPos,1)));
+        glUniform3fv(shadersMana.getLightPosVs(),1,glm::value_ptr(glm::vec3(VMatrix*glm::vec4(lightPos,1.0f))));
         glUniform3fv(shadersMana.getLightIntensity(),1,glm::value_ptr(lightIntensity));
 
-        wall->resetPos();
-        wall->draw();
-        wall->translate(glm::vec3(1,0,1));
-        wall->draw();
-        wall->translate(glm::vec3(1,0,0));
-        wall->draw();
+        map.draw();
 
-        /* Swap front and back buffers */
+        //Swap front and back buffers
         glfwSwapBuffers(window);
-        /* Poll for and process events */
+        //Poll for and process events
         glfwPollEvents();
     }
 }
