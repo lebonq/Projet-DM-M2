@@ -4,7 +4,7 @@
 
 #include "Map.hpp"
 
-Map::Map(const std::string nameLevel)
+Map::Map(const std::string& nameLevel)
 {
     DEBUG_PRINT("Create a Map " << std::endl);
     int width,height;
@@ -69,16 +69,14 @@ void Map::draw()
             }
 
             //For wall bewteen water and floor
-            wall->scale(glm::vec3(1,0.25,1));
-            wall->translate(glm::vec3(0,-1.25,0));
-            if(this->m_terrain[index] == DM_PROJECT_MAP_EMPTY && this->m_terrain[index_bot] == DM_PROJECT_MAP_WATER) wall->draw();
-            if(this->m_terrain[index_bot] == DM_PROJECT_MAP_EMPTY && this->m_terrain[index] == DM_PROJECT_MAP_WATER) {
+            wall->translate(glm::vec3(0,-1,0));
+            if(this->m_terrain[index] != DM_PROJECT_MAP_WATER && this->m_terrain[index_bot] == DM_PROJECT_MAP_WATER) wall->draw();
+            if(this->m_terrain[index_bot] != DM_PROJECT_MAP_WATER && this->m_terrain[index] == DM_PROJECT_MAP_WATER) {
                 wall->rotate(180,glm::vec3(0,1,0));//Those rotation allow us to orient the wall inside the room
                 wall->draw();
                 wall->rotate(-180,glm::vec3(0,1,0));
             }
-            wall->translate(glm::vec3(0,1.25,0));
-            wall->scale(glm::vec3(1,4,1));
+            wall->translate(glm::vec3(0,1,0));
 
             //Wall facing Y
             wall->rotate(90,glm::vec3(0,1,0));
@@ -89,6 +87,19 @@ void Map::draw()
                 wall->draw();
                 wall->rotate(-180,glm::vec3(0,1,0));
             }
+
+            //Florr to water
+            wall->translate(glm::vec3(0,-1,0));
+            if(this->m_terrain[index] != DM_PROJECT_MAP_WATER && this->m_terrain[index_right] == DM_PROJECT_MAP_WATER) wall->draw();
+            if(this->m_terrain[index_right] != DM_PROJECT_MAP_WATER && this->m_terrain[index] == DM_PROJECT_MAP_WATER) {
+                wall->rotate(180,glm::vec3(0,1,0));//Those rotation allow us to orient the wall inside the room
+                wall->draw();
+                wall->rotate(-180,glm::vec3(0,1,0));
+            }
+            wall->translate(glm::vec3(0,1,0));
+
+
+
             wall->translate(glm::vec3(-0.5,0,-0.5));
             wall->rotate(-90,glm::vec3(0,1,0));
 

@@ -20,7 +20,7 @@ private:
     ModelsManager m_ModelsManager;
 
 public:
-    Map(const std::string nameLevel);
+    Map(const std::string& nameLevel);
     void draw();
     ShadersManager& getShadersManager(){return this->m_ModelsManager.getShaderManager();};
     ~Map();

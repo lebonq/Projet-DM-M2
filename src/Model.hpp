@@ -23,9 +23,9 @@ private:
     int m_textureId;
     ShadersManager& m_shaderProgram; //Not owning pointer
 
-    glm::vec3 m_kd = glm::vec3(1);
-    glm::vec3 m_ks = glm::vec3(0.2);
-    GLfloat m_shininess = 2.0f;
+    glm::vec3 m_kd;
+    glm::vec3 m_ks;
+    GLfloat m_shininess;
 
     glm::mat4 m_MMatrix;
 

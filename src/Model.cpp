@@ -14,6 +14,9 @@ Model::Model(const int ID, const GLuint texID, ShadersManager& mShaderProgram)
     this->m_nVertexCount = m_Vertices.size();
     this->m_textureId = texID;
     this->m_MMatrix = glm::mat4(1);
+    this->m_ks = DM_PROJECT_MODEL_KS[ID];
+    this->m_kd = DM_PROJECT_MODEL_KD[ID];
+    this->m_shininess = DM_PROJECT_MODEL_SHININESS[ID];
 
     glGenBuffers(1,&this->m_vbo);
     glGenVertexArrays(1,&this->m_vao);

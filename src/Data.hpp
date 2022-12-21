@@ -64,6 +64,10 @@ const std::vector<std::vector<unsigned int>> DM_PROJECT_MODEL_INDICES = {{
     2, 3, 0   // second triangle
 }};
 
+const std::vector<glm::vec3> DM_PROJECT_MODEL_KD = {glm::vec3(2),glm::vec3(2),glm::vec3(9)};
+const std::vector<glm::vec3> DM_PROJECT_MODEL_KS = {glm::vec3(0),glm::vec3(0),glm::vec3(25)};
+const std::vector<float> DM_PROJECT_MODEL_SHININESS = {2,2,20};
+
 
 
 #endif // PROJET_DM_QUENTIN_LEBON_DATA_HPP
