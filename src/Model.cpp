@@ -63,11 +63,17 @@ GLsizei Model::getVertexCount() const {
 Model::~Model()
 {
     DEBUG_PRINT("Delete a Model " << std::endl);
-    glDeleteVertexArrays(1, &this->m_vao);
     glDeleteBuffers(1, &this->m_vbo);
     glDeleteBuffers(1, &this->m_ibo);
+    glDeleteVertexArrays(1, &this->m_vao);
 }
 void Model::draw()
+{
+    glUniformMatrix4fv(this->m_shaderProgram.getMMatrix(),1,GL_FALSE,glm::value_ptr(this->m_MMatrix));
+    glDrawElements(GL_TRIANGLES,this->m_ibos.size(),GL_UNSIGNED_INT,0);
+}
+
+void Model::bindModel()
 {
     this->m_shaderProgram.use();
     glBindVertexArray(this->m_vao);
@@ -76,8 +82,10 @@ void Model::draw()
     glUniform1fv(this->m_shaderProgram.getShininess(),1,&this->m_shininess);
     glBindTexture(GL_TEXTURE_2D, this->m_textureId);
     glUniform1i(this->m_shaderProgram.getTexLoc(),0);
-    glUniformMatrix4fv(this->m_shaderProgram.getMMatrix(),1,GL_FALSE,glm::value_ptr(this->m_MMatrix));
-    glDrawElements(GL_TRIANGLES,this->m_ibos.size(),GL_UNSIGNED_INT,0);
+}
+
+void Model::unBindModel()
+{
     glBindTexture(GL_TEXTURE_2D, 0);
     glBindVertexArray(0);
 }

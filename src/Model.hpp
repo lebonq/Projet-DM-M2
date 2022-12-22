@@ -36,6 +36,8 @@ public:
     Model(const int ID, const GLuint texID, ShadersManager& mShaderProgram);
     ~Model();
     void draw();
+    void bindModel();
+    void unBindModel();
     void resetPos(){this->m_MMatrix = glm::mat4(1);};
     void translate(const glm::vec3 vec){this->m_MMatrix = glm::translate(this->m_MMatrix,vec);};
     /*

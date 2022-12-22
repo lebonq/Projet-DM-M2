@@ -27,6 +27,8 @@ TexturesManager::TexturesManager()
 TexturesManager::~TexturesManager()
 {
     DEBUG_PRINT("Delete TextureManager " << std::endl);
+    glDeleteTextures(this->m_texIds.size(),this->m_texIds.data());
+
 }
 GLuint TexturesManager::getTexId(const int ID)
 {

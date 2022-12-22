@@ -142,4 +142,5 @@ int main()
         //Poll for and process events
         glfwPollEvents();
     }
+    glUseProgram(0);
 }

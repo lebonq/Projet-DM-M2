@@ -27,5 +27,6 @@ std::vector<uint> Util::readImageFile(const std::string filePath,int * width, in
             DEBUG_PRINT(std::hex << std::setw(6) << std::setfill('0')
               << data[i/3] << "|")
     }
+    DEBUG_PRINT(std::endl)
     return data;
 }

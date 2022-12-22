@@ -32,9 +32,9 @@ const int DM_PROJECT_ID_MANAGER_WALL = 0; //Index of the wall texture in the Tex
 const int DM_PROJECT_ID_MANAGER_FLOOR = 1;
 const int DM_PROJECT_ID_MANAGER_WATER = 2;
 
-const std::vector<std::string> DM_PROJECT_TEX = {"assets/textures/Brick/Brick_08-512x512.png"/*Wall Texture in 0*/
-                                                ,"assets/textures/Tile/Tile_19-512x512.png"/*Floor texture in 1*/
-                                                ,"assets/textures/Elements/Elements_15-512x512.png"};
+const std::vector<std::string> DM_PROJECT_TEX = {"assets/textures/wall_up.png"/*Wall Texture in 0*/
+                                                ,"assets/textures/floor_up.png"/*Floor texture in 1*/
+                                                ,"assets/textures/water_up.png"};
 
 const std::vector<std::vector<glimac::ShapeVertex>> DM_PROJECT_MODEL_VERTICES = {{
              glimac::ShapeVertex{glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 0.0f)},  // bottom left
