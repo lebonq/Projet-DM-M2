@@ -10,6 +10,10 @@
 #include "Data.hpp"
 #include "ModelsManager.hpp"
 #include "Util.hpp"
+#include <fstream>
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
 
 class Map {
 private:
@@ -17,8 +21,10 @@ private:
     int m_height;
     int m_entrancePos;
     int m_exitPos;
-    std::vector<int> m_terrain; //used to store the type of every "chunck" of the map
+    int m_nLevels;
 
+    std::vector<int> m_terrain; //used to store the type of every "chunck" of the map
+    json m_data;
     ModelsManager m_ModelsManager;
 
 public:
@@ -30,6 +36,7 @@ public:
     int getEntrancePos() const { return m_entrancePos; }
     int getExitPos() const { return m_exitPos; }
     ~Map();
+    void loadMap(const std::string& nameLevel);
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_MAP_HPP

@@ -7,12 +7,24 @@
 Map::Map(const std::string& nameLevel)
 {
     DEBUG_PRINT("Create a Map " << std::endl);
+    std::ifstream json_file(nameLevel + ".json");
+    this->m_data = json::parse(json_file);
+
+    this->m_nLevels = this->m_data["levels"].size();
+    this->loadMap(this->m_data["levels"]["0"]["image"]);
+
+    DEBUG_PRINT(this->m_data["levels"].size() << std::endl);
+}
+
+void Map::loadMap(const std::string& nameLevel)
+{
     int               width, height;
-    std::vector<uint> image_data = Util::readImageFile(nameLevel + ".ppm", &width, &height);
+    std::vector<uint> image_data = Util::readImageFile(nameLevel, &width, &height);
     this->m_width                = width;
     this->m_height               = height;
 
     int cpt = 0;
+    this->m_terrain.clear();
     for (auto datum : image_data) {
         switch (datum) {
         case DM_PROJECT_COLOR_WALL:
@@ -39,7 +51,6 @@ Map::Map(const std::string& nameLevel)
             PRINT("Bad image for map.");
             exit(-1);
         }
-        cpt++;
     }
 }
 
@@ -70,8 +81,8 @@ void Map::draw()
             if (this->m_terrain[index_bot] != DM_PROJECT_MAP_WALL && this->m_terrain[index] == DM_PROJECT_MAP_WALL)
                 wall->draw();
             // || index_bot >= this->m_width*this->m_height  is for when we touch the border of the map to make sure we draw our wall
-            //Si index n'est pas un mur et que index_bot est un mur ou hors du tableau alors on draw
-            if (this->m_terrain[index] != DM_PROJECT_MAP_WALL && (this->m_terrain[index_bot] == DM_PROJECT_MAP_WALL||  y+1 >= this->m_height) ) {
+            // Si index n'est pas un mur et que index_bot est un mur ou hors du tableau alors on draw
+            if (this->m_terrain[index] != DM_PROJECT_MAP_WALL && (this->m_terrain[index_bot] == DM_PROJECT_MAP_WALL || y + 1 >= this->m_height)) {
                 wall->rotate(180, glm::vec3(0, 1, 0)); // Those rotation allow us to orient the wall inside the room
                 wall->draw();
                 wall->rotate(-180, glm::vec3(0, 1, 0));
@@ -79,16 +90,16 @@ void Map::draw()
 
             // For wall bewteen water and floor
             wall->translate(glm::vec3(0, -1, 0));
-            if (this->m_terrain[index] != DM_PROJECT_MAP_WATER && this->m_terrain[index_bot] == DM_PROJECT_MAP_WATER )
+            if (this->m_terrain[index] != DM_PROJECT_MAP_WATER && this->m_terrain[index_bot] == DM_PROJECT_MAP_WATER)
                 wall->draw();
-            if ((this->m_terrain[index_bot] != DM_PROJECT_MAP_WATER || y+1 >= this->m_height) && this->m_terrain[index] == DM_PROJECT_MAP_WATER) {
+            if ((this->m_terrain[index_bot] != DM_PROJECT_MAP_WATER || y + 1 >= this->m_height) && this->m_terrain[index] == DM_PROJECT_MAP_WATER) {
                 wall->rotate(180, glm::vec3(0, 1, 0)); // Those rotation allow us to orient the wall inside the room
                 wall->draw();
                 wall->rotate(-180, glm::vec3(0, 1, 0));
             }
             wall->translate(glm::vec3(0, 1, 0));
 
-            //Wall touching the top
+            // Wall touching the top
             if (y == 0 && this->m_terrain[index] != DM_PROJECT_MAP_WALL) {
                 wall->translate(glm::vec3(0, 0, -1));
                 wall->draw();
@@ -103,11 +114,11 @@ void Map::draw()
             // Wall facing Z
             wall->rotate(90, glm::vec3(0, 1, 0));
             wall->translate(glm::vec3(0.5, 0, 0.5));
-            //x -(y*width)
+            // x -(y*width)
             if (this->m_terrain[index_right] != DM_PROJECT_MAP_WALL && this->m_terrain[index] == DM_PROJECT_MAP_WALL)
                 wall->draw();
             //|| x+1 >= this->m_width) To check is we are  on the right side of the maze
-            if (this->m_terrain[index] != DM_PROJECT_MAP_WALL && (this->m_terrain[index_right] == DM_PROJECT_MAP_WALL || x+1 >= this->m_width)) {
+            if (this->m_terrain[index] != DM_PROJECT_MAP_WALL && (this->m_terrain[index_right] == DM_PROJECT_MAP_WALL || x + 1 >= this->m_width)) {
                 wall->rotate(180, glm::vec3(0, 1, 0));
                 wall->draw();
                 wall->rotate(-180, glm::vec3(0, 1, 0));
@@ -128,7 +139,7 @@ void Map::draw()
             wall->translate(glm::vec3(0, -1, 0));
             if (this->m_terrain[index] != DM_PROJECT_MAP_WATER && this->m_terrain[index_right] == DM_PROJECT_MAP_WATER)
                 wall->draw();
-            if ((this->m_terrain[index_right] != DM_PROJECT_MAP_WATER || x+1 >= this->m_width) && this->m_terrain[index] == DM_PROJECT_MAP_WATER) {
+            if ((this->m_terrain[index_right] != DM_PROJECT_MAP_WATER || x + 1 >= this->m_width) && this->m_terrain[index] == DM_PROJECT_MAP_WATER) {
                 wall->rotate(180, glm::vec3(0, 1, 0)); // Those rotation allow us to orient the wall inside the room
                 wall->draw();
                 wall->rotate(-180, glm::vec3(0, 1, 0));

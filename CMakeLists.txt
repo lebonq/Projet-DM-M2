@@ -1,12 +1,22 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.11)
 
 project(Projet_DM_Quentin_Lebon)
+
+include(FetchContent)
 
 # Set the folder where the executables are created
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
 
 # Include glimac
 add_subdirectory(glimac)
+
+# Avoid warning about DOWNLOAD_EXTRACT_TIMESTAMP in CMake 3.24:
+if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
+    cmake_policy(SET CMP0135 NEW)
+endif()
+
+FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz)
+FetchContent_MakeAvailable(json)
 
 set(TARGET_NAME ${PROJECT_NAME}_exe)
 add_executable(${TARGET_NAME})
@@ -25,7 +35,7 @@ file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS src/*)
 target_sources(${TARGET_NAME} PRIVATE ${MY_SOURCES})
 
 # Add glimac as a dependency
-target_link_libraries(${TARGET_NAME} glimac)
+target_link_libraries(${TARGET_NAME} glimac nlohmann_json::nlohmann_json)
 
 # Copy the assets and the shaders to the output folder (where the executable is created)
 include("CMakeUtils/files_and_folders.cmake")

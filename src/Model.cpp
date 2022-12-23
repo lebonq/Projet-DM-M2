@@ -84,6 +84,7 @@ void Model::bindModel()
     glUniform1i(this->m_shaderProgram.getTexLoc(),0);
 }
 
+
 void Model::unBindModel()
 {
     glBindTexture(GL_TEXTURE_2D, 0);

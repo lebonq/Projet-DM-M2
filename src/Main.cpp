@@ -27,6 +27,8 @@ float doneMove = 0;
 float doneMove_real = 0;
 double prevTime;
 
+Map* map;
+
 static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/)
 {
     if(key == GLFW_KEY_W && action == GLFW_PRESS && rotation == 0 && move == 0){
@@ -139,18 +141,19 @@ int main()
     //For 3D
     glEnable(GL_DEPTH_TEST);
 
-    Map map("assets/map1");
-    ShadersManager& shadersMana = map.getShadersManager();
+    map = new Map("assets/map1");
+    //exit(0);
+    ShadersManager& shadersMana = map->getShadersManager();
 
     //set starting pos player
-    int pos_cam = map.getEntrancePos();
-    int cam_x = pos_cam%map.getWidth();
-    int cam_y = (pos_cam-cam_x)/map.getWidth();
+    int pos_cam = map->getEntrancePos();
+    int cam_x = pos_cam%map->getWidth();
+    int cam_y = (pos_cam-cam_x)/map->getWidth();
     float phi_cam = 0.f;
 
-    if(cam_y+1 >= map.getHeight()) phi_cam = 180.f;
+    if(cam_y+1 >= map->getHeight()) phi_cam = 180.f;
     else if(cam_y == 0) phi_cam = 0.0f;
-    else if(cam_x+1 >= map.getWidth()) phi_cam = -90.0f;
+    else if(cam_x+1 >= map->getWidth()) phi_cam = -90.0f;
     else if(cam_x == 0) phi_cam = 90.0f;
 
     camera = new FreeflyCamera(glm::vec3(cam_x+1,0.5,cam_y),phi_cam);
@@ -211,7 +214,7 @@ int main()
         glUniform3fv(shadersMana.getLightPosVs(),1,glm::value_ptr(glm::vec3(VMatrix*glm::vec4(lightPos,1.0f))));
         glUniform3fv(shadersMana.getLightIntensity(),1,glm::value_ptr(lightIntensity));
 
-        map.draw();
+        map->draw();
 
         //Swap front and back buffers
         glfwSwapBuffers(window);

@@ -1,0 +1,50 @@
+{
+  "levels": {
+    "0": {
+      "image": "assets/map1_0.ppm",
+      "items": {
+        "0": {
+          "pos_x": 0,
+          "pos_y": 0,
+          "type": "gold_coin",
+          "amount": 120,
+          "texture": "gold_coin.png"
+        }
+      },
+      "monsters": {
+        "0": {
+          "pos_x": 3,
+          "pos_y": 0,
+          "type": "slime",
+          "live": 100,
+          "attack": 20,
+          "defense": 5,
+          "texture": "slime1.png"
+        }
+      }
+    },
+    "1": {
+      "image": "assets/map1_1.ppm",
+      "items": {
+        "0": {
+          "pos_x": 0,
+          "pos_y": 0,
+          "type": "gold_coin",
+          "amount": 120,
+          "texture": "gold_coin.png"
+        }
+      },
+      "monsters": {
+        "0": {
+          "pos_x": 3,
+          "pos_y": 0,
+          "type": "slime",
+          "live": 100,
+          "attack": 20,
+          "defense": 5,
+          "texture": "slime1.png"
+        }
+      }
+    }
+  }
+}
