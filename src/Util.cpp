@@ -30,3 +30,4 @@ std::vector<uint> Util::readImageFile(const std::string filePath,int * width, in
     DEBUG_PRINT(std::endl)
     return data;
 }
+

@@ -5,13 +5,14 @@
 #ifndef PROJET_DM_QUENTIN_LEBON_MAP_HPP
 #define PROJET_DM_QUENTIN_LEBON_MAP_HPP
 
+#include <fstream>
+#include <nlohmann/json.hpp>
 #include <string>
 #include <vector>
 #include "Data.hpp"
 #include "ModelsManager.hpp"
 #include "Util.hpp"
-#include <fstream>
-#include <nlohmann/json.hpp>
+#include "WorldObject.hpp"
 
 using json = nlohmann::json;
 
@@ -24,11 +25,13 @@ private:
     int m_nLevels;
 
     std::vector<int> m_terrain; //used to store the type of every "chunck" of the map
+    std::vector<WorldObject*> m_worldObjects; //owning pointers
     json m_data;
     ModelsManager m_ModelsManager;
 
 public:
     Map(const std::string& nameLevel);
+    void initWorldObject();
     void draw();
     ShadersManager& getShadersManager(){return this->m_ModelsManager.getShaderManager();};
     int getWidth() const { return m_width; }

@@ -168,7 +168,7 @@ int main()
             double rotate_angle = (((glfwGetTime()*1000) - prevTime)*90)/900; //we compute the rotation needed to go to 90 degree in function of the elapsed time
             doneRotation += rotate_angle;
             doneRotation_real += rotate_angle;
-            doneRotation = glm::clamp(doneRotation,0.0f,90.0f); //we clamps the value at 90 to be sure to have a 90 degres rotation
+            doneRotation = glm::clamp(doneRotation,0.0f,90.0f); //we clamp the value at 90 to be sure to have a 90 degres rotation
             if(doneRotation == 90){
                 rotate_angle = -(doneRotation_real - rotate_angle)+90;//We recompute the angle to do our finale rotation and be at a cumulative rotation of 90 degree of the camera
                 camera->rotateLeft(rotate_angle*rotation);// oriented roation

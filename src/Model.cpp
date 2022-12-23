@@ -13,7 +13,6 @@ Model::Model(const int ID, const GLuint texID, ShadersManager& mShaderProgram)
     this->m_ibos = DM_PROJECT_MODEL_INDICES[this->m_ID];
     this->m_nVertexCount = m_Vertices.size();
     this->m_textureId = texID;
-    this->m_MMatrix = glm::mat4(1);
     this->m_ks = DM_PROJECT_MODEL_KS[ID];
     this->m_kd = DM_PROJECT_MODEL_KD[ID];
     this->m_shininess = DM_PROJECT_MODEL_SHININESS[ID];
@@ -55,11 +54,6 @@ const glimac::ShapeVertex* Model::getDataPointer() const {
     return &this->m_Vertices[0];
 }
 
-// Renvoit le nombre de vertex
-GLsizei Model::getVertexCount() const {
-    return this->m_nVertexCount;
-}
-
 Model::~Model()
 {
     DEBUG_PRINT("Delete a Model " << std::endl);
@@ -67,9 +61,9 @@ Model::~Model()
     glDeleteBuffers(1, &this->m_ibo);
     glDeleteVertexArrays(1, &this->m_vao);
 }
-void Model::draw()
+void Model::draw(const glm::mat4& mmatrix)
 {
-    glUniformMatrix4fv(this->m_shaderProgram.getMMatrix(),1,GL_FALSE,glm::value_ptr(this->m_MMatrix));
+    glUniformMatrix4fv(this->m_shaderProgram.getMMatrix(),1,GL_FALSE,glm::value_ptr(mmatrix));
     glDrawElements(GL_TRIANGLES,this->m_ibos.size(),GL_UNSIGNED_INT,0);
 }
 
