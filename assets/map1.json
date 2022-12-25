@@ -28,7 +28,7 @@
           "live": 100,
           "attack": 20,
           "defense": 5,
-          "id_model": 4
+          "id_model": 5
         }
       }
     },
@@ -52,7 +52,7 @@
           "live": 100,
           "attack": 20,
           "defense": 5,
-          "id_model": 4
+          "id_model": 5
         }
       }
     }

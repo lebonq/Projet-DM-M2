@@ -233,7 +233,22 @@ void Map::initInteractiveObject(){
         this->m_worldItems.push_back(item_ptr);
         DEBUG_PRINT("Item type : " << item["type"] << " x : " << item["pos_x"] << " y : " << item["pos_y"] << std::endl);
     }
+
+    json listMonsters = this->m_data["levels"][std::to_string(this->m_currentLevel)]["monsters"];
+
+    for(auto monster : listMonsters){
+        Model* monster_model = this->m_ModelsManager.getRefModel(monster["id_model"]);
+        int x = monster["pos_x"];
+        int y = monster["pos_y"];
+        glm::mat4 mmatrix(1.0f);
+        mmatrix = glm::translate(mmatrix,glm::vec3(x+1, 0.40, y));
+        Monster* monster_ptr = new Monster(monster_model,mmatrix,x,y,monster["type"],monster["live"],monster["attack"],monster["defense"]);
+        this->m_worldMonsters.push_back(monster_ptr);
+        DEBUG_PRINT("Monster type : " << monster["type"] << " x : " << monster["pos_x"] << " y : " << monster["pos_y"] << std::endl);
+    }
 }
+
+//TODO : add moving shadow for monster
 
 void Map::draw()
 {
@@ -243,6 +258,10 @@ void Map::draw()
     for (Item* item : this->m_worldItems) {
         item->draw(this->m_player);
     }
+    for(Monster* monster : this->m_worldMonsters){
+        monster->draw(this->m_player);
+    }
+
 }
 void Map::update()
 {

@@ -37,9 +37,7 @@ public:
     {
         m_real_z = z;
     };
-    // Override draw function
-    // Call update animation from main loop
-    // One is to make the item face you other item move and fly
+
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_PLAYER_HPP

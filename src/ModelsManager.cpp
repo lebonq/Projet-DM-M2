@@ -21,7 +21,11 @@ ModelsManager::ModelsManager()
     DEBUG_PRINT("Load Shadow Model " << std::endl);
     Model* shadow = new Model(DM_PROJECT_ID_MANAGER_SHADOW, this->m_texManager.getTexId(DM_PROJECT_ID_MANAGER_SHADOW), this->m_shaderManager);
     this->m_listModels.push_back(shadow);
+    DEBUG_PRINT("Load Skeleton Model " << std::endl);
+    Model* skeleton = new Model(DM_PROJECT_ID_MANAGER_SKELETON, this->m_texManager.getTexId(DM_PROJECT_ID_MANAGER_SKELETON), this->m_shaderManager);
+    this->m_listModels.push_back(skeleton);
 }
+
 ModelsManager::~ModelsManager()
 {
     DEBUG_PRINT("Delete ModelsManager " << std::endl);

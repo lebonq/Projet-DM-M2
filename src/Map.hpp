@@ -12,6 +12,7 @@
 #include "Data.hpp"
 #include "Item.hpp"
 #include "ModelsManager.hpp"
+#include "Monster.hpp"
 #include "Player.hpp"
 #include "Util.hpp"
 #include "WorldObject.hpp"
@@ -30,6 +31,7 @@ private:
     std::vector<int> m_terrain; //used to store the type of every "chunck" of the map
     std::vector<WorldObject*> m_worldObjects; //owning pointers
     std::vector<Item*> m_worldItems; //owning pointers
+    std::vector<Monster*> m_worldMonsters; //owning pointers
     Player* m_player;
     json m_data;
     ModelsManager m_ModelsManager;
