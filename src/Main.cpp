@@ -95,7 +95,7 @@ static void size_callback(GLFWwindow* window, int width, int height)
     int frame_height = 0;
     glfwGetFramebufferSize(window,&frame_width,&frame_height);
     glViewport(0, 0, frame_width, frame_height);
-    PMatrix = glm::perspective(glm::radians(70.0f),static_cast<float>(window_width)/static_cast<float>(window_height),0.1f,100.f);
+    PMatrix = glm::perspective(glm::radians(70.0f),static_cast<float>(window_width)/static_cast<float>(window_height),0.25f,100.f);
 }
 
 int main()
@@ -137,7 +137,7 @@ int main()
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     //Default proj matrix
-    PMatrix = glm::perspective(glm::radians(70.0f),static_cast<float>(window_width)/static_cast<float>(window_height),0.1f,100.f);
+    PMatrix = glm::perspective(glm::radians(70.0f),static_cast<float>(window_width)/static_cast<float>(window_height),0.25f,100.f);
 
     //For 3D
     glEnable(GL_DEPTH_TEST);
