@@ -10,7 +10,9 @@
 #include <string>
 #include <vector>
 #include "Data.hpp"
+#include "Item.hpp"
 #include "ModelsManager.hpp"
+#include "Player.hpp"
 #include "Util.hpp"
 #include "WorldObject.hpp"
 
@@ -23,9 +25,12 @@ private:
     int m_entrancePos;
     int m_exitPos;
     int m_nLevels;
+    int m_currentLevel;
 
     std::vector<int> m_terrain; //used to store the type of every "chunck" of the map
     std::vector<WorldObject*> m_worldObjects; //owning pointers
+    std::vector<Item*> m_worldItems; //owning pointers
+    Player* m_player;
     json m_data;
     ModelsManager m_ModelsManager;
 
@@ -40,6 +45,9 @@ public:
     int getExitPos() const { return m_exitPos; }
     ~Map();
     void loadMap(const std::string& nameLevel);
+    void update();
+    void initInteractiveObject();
+    Player* getPlayer() const { return this->m_player; }
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_MAP_HPP

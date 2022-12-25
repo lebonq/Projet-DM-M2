@@ -9,10 +9,6 @@ RenderedObject::RenderedObject(Model* model,glm::mat4 mat, int map_x, int map_y)
 {
 }
 
-RenderedObject::~RenderedObject()
-{
-}
-
 /**
  * @warning Don't forget to bind the model before drawing !
  */

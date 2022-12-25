@@ -11,10 +11,19 @@ Map::Map(const std::string& nameLevel)
     this->m_data = json::parse(json_file);
 
     this->m_nLevels = this->m_data["levels"].size();
+    this->m_currentLevel = 0;
     this->loadMap(this->m_data["levels"]["0"]["image"]);
 
     DEBUG_PRINT(this->m_data["levels"].size() << std::endl);
     this->initWorldObject();
+    this->initInteractiveObject();
+
+    //set starting pos player
+    int pos_player= this->getEntrancePos();
+    int cam_x = pos_player%this->getWidth();
+    int cam_z = (pos_player-cam_x)/this->getWidth();
+
+    this->m_player = new Player(nullptr, glm::mat4(1.0f), cam_x, cam_z, cam_x+1, cam_z);
 }
 
 void Map::loadMap(const std::string& nameLevel)
@@ -58,6 +67,14 @@ void Map::loadMap(const std::string& nameLevel)
 Map::~Map()
 {
     DEBUG_PRINT("Delete a Map " << std::endl);
+    for (auto& worldObject : this->m_worldObjects) {
+        delete worldObject;
+    }
+    for (auto& worldItem : this->m_worldItems) {
+        delete worldItem;
+    }
+    delete this->m_player;
+
 }
 
 void Map::initWorldObject()
@@ -198,9 +215,36 @@ void Map::initWorldObject()
     }
 
 }
+
+void Map::initInteractiveObject(){
+    this->m_worldItems.clear();
+    json listItems = this->m_data["levels"][std::to_string(this->m_currentLevel)]["items"];
+    Model* shadow = this->m_ModelsManager.getRefModel(DM_PROJECT_ID_MANAGER_SHADOW);
+    for(auto item : listItems){
+        Model* item_model = this->m_ModelsManager.getRefModel(item["id_model"]);
+        int x = item["pos_x"];
+        int y = item["pos_y"];
+        glm::mat4 mmatrix(1.0f);
+        mmatrix = glm::translate(mmatrix,glm::vec3(x+1, 0.40, y));
+        glm::mat4 smatrix(1.0f);
+        smatrix = glm::translate(smatrix,glm::vec3(x+1, 0.01f, y));
+        this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_SHADOW,shadow,smatrix,x,y));
+        Item* item_ptr = new Item(item_model,mmatrix,x,y,item["type"],item["amount_0"],item["amount_1"]);
+        this->m_worldItems.push_back(item_ptr);
+        DEBUG_PRINT("Item type : " << item["type"] << " x : " << item["pos_x"] << " y : " << item["pos_y"] << std::endl);
+    }
+}
+
 void Map::draw()
 {
     for (WorldObject* object : this->m_worldObjects) {
         object->draw();
     }
+    for (Item* item : this->m_worldItems) {
+        item->draw(this->m_player);
+    }
+}
+void Map::update()
+{
+
 }

@@ -8,13 +8,14 @@
 #include "RenderedObject.hpp"
 
 class WorldObject : public RenderedObject {
-public:
-    WorldObject(int type,Model* model,glm::mat4 mat, int map_x, int map_y);
-    ~WorldObject(){};
-    int getType(){return  m_objType;}
+
 private:
     int m_objType;
 
+public:
+    WorldObject(int type, Model* model, glm::mat4 mat, int map_x, int map_y);
+    ~WorldObject(){};
+    int getType() { return m_objType; }
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_WORLDOBJECT_HPP

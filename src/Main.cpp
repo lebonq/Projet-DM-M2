@@ -28,6 +28,7 @@ float doneMove_real = 0;
 double prevTime;
 
 Map* map;
+Player* player;
 
 static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/)
 {
@@ -140,23 +141,23 @@ int main()
 
     //For 3D
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
     map = new Map("assets/map1");
+    player = map->getPlayer();
     //exit(0);
     ShadersManager& shadersMana = map->getShadersManager();
 
-    //set starting pos player
-    int pos_cam = map->getEntrancePos();
-    int cam_x = pos_cam%map->getWidth();
-    int cam_y = (pos_cam-cam_x)/map->getWidth();
-    float phi_cam = 0.f;
 
-    if(cam_y+1 >= map->getHeight()) phi_cam = 180.f;
-    else if(cam_y == 0) phi_cam = 0.0f;
+    float phi_cam = 0.f;
+    int cam_x = player->getMapX();
+    int cam_z = player->getMapY();
+    if(cam_z+1 >= map->getHeight()) phi_cam = 180.f;
+    else if(cam_z == 0) phi_cam = 0.0f;
     else if(cam_x+1 >= map->getWidth()) phi_cam = -90.0f;
     else if(cam_x == 0) phi_cam = 90.0f;
-
-    camera = new FreeflyCamera(glm::vec3(cam_x+1,0.5,cam_y),phi_cam);
+    camera = new FreeflyCamera(glm::vec3(cam_x+1,0.5,cam_z),phi_cam);
 
 
         //float rotate = 0.f;
@@ -188,7 +189,9 @@ int main()
             doneMove = glm::clamp(doneMove,0.0f,1.0f);
             if(doneMove == 1 ){
                 move_distance = -(doneMove_real - move_distance)+1;
-                if(moveFront == true)camera->moveFront(move_distance*move);
+                if(moveFront == true) {
+                    camera->moveFront(move_distance * move);
+                }
                 else camera->moveLeft(move_distance*move);
                 doneMove = 0;
                 doneMove_real = 0;
@@ -197,6 +200,8 @@ int main()
                 if(moveFront == true)camera->moveFront(move_distance*move);
                 else camera->moveLeft(move_distance*move);
             }
+            player->setRealX(camera->getPosition().x);
+            player->setRealZ(camera->getPosition().z);
         }
 
         glClearColor(0.0f, 0.0f, 0.f, 1.f);

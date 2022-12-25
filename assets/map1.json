@@ -5,21 +5,30 @@
       "items": {
         "0": {
           "pos_x": 0,
-          "pos_y": 0,
-          "type": "gold_coin",
-          "amount": 120,
-          "texture": "gold_coin.png"
+          "pos_y": 3,
+          "type": 0,
+          "amount_0": 120,
+          "amount_1": 0,
+          "id_model": 3
+        },
+        "1": {
+          "pos_x": 5,
+          "pos_y": 5,
+          "type": 0,
+          "amount_0": 40,
+          "amount_1": 0,
+          "id_model": 3
         }
       },
       "monsters": {
         "0": {
           "pos_x": 3,
           "pos_y": 0,
-          "type": "slime",
+          "type": 0,
           "live": 100,
           "attack": 20,
           "defense": 5,
-          "texture": "slime1.png"
+          "id_model": 4
         }
       }
     },
@@ -29,20 +38,21 @@
         "0": {
           "pos_x": 0,
           "pos_y": 0,
-          "type": "gold_coin",
-          "amount": 120,
-          "texture": "gold_coin.png"
+          "type": 0,
+          "amount_0": 0,
+          "amount_1": 120,
+          "id_model": 3
         }
       },
       "monsters": {
         "0": {
           "pos_x": 3,
           "pos_y": 0,
-          "type": "slime",
+          "type": 0,
           "live": 100,
           "attack": 20,
           "defense": 5,
-          "texture": "slime1.png"
+          "id_model": 4
         }
       }
     }

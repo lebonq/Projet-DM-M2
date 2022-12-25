@@ -31,3 +31,13 @@ std::vector<uint> Util::readImageFile(const std::string filePath,int * width, in
     return data;
 }
 
+// Calculate the angle between two vectors a and b
+float Util::calcAngle(const glm::vec3& a, const glm::vec3& b) {
+  float dotProduct = glm::dot(a, b);
+  float aMagnitude = glm::length(a);
+  float bMagnitude = glm::length(b);
+
+  float cosine = dotProduct / (aMagnitude * bMagnitude);
+  return glm::acos(cosine);
+}
+

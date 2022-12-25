@@ -5,7 +5,41 @@
 #ifndef PROJET_DM_QUENTIN_LEBON_PLAYER_HPP
 #define PROJET_DM_QUENTIN_LEBON_PLAYER_HPP
 
-class Player {
+#include "InteractiveObject.hpp"
+class Player : public InteractiveObject {
+private:
+    int m_life    = 100;
+    int m_defense = 0;
+    int m_attack  = 10;
+
+    float m_real_x = 0;
+    float m_real_z = 0;
+
+public:
+    Player(Model* model, glm::mat4 mat, int map_x, int map_y, float real_x, float real_z);
+    ~Player();
+    void  update() override;
+    void  getClicked() override;
+    void  draw() override;
+    float getRealX() const
+    {
+        return m_real_x;
+    };
+    float getRealZ() const
+    {
+        return m_real_z;
+    };
+    void  setRealX(float x)
+    {
+        m_real_x = x;
+    };
+    void  setRealZ(float z)
+    {
+        m_real_z = z;
+    };
+    // Override draw function
+    // Call update animation from main loop
+    // One is to make the item face you other item move and fly
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_PLAYER_HPP

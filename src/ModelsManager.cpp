@@ -15,6 +15,12 @@ ModelsManager::ModelsManager()
     DEBUG_PRINT("Load Water Model " << std::endl);
     Model* water = new Model(DM_PROJECT_ID_MANAGER_WATER, this->m_texManager.getTexId(DM_PROJECT_ID_MANAGER_WATER), this->m_shaderManager);
     this->m_listModels.push_back(water);
+    DEBUG_PRINT("Load Gold Coin Model " << std::endl);
+    Model* gold = new Model(DM_PROJECT_ID_MANAGER_GOLDCOIN, this->m_texManager.getTexId(DM_PROJECT_ID_MANAGER_GOLDCOIN), this->m_shaderManager);
+    this->m_listModels.push_back(gold);
+    DEBUG_PRINT("Load Shadow Model " << std::endl);
+    Model* shadow = new Model(DM_PROJECT_ID_MANAGER_SHADOW, this->m_texManager.getTexId(DM_PROJECT_ID_MANAGER_SHADOW), this->m_shaderManager);
+    this->m_listModels.push_back(shadow);
 }
 ModelsManager::~ModelsManager()
 {
