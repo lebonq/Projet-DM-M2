@@ -28,18 +28,6 @@ void Monster::draw(Player *player)
 {
     float x = player->getRealX();
     float z = player->getRealZ();
-
-    glm::mat4 mat = glm::mat4(1.0f);
-    glm::vec3 to_player(x - static_cast<float>(this->m_PosMapX+1), z - static_cast<float>(this->m_PosMapY),0.0f);
-    glm::vec3 to_one(0.0f, static_cast<float>(this->m_PosMapY+1) - static_cast<float>(this->m_PosMapY)  ,0.0f);
-    float angle = Util::calcAngle(to_player,to_one);
-    //to orient angle
-    if(x < static_cast<float>(this->m_PosMapX+1)){
-        angle = -angle;
-    }
-
-    mat = glm::translate(mat,glm::vec3(this->m_PosMapX+1, 0.40, this->m_PosMapY));
-    mat = glm::rotate(mat, angle, glm::vec3(0.0f, 1.0f, 0.0f));
-    this->m_MMatrix = mat;
+    glUniform3fv(this->m_Model->getShaderProgram()->getPlayerPos(),1,glm::value_ptr(glm::vec3(x,0,z)));
     this->draw();
 }

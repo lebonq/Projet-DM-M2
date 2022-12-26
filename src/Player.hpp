@@ -32,10 +32,12 @@ public:
     void  setRealX(float x)
     {
         m_real_x = x;
+        m_PosMapX = x;
     };
     void  setRealZ(float z)
     {
         m_real_z = z;
+        m_PosMapY = z;
     };
 
 };

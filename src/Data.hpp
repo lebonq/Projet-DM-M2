@@ -102,7 +102,7 @@ const std::vector<std::vector<unsigned int>> DM_PROJECT_MODEL_INDICES = {{
 }};
 
 const std::vector<glm::vec3> DM_PROJECT_MODEL_KD = {glm::vec3(2),glm::vec3(2),glm::vec3(9),glm::vec3(3),glm::vec3(2),glm::vec3(2)};
-const std::vector<glm::vec3> DM_PROJECT_MODEL_KS = {glm::vec3(0),glm::vec3(0),glm::vec3(25),glm::vec3(3),glm::vec3(0),glm::vec3(0)};
+const std::vector<glm::vec3> DM_PROJECT_MODEL_KS = {glm::vec3(0),glm::vec3(0),glm::vec3(25),glm::vec3(4),glm::vec3(0),glm::vec3(0)};
 const std::vector<float> DM_PROJECT_MODEL_SHININESS = {2,2,20,7,2,2};
 
 

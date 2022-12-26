@@ -39,8 +39,10 @@ private:
 public:
     Map(const std::string& nameLevel);
     void initWorldObject();
-    void draw();
-    ShadersManager& getShadersManager(){return this->m_ModelsManager.getShaderManager();};
+    void drawStatic();
+    void drawFacing();
+    ShadersManager* getShadersManagerFacing(){return this->m_ModelsManager.getShaderManagerFacing();};
+    ShadersManager* getShadersManagerStatic(){return this->m_ModelsManager.getShaderManagerStatic();};
     int getWidth() const { return m_width; }
     int getHeight() const { return m_height; }
     int getEntrancePos() const { return m_entrancePos; }

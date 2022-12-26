@@ -21,7 +21,7 @@ private:
     GLsizei m_nVertexCount; // Nombre de sommets
 
     GLuint m_textureId;
-    ShadersManager& m_shaderProgram; //Not owning pointer
+    ShadersManager* m_shaderProgram; //Not owning pointer
 
     glm::vec3 m_kd;
     glm::vec3 m_ks;
@@ -31,12 +31,13 @@ private:
     GLuint m_vao;
     GLuint m_ibo;
 public:
-    Model(const int ID, const GLuint texID, ShadersManager& mShaderProgram);
+    Model(const int ID, const GLuint texID, ShadersManager* mShaderProgram);
     ~Model();
     void draw(const glm::mat4& mmatrix);
     void bindModel();
     void unBindModel();
     const glimac::ShapeVertex* getDataPointer() const;
+    ShadersManager* getShaderProgram() const{return this->m_shaderProgram;}
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_MODEL_HPP

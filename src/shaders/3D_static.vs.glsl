@@ -13,7 +13,6 @@ out vec3 vPosition_vs; // Position du sommet transformé dans l'espace View
 out vec3 vNormal_vs; // Normale du sommet transformé dans l'espace View
 out vec2 vTexCoords; // Coordonnées de texture du sommet
 
-
 mat3 translate(float tx, float ty) {
     return mat3(vec3(1,0,0),vec3(0,1,0),vec3(tx,ty,1));
 }
@@ -29,13 +28,12 @@ mat3 rotation(float alpha) {
 void main() {
     // Passage en coordonnées homogènes
     vec4 vertexPosition = vec4(aVertexPosition, 1);
-    vec4 vertexNormal = vec4(normalize(aVertexNormal), 0);
-
-    mat4 normalMatrix = transpose(inverse(uVMatrix*uMMatrix));
+    vec4 vertexNormal = vec4(aVertexNormal, 0);
 
     // Calcul des valeurs de sortie
     vPosition_vs = vec3(uVMatrix * uMMatrix * vertexPosition);
-    vNormal_vs = vec3(normalMatrix * vertexNormal);
+    vNormal_vs = vec3(transpose(inverse(uVMatrix*uMMatrix)) * vertexNormal);
+    vTexCoords = aVertexTexCoords;
 
     // Calcul de la position projetée
     gl_Position = uPMatrix * uVMatrix * uMMatrix * vertexPosition;

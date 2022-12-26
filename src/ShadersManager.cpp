@@ -3,10 +3,10 @@
 //
 
 #include "ShadersManager.hpp"
-ShadersManager::ShadersManager()
+ShadersManager::ShadersManager(std::string vs,std::string fs)
 {
     DEBUG_PRINT("Build ShaderManage" << std::endl);
-    this->m_shaderProgram = glimac::loadProgram("src/shaders/sphere3D.vs.glsl", "src/shaders/pointlight.fs.glsl");
+    this->m_shaderProgram= glimac::loadProgram(vs, fs);
     // get our uniform vairable fromt the shader
     this->m_uMMatrix = glGetUniformLocation(this->m_shaderProgram.getGLId(), "uMMatrix");
     this->m_uVMatrix = glGetUniformLocation(this->m_shaderProgram.getGLId(), "uVMatrix");
@@ -19,6 +19,8 @@ ShadersManager::ShadersManager()
 
     this->m_uLightPos_vs    = glGetUniformLocation(this->m_shaderProgram.getGLId(), "uLightPos_vs");
     this->m_uLightIntensity = glGetUniformLocation(this->m_shaderProgram.getGLId(), "uLightIntensity");
+
+    this->m_playerPos = glGetUniformLocation(this->m_shaderProgram.getGLId(), "uPlayerPos");
 }
 ShadersManager::~ShadersManager()
 {

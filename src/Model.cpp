@@ -4,7 +4,7 @@
 
 #include "Model.hpp"
 #include <iostream>
-Model::Model(const int ID, const GLuint texID, ShadersManager& mShaderProgram)
+Model::Model(const int ID, const GLuint texID, ShadersManager* mShaderProgram)
     : m_shaderProgram(mShaderProgram)
 {
     DEBUG_PRINT("Build a Model " << std::endl);
@@ -63,19 +63,18 @@ Model::~Model()
 }
 void Model::draw(const glm::mat4& mmatrix)
 {
-    glUniformMatrix4fv(this->m_shaderProgram.getMMatrix(),1,GL_FALSE,glm::value_ptr(mmatrix));
+    glUniformMatrix4fv(this->m_shaderProgram->getMMatrix(),1,GL_FALSE,glm::value_ptr(mmatrix));
     glDrawElements(GL_TRIANGLES,this->m_ibos.size(),GL_UNSIGNED_INT,0);
 }
 
 void Model::bindModel()
 {
-    this->m_shaderProgram.use();
     glBindVertexArray(this->m_vao);
-    glUniform3fv(this->m_shaderProgram.getKd(),1,glm::value_ptr(this->m_kd));
-    glUniform3fv(this->m_shaderProgram.getKs(),1,glm::value_ptr(this->m_ks));
-    glUniform1fv(this->m_shaderProgram.getShininess(),1,&this->m_shininess);
+    glUniform3fv(this->m_shaderProgram->getKd(),1,glm::value_ptr(this->m_kd));
+    glUniform3fv(this->m_shaderProgram->getKs(),1,glm::value_ptr(this->m_ks));
+    glUniform1fv(this->m_shaderProgram->getShininess(),1,&this->m_shininess);
     glBindTexture(GL_TEXTURE_2D, this->m_textureId);
-    glUniform1i(this->m_shaderProgram.getTexLoc(),0);
+    glUniform1i(this->m_shaderProgram->getTexLoc(),0);
 }
 
 

@@ -73,6 +73,9 @@ Map::~Map()
     for (auto& worldItem : this->m_worldItems) {
         delete worldItem;
     }
+    for (auto& worldMonster : this->m_worldMonsters) {
+        delete worldMonster;
+    }
     delete this->m_player;
 
 }
@@ -250,18 +253,19 @@ void Map::initInteractiveObject(){
 
 //TODO : add moving shadow for monster
 
-void Map::draw()
+void Map::drawStatic()
 {
     for (WorldObject* object : this->m_worldObjects) {
         object->draw();
     }
+}
+void Map::drawFacing(){
     for (Item* item : this->m_worldItems) {
         item->draw(this->m_player);
     }
     for(Monster* monster : this->m_worldMonsters){
         monster->draw(this->m_player);
     }
-
 }
 void Map::update()
 {

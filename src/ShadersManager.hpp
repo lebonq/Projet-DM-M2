@@ -24,8 +24,10 @@ private:
 
     GLuint m_uLightPos_vs;
     GLuint m_uLightIntensity;
+
+    GLuint m_playerPos;
 public:
-    ShadersManager();
+    ShadersManager(std::string vs,std::string fs);
     ~ShadersManager();
     void use(){this->m_shaderProgram.use();};
     GLuint getMMatrix() const { return m_uMMatrix; }
@@ -37,6 +39,7 @@ public:
     GLuint getShininess() const { return m_uShininess; }
     GLuint getLightPosVs() const { return m_uLightPos_vs; }
     GLuint getLightIntensity() const { return m_uLightIntensity; }
+    GLuint getPlayerPos() const { return m_playerPos; }
 
 };
 
