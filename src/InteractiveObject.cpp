@@ -3,9 +3,9 @@
 //
 
 #include "InteractiveObject.hpp"
-#include "Player.hpp"
-InteractiveObject::InteractiveObject( Model* model, glm::mat4 mat, int map_x, int map_y) :
-    RenderedObject(model,mat, map_x, map_y)
+
+InteractiveObject::InteractiveObject( Model* model, WorldObject* shadow,glm::mat4 mat, int map_x, int map_y) :
+    RenderedObject(model,mat, map_x, map_y), m_shadow(shadow)
 {
 }
 void InteractiveObject::draw()

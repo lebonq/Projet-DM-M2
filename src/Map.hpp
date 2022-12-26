@@ -32,6 +32,7 @@ private:
     std::vector<WorldObject*> m_worldObjects; //owning pointers
     std::vector<Item*> m_worldItems; //owning pointers
     std::vector<Monster*> m_worldMonsters; //owning pointers
+
     Player* m_player;
     json m_data;
     ModelsManager m_ModelsManager;
@@ -52,6 +53,7 @@ public:
     void update();
     void initInteractiveObject();
     Player* getPlayer() const { return this->m_player; }
+    void    interact();
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_MAP_HPP

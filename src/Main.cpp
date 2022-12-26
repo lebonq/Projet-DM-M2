@@ -15,8 +15,7 @@ int window_height = 1080;
 int old_xpos = 0.f;
 int old_ypos = 0.f;
 
-glm::mat4      PMatrix, VMatrix, MMatrix;
-FreeflyCamera* camera;
+glm::mat4      PMatrix, VMatrix;
 int            rotation          = 0;
 float          doneRotation      = 0;
 float          doneRotation_real = 0;
@@ -29,6 +28,7 @@ double prevTime;
 
 Map*    map;
 Player* player;
+FreeflyCamera* camera;
 
 static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/)
 {
@@ -63,20 +63,21 @@ static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int acti
         rotation = 1;
         prevTime = glfwGetTime() * 1000;
     }
-    if (key == GLFW_KEY_E && action == GLFW_PRESS && rotation == 0) {
+    if (key == GLFW_KEY_E && action == GLFW_PRESS && rotation == 0 && move == 0) {
         rotation = -1;
         prevTime = glfwGetTime() * 1000;
+    }
+    if( key == GLFW_KEY_SPACE && action == GLFW_PRESS){
+        map->interact();
     }
     if (key == GLFW_KEY_ESCAPE) {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 }
 
-static void mouse_button_callback(GLFWwindow* window, int button, int action, int /*mods*/)
+static void mouse_button_callback(GLFWwindow* /*window*/, int /*button*/, int /*action*/, int /*mods*/)
 {
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    }
+
 }
 
 static void scroll_callback(GLFWwindow* /*window*/, double /*xoffset*/, double /*yoffset*/)
@@ -141,33 +142,21 @@ int main()
 
     // For 3D
     glEnable(GL_DEPTH_TEST);
+    //for transparency
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     map    = new Map("assets/map1");
     player = map->getPlayer();
+    camera = player->getCamera();
     // exit(0);
 
     std::vector<ShadersManager*> shaders;
     shaders.push_back(map->getShadersManagerFacing());
     shaders.push_back(map->getShadersManagerStatic());
 
-    float phi_cam = 0.f;
-    int   cam_x   = player->getRealX();
-    int   cam_z   = player->getRealZ();
-    if (cam_z + 1 >= map->getHeight())
-        phi_cam = 180.f;
-    else if (cam_z == 0)
-        phi_cam = 0.0f;
-    else if (cam_x + 1 >= map->getWidth())
-        phi_cam = -90.0f;
-    else if (cam_x == 0)
-        phi_cam = 90.0f;
-    camera = new FreeflyCamera(glm::vec3(cam_x + 1, 0.5, cam_z), phi_cam);
 
-    // float rotate = 0.f;
     // Loop until the user closes the window
-
     while (!glfwWindowShouldClose(window)) {
         // IO
         if (rotation != 0) {
@@ -190,28 +179,28 @@ int main()
         // Exclaty the same as for the rotation
         if (move != 0) {
             double move_distance = ((glfwGetTime() * 1000) - prevTime) / 1200;
-            doneMove += move_distance;
-            doneMove_real += move_distance;
+            doneMove += static_cast<float>(move_distance);
+            doneMove_real += static_cast<float>(move_distance);
             doneMove = glm::clamp(doneMove, 0.0f, 1.0f);
             if (doneMove == 1) {
-                move_distance = -(doneMove_real - move_distance) + 1;
+                float move_distancef = -(doneMove_real - static_cast<float>(move_distance)) + 1.0f;
                 if (moveFront == true) {
-                    camera->moveFront(move_distance * move);
+                    player->moveToFrontCamera(move_distancef * static_cast<float>(move));
                 }
-                else
-                    camera->moveLeft(move_distance * move);
+                else{
+                    player->moveToLeftCamera(move_distancef * static_cast<float>(move));
+                }
                 doneMove      = 0;
                 doneMove_real = 0;
                 move          = 0;
+                player->updateMapPos();
             }
             else {
                 if (moveFront == true)
-                    camera->moveFront(move_distance * move);
+                    player->moveToFrontCamera(static_cast<float>(move_distance) * static_cast<float>(move));
                 else
-                    camera->moveLeft(move_distance * move);
+                    player->moveToLeftCamera(static_cast<float>(move_distance) * static_cast<float>(move));
             }
-            player->setRealX(camera->getPosition().x);
-            player->setRealZ(camera->getPosition().z);
         }
 
         glClearColor(0.0f, 0.0f, 0.f, 1.f);

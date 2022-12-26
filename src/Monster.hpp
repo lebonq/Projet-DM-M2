@@ -17,12 +17,12 @@ private:
     float m_real_x = 0;
     float m_real_z = 0;
 public:
-    Monster(Model* model, glm::mat4 mat, int map_x, int map_y,int type,int life, int defense, int attack);
+    Monster(Model* model, glm::mat4 mat,WorldObject* shadow, int map_x, int map_y,int type,int life, int defense, int attack);
     ~Monster();
     void  update() override;
-    void  getClicked() override;
+    void  getClicked(Player* player) override;
     void  draw() override;
-        void draw(Player *player);//put a new class for this
+    void draw(Player *player);
     float getRealX() const
     {
         return m_real_x;

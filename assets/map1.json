@@ -22,7 +22,7 @@
       },
       "monsters": {
         "0": {
-          "pos_x": 3,
+          "pos_x": 2,
           "pos_y": 0,
           "type": 0,
           "live": 100,
@@ -46,7 +46,7 @@
       },
       "monsters": {
         "0": {
-          "pos_x": 3,
+          "pos_x": 2,
           "pos_y": 0,
           "type": 0,
           "live": 100,
