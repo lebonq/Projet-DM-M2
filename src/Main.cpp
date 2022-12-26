@@ -34,6 +34,7 @@ static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int acti
 {
     if (key == GLFW_KEY_W && action == GLFW_PRESS && rotation == 0 && move == 0) {
         // camera->moveFront(1.0f);
+
         move      = 1;
         prevTime  = glfwGetTime() * 1000;
         moveFront = true;

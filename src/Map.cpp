@@ -281,6 +281,16 @@ void Map::interact()
     int x = this->m_player->getMapX();
     int y = this->m_player->getMapY();
 
+    //get the pos where the player look
+    glm::vec3 frontVec = this->m_player->getCamera()->getFrontVector();
+    float xDir         = round(frontVec.x);
+    float yDir         = round(frontVec.z);
+
+    x += xDir;
+    y += yDir;
+
+    DEBUG_PRINT(frontVec.x << " " << frontVec.y << " " << frontVec.z << std::endl);
+
     for (auto it = m_worldItems.begin(); it != m_worldItems.end(); ) {
         Item* item = *it;
         if (item->getMapX() == x && item->getMapY() == y) {
