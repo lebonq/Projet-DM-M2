@@ -30,6 +30,8 @@ Map*    map;
 Player* player;
 FreeflyCamera* camera;
 
+double update_time = 0.0;
+
 float randomFloat() {
   std::srand(std::time(nullptr));
   float f = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX);
@@ -165,6 +167,7 @@ int main()
     shaders.push_back(map->getShadersManagerStatic());
 
 
+    update_time = glfwGetTime() * 1000;//init update time
     // Loop until the user closes the window
     while (!glfwWindowShouldClose(window)) {
         // IO
@@ -210,6 +213,11 @@ int main()
                 else
                     player->moveToLeftCamera(static_cast<float>(move_distance) * static_cast<float>(move));
             }
+        }
+
+        if ((glfwGetTime() * 1000) - update_time > 1000) {
+            update_time = glfwGetTime() * 1000;
+            map->update();
         }
 
         glClearColor(0.0f, 0.0f, 0.f, 1.f);

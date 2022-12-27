@@ -16,7 +16,6 @@ protected:
 public:
     InteractiveObject(Model* model, WorldObject* m_shadow, glm::mat4 mat, int map_x, int map_y);
     ~InteractiveObject() override = default;
-    virtual void update() = 0;
     virtual void getClicked(Player* player) = 0;
     virtual void draw() override;
     //Call update animation from main loop

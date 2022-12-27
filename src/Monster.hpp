@@ -14,10 +14,17 @@ private:
 
     float m_real_x = 0;
     float m_real_z = 0;
+
+    int m_previousCell = -1;
+
+public:
+    int  getPreviousCell() const;
+    void setPreviousCell(int previousCell);
+
 public:
     Monster(Model* model, glm::mat4 mat,WorldObject* shadow, int map_x, int map_y,int type,int life, int defense, int attack);
     ~Monster();
-    void  update() override;
+    void  update(Player* player);
     void  getClicked(Player* player) override;
     void  draw() override;
     void draw(Player *player);
@@ -39,6 +46,8 @@ public:
     }
     friend std::ostream& operator<<(std::ostream& os, const Monster& monster);
 
+    void moveOnX(int direction);
+    void moveOnY(int direction);
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_MONSTER_HPP

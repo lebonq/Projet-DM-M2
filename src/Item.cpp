@@ -8,10 +8,7 @@ Item::Item(Model* model, glm::mat4 mat,WorldObject* shadow, int map_x, int map_y
     InteractiveObject(model,shadow,mat, map_x, map_y), m_ItemType(id), m_ItemValue1(amount1), m_ItemValue2(amount2)
 {
 }
-void Item::update()
-{
-    return;
-}
+
 
 void Item::getClicked(Player* player)//TO-DO pass player object
 {

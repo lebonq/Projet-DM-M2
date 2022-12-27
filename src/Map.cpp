@@ -274,6 +274,67 @@ void Map::drawFacing()
 }
 void Map::update()
 {
+    int p_x = this->m_player->getMapX();
+    int p_y = this->m_player->getMapY();
+
+    for (auto monster : this->m_worldMonsters) {
+        int m_x = monster->getMapX();
+        int m_y = monster->getMapY();
+
+        // id monster is 4-adjencency of player
+        if ((abs(p_x - m_x) == 0 && abs(p_y - m_y) == 1) || (abs(p_x - m_x) == 1 && abs(p_y - m_y) == 0)) {
+            m_player->getAttacked(monster);
+        }
+        else {
+            int direction_x = p_x < m_x ? -1 : p_x > m_x ? 1
+                                                         : 0;
+            int direction_y = p_y > m_y ? 1 : p_y < m_y ? -1
+                                                        : 0;
+
+            int cell_dir_x = m_y * this->getWidth() + m_x + direction_x;
+            int cell_dir_y = (m_y + direction_y) * this->getWidth() + m_x;
+
+            //Si la case vers laquelle on veut se déplacé n'est pas vide OU que l'on en vient
+            if((this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_EMPTY && this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_ENTRANCE && this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_EXIT)
+                || monster->getPreviousCell() == cell_dir_x){
+                direction_x*=-1;// alors inverse la direction
+               cell_dir_x = m_y * this->getWidth() + m_x + direction_x;
+               //(Si cette nouvelle direct n'est pas vide OU que elle n'est pas sur la même ligne) ET que on ne veut pas se deaplcer en verticale
+               if(((this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_EMPTY && this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_ENTRANCE && this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_EXIT) || m_x+direction_x < 0 || m_x+direction_x >= this->getWidth())
+                   && direction_y == 0 ){
+                    srand(time(0));
+                    direction_y = (rand()%3)-1;//alors on se deplace en verticale dans une direction aléatoire
+               }
+            }
+
+            if((this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EMPTY && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_ENTRANCE && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EXIT)
+                || monster->getPreviousCell() == cell_dir_y){
+                direction_y*=-1;//inverse la direction
+               cell_dir_y = (m_y + direction_y) * this->getWidth() + m_x;
+               if(((this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EMPTY && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_ENTRANCE && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EXIT) || m_y+direction_y < 0 || m_y+direction_y >= this->getHeight())
+                   && direction_x == 0 ){
+                    srand(time(0));
+                    direction_x = (rand()%3)-1;
+               }
+            }
+
+            if (direction_x != 0 && m_x+direction_x >= 0 && m_x+direction_x < this->getWidth() &&
+                (this->m_terrain[cell_dir_x] == DM_PROJECT_MAP_EMPTY || this->m_terrain[cell_dir_x] == DM_PROJECT_MAP_ENTRANCE || this->m_terrain[cell_dir_x] == DM_PROJECT_MAP_EXIT)) {
+                monster->moveOnX(direction_x);
+            }
+            else if(m_y + direction_y >= 0 && m_y + direction_y < this->getHeight() &&
+                (this->m_terrain[cell_dir_y] == DM_PROJECT_MAP_EMPTY || this->m_terrain[cell_dir_y] == DM_PROJECT_MAP_ENTRANCE || this->m_terrain[cell_dir_y] == DM_PROJECT_MAP_EXIT)) {
+                monster->moveOnY(direction_y);
+            }
+            monster->setPreviousCell(m_y * this->getWidth() + m_x);
+
+        }
+    }
+    DEBUG_PRINT("Player stats : Gold => " << std::to_string(this->m_player->getGold()) << " Life => "
+                                          << std::to_string(this->m_player->getLife()) << " Defense => "
+                                          << std::to_string(this->m_player->getDefense()) << " Attack => "
+                                          << std::to_string(this->m_player->getAttack()) << " X =>"
+                                          << std::to_string(this->m_player->getMapX()) << " Y =>" << std::to_string(this->m_player->getMapY()) << std::endl)
 }
 void Map::interact()
 {
@@ -317,8 +378,8 @@ void Map::interact()
             monster->getClicked(this->m_player);
             monster->getAttacked(this->m_player);
             DEBUG_PRINT("Monster stats : Life => " << std::to_string(monster->getLife()) << " Defense => "
-                                                  << std::to_string(monster->getDefense()) << " Attack => "
-                                                  << std::to_string(monster->getAttack()) << std::endl)
+                                                   << std::to_string(monster->getDefense()) << " Attack => "
+                                                   << std::to_string(monster->getAttack()) << std::endl)
             if (monster->getLife() <= 0) {
                 it = m_worldMonsters.erase(it);
                 // remove associed shadow
@@ -333,7 +394,8 @@ void Map::interact()
                     }
                 }
                 delete monster;
-            }else{
+            }
+            else {
                 ++it;
             }
         }
@@ -342,9 +404,4 @@ void Map::interact()
             it++;
         }
     }
-
-    DEBUG_PRINT("Player stats : Gold => " << std::to_string(this->m_player->getGold()) << " Life => "
-                                          << std::to_string(this->m_player->getLife()) << " Defense => "
-                                          << std::to_string(this->m_player->getDefense()) << " Attack => "
-                                          << std::to_string(this->m_player->getAttack()) << std::endl)
 }

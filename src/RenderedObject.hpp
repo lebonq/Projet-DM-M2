@@ -30,6 +30,14 @@ public:
     {
         return m_PosMapY;
     };
+    void setMapX(int x)
+    {
+        m_PosMapX = x;
+    };
+    void setMapY(int y)
+    {
+        m_PosMapY = y;
+    };
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_RENDEREDOBJECT_HPP
