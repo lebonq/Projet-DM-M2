@@ -106,7 +106,7 @@ static void size_callback(GLFWwindow* window, int width, int height)
     int frame_width  = 0;
     int frame_height = 0;
     glfwGetFramebufferSize(window, &frame_width, &frame_height);
-    glViewport(0, 0, frame_width, frame_height);
+    glViewport(0, 0, frame_width, frame_height-200);
     PMatrix = glm::perspective(glm::radians(70.0f), static_cast<float>(window_width) / static_cast<float>(window_height), 0.25f, 100.f);
 }
 
@@ -147,6 +147,8 @@ int main()
     glfwSetWindowSizeCallback(window, &size_callback);
     // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //-200 for UI
+    glViewport(0, 0, window_width, window_height-200);
 
     // Default proj matrix
     PMatrix = glm::perspective(glm::radians(70.0f), static_cast<float>(window_width) / static_cast<float>(window_height), 0.25f, 100.f);
@@ -243,6 +245,10 @@ int main()
                                       0.0f, 0.0f, 0.0f, 1.0f);*/
 
 
+        //************************DRAW UI  ************************
+        //glViewport(0, window_height-200, window_width, 200);
+        //************************DRAW GAME************************
+        //glViewport(0, 0, window_width, window_height-200);
         ShadersManager* shader;
         // draw static
         shader = shaders[1];

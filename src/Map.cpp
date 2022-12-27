@@ -286,6 +286,13 @@ void Map::update()
             m_player->getAttacked(monster);
         }
         else {
+            //le monstre ne se deplace que si il est a 6 de distance maximum (distance cartesienne)
+            float distance = sqrt(pow(p_x - m_x, 2) + pow(p_y - m_y, 2));
+            DEBUG_PRINT("distance : " << distance << std::endl);
+            if (distance >= 6) {
+                continue;
+            }
+
             int direction_x = p_x < m_x ? -1 : p_x > m_x ? 1
                                                          : 0;
             int direction_y = p_y > m_y ? 1 : p_y < m_y ? -1
@@ -302,8 +309,7 @@ void Map::update()
                //(Si cette nouvelle direct n'est pas vide OU que elle n'est pas sur la même ligne) ET que on ne veut pas se deaplcer en verticale
                if(((this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_EMPTY && this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_ENTRANCE && this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_EXIT) || m_x+direction_x < 0 || m_x+direction_x >= this->getWidth())
                    && direction_y == 0 ){
-                    srand(time(0));
-                    direction_y = (rand()%3)-1;//alors on se deplace en verticale dans une direction aléatoire
+                    direction_y = -(monster->getPreviousCell() - cell_dir_y)/this->getHeight();// On force le deplacement vertical dans le sens opposé d'ou l'on vient
                }
             }
 
@@ -313,8 +319,7 @@ void Map::update()
                cell_dir_y = (m_y + direction_y) * this->getWidth() + m_x;
                if(((this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EMPTY && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_ENTRANCE && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EXIT) || m_y+direction_y < 0 || m_y+direction_y >= this->getHeight())
                    && direction_x == 0 ){
-                    srand(time(0));
-                    direction_x = (rand()%3)-1;
+                    direction_x =  -(monster->getPreviousCell() - cell_dir_x);
                }
             }
 
