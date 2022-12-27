@@ -7,11 +7,8 @@
 
 #include "InteractiveObject.hpp"
 #include "Player.hpp"
-class Monster : public InteractiveObject {
+class Monster : public InteractiveObject, CombatEntity {
 private:
-    int m_life;
-    int m_defense;
-    int m_attack ;
     int m_type;
 
     float m_real_x = 0;

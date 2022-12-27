@@ -258,8 +258,9 @@ void Map::drawStatic()
 {
     for (WorldObject* object : this->m_worldObjects) {
 
-        if(object == nullptr)
-            DEBUG_PRINT("object of nullptr" << std::endl);
+        if(object == nullptr) {
+            DEBUG_PRINT("object of nullptr" << std::endl)
+        }
 
         object->draw();
     }
@@ -289,8 +290,6 @@ void Map::interact()
     x += xDir;
     y += yDir;
 
-    DEBUG_PRINT(frontVec.x << " " << frontVec.y << " " << frontVec.z << std::endl);
-
     for (auto it = m_worldItems.begin(); it != m_worldItems.end(); ) {
         Item* item = *it;
         if (item->getMapX() == x && item->getMapY() == y) {
@@ -315,9 +314,16 @@ void Map::interact()
     for (Monster* monster : this->m_worldMonsters) {
         if (monster->getMapX() == x && monster->getMapY() == y) {
             monster->getClicked(this->m_player);
+
         }
         else {
             DEBUG_PRINT("No monster to interact with" << std::endl);
         }
     }
+
+    DEBUG_PRINT("Player stats : Gold => " << std::to_string(this->m_player->getGold()) << " Life => "
+                                          << std::to_string(this->m_player->getLife()) << " Defense => "
+                                          << std::to_string(this->m_player->getDefense()) << " Attack => "
+                                          << std::to_string(this->m_player->getAttack()) << std::endl)
+
 }

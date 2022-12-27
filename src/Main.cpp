@@ -30,6 +30,14 @@ Map*    map;
 Player* player;
 FreeflyCamera* camera;
 
+float randomFloat() {
+  std::srand(std::time(nullptr));
+  float f = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX);
+  f *=0.02f; // scale to 0.0 to 0.2
+  f -=0.01f; // scale to -0.1 to 0.1
+  return f;
+}
+
 static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/)
 {
     if (key == GLFW_KEY_W && action == GLFW_PRESS && rotation == 0 && move == 0) {
@@ -210,6 +218,22 @@ int main()
         VMatrix                  = camera->getViewMatrix();
         glm::vec3 lightPos       = camera->getPosition();
         glm::vec3 lightIntensity = glm::vec3(1);
+
+
+        /*float frequency = 20.0f; // shaking frequency
+        float time = glfwGetTime(); // current time
+
+        float intensity1 = glm::sin(time * frequency) *0.03f+randomFloat();
+        float intensity2 = glm::cos(time * frequency) * 0.03f+randomFloat();
+
+        // Default proj matrix
+        PMatrix = glm::perspective(glm::radians(70.0f), static_cast<float>(window_width) / static_cast<float>(window_height), 0.25f, 100.f);
+        // shake the projection matrix
+        PMatrix = PMatrix *  glm::mat4(1.0f+intensity1, 0.0f, 0.0f, 0.0f,
+                                                    0.0f, 1.0f+intensity2, 0.0f, 0.0f,
+                                                    0.0f, 0.0f, 1.0f, 0.0f,
+                                      0.0f, 0.0f, 0.0f, 1.0f);*/
+
 
         ShadersManager* shader;
         // draw static

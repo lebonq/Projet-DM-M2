@@ -16,10 +16,9 @@ void Item::update()
 void Item::getClicked(Player* player)//TO-DO pass player object
 {
     if(this->m_ItemType == DM_PROJECT_ITEM_GOLD){
-        DEBUG_PRINT("We add gold to the player => gold coins " << this->m_ItemValue1 << std::endl);
+        DEBUG_PRINT("We add gold to the player => gold coins " << std::to_string(this->m_ItemValue1) << std::endl);
+        player->changeGold(this->m_ItemValue1);
     }
-    player->getRealZ();
-
 }
 Item::~Item()
 {

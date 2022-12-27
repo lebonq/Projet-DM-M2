@@ -5,13 +5,11 @@
 #ifndef PROJET_DM_QUENTIN_LEBON_PLAYER_HPP
 #define PROJET_DM_QUENTIN_LEBON_PLAYER_HPP
 
-#include "Model.hpp"
 #include <glimac/FreeflyCamera.hpp>
-class Player {
+#include "CombatEntity.hpp"
+#include "Model.hpp"
+class Player : public CombatEntity {
 private:
-    int m_life    = 100;
-    int m_defense = 0;
-    int m_attack  = 10;
     int m_gold    = 0;
 
     float m_real_x;
@@ -71,6 +69,14 @@ public:
      * Change the world space coords of the player
      */
     void updateRealPos();
+    void changeGold(int amount)
+    {
+        m_gold += amount;
+    };
+    int getGold() const
+    {
+        return m_gold;
+    };
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_PLAYER_HPP

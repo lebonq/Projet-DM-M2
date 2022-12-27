@@ -4,7 +4,7 @@
 
 #include "Player.hpp"
 Player::Player(int map_x, int map_y, float real_x, float real_z, int mapHeight, int mapWidth)
-    : m_real_x(real_x), m_real_z(real_z), m_PosMapX(map_x), m_PosMapY(map_y)
+    : CombatEntity(100,0,10), m_real_x(real_x), m_real_z(real_z), m_PosMapX(map_x), m_PosMapY(map_y)
 {
     float phi_cam = 0.f;
     int   cam_x   = real_x;

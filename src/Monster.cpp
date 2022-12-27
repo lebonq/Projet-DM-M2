@@ -5,7 +5,7 @@
 #include "Monster.hpp"
 
 Monster::Monster(Model* model, glm::mat4 mat,WorldObject* shadow, int map_x, int map_y,int type,int life, int defense, int attack):
-    InteractiveObject(model,shadow,mat, map_x, map_y),m_life(life), m_defense(defense), m_attack(attack), m_type(type), m_real_x(map_x), m_real_z(map_y)
+    InteractiveObject(model,shadow,mat, map_x, map_y), CombatEntity(life,defense,attack), m_type(type), m_real_x(map_x), m_real_z(map_y)
 {
 }
 
@@ -19,7 +19,7 @@ void Monster::update()
 void Monster::getClicked(Player* player)
 {
     if(this->m_type == DM_PROJECT_MONSTER_SKELETON){
-        DEBUG_PRINT("You just it a skeleton damn " << this->m_attack << std::endl);
+        DEBUG_PRINT("You just hit a skeleton " << this->getAttack() << std::endl);
     }
     player->getRealZ();
 }
