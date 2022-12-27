@@ -15,7 +15,7 @@ protected:
     WorldObject* m_shadow;
 public:
     InteractiveObject(Model* model, WorldObject* m_shadow, glm::mat4 mat, int map_x, int map_y);
-    virtual ~InteractiveObject() = default;
+    ~InteractiveObject() override = default;
     virtual void update() = 0;
     virtual void getClicked(Player* player) = 0;
     virtual void draw() override;

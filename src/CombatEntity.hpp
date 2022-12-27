@@ -5,11 +5,12 @@
 #ifndef PROJET_DM_QUENTIN_LEBON_COMBATENTITY_HPP
 #define PROJET_DM_QUENTIN_LEBON_COMBATENTITY_HPP
 
+#include <ostream>
 class CombatEntity {
 private:
-int m_life;
-int m_defense;
-int m_attack;
+    int m_life;
+    int m_defense;
+    int m_attack;
 
 public:
     CombatEntity(int life, int defense, int attack);
@@ -38,6 +39,8 @@ public:
     {
         return m_attack;
     };
+    void getAttacked(CombatEntity* attacker);
+
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_COMBATENTITY_HPP

@@ -12,6 +12,12 @@ Monster::Monster(Model* model, glm::mat4 mat,WorldObject* shadow, int map_x, int
 Monster::~Monster()
 {
 }
+
+std::ostream& operator<<(std::ostream& os, const Monster& monster)
+{
+   os << "m_life: " << monster.getLife() << " m_defense: " << monster.getDefense() << " m_attack: " << monster.getAttack();
+    return os;
+}
 void Monster::update()
 {
 }

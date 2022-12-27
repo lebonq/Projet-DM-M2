@@ -5,9 +5,10 @@
 #ifndef PROJET_DM_QUENTIN_LEBON_MONSTER_HPP
 #define PROJET_DM_QUENTIN_LEBON_MONSTER_HPP
 
+#include <ostream>
 #include "InteractiveObject.hpp"
 #include "Player.hpp"
-class Monster : public InteractiveObject, CombatEntity {
+class Monster : public InteractiveObject, public CombatEntity {
 private:
     int m_type;
 
@@ -35,7 +36,9 @@ public:
     void  setRealZ(float z)
     {
         m_real_z = z;
-    };
+    }
+    friend std::ostream& operator<<(std::ostream& os, const Monster& monster);
+
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_MONSTER_HPP

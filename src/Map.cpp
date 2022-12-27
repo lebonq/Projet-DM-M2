@@ -231,7 +231,7 @@ void Map::initInteractiveObject()
         glm::mat4 smatrix(1.0f);
         smatrix = glm::translate(smatrix, glm::vec3(x + 1, 0.01f, y));
         this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_SHADOW, shadow, smatrix, x, y));
-        Item* item_ptr = new Item(item_model, mmatrix,this->m_worldObjects.back(), x, y, item["type"], item["amount_0"], item["amount_1"]);
+        Item* item_ptr = new Item(item_model, mmatrix, this->m_worldObjects.back(), x, y, item["type"], item["amount_0"], item["amount_1"]);
         this->m_worldItems.push_back(item_ptr);
         DEBUG_PRINT("Item type : " << item["type"] << " x : " << item["pos_x"] << " y : " << item["pos_y"] << std::endl);
     }
@@ -243,22 +243,20 @@ void Map::initInteractiveObject()
         int       x             = monster["pos_x"];
         int       y             = monster["pos_y"];
         glm::mat4 mmatrix(1.0f);
-        mmatrix              = glm::translate(mmatrix, glm::vec3(x + 1, 0.52, y));
+        mmatrix = glm::translate(mmatrix, glm::vec3(x + 1, 0.52, y));
         glm::mat4 smatrix(1.0f);
         smatrix = glm::translate(smatrix, glm::vec3(x + 1, 0.01f, y));
         this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_SHADOW, shadow, smatrix, x, y));
-        Monster* monster_ptr = new Monster(monster_model, mmatrix,this->m_worldObjects.back(), x, y, monster["type"], monster["live"], monster["attack"], monster["defense"]);
+        Monster* monster_ptr = new Monster(monster_model, mmatrix, this->m_worldObjects.back(), x, y, monster["type"], monster["live"], monster["defense"], monster["attack"]);
         this->m_worldMonsters.push_back(monster_ptr);
         DEBUG_PRINT("Monster type : " << monster["type"] << " x : " << monster["pos_x"] << " y : " << monster["pos_y"] << std::endl);
     }
 }
 
-
 void Map::drawStatic()
 {
     for (WorldObject* object : this->m_worldObjects) {
-
-        if(object == nullptr) {
+        if (object == nullptr) {
             DEBUG_PRINT("object of nullptr" << std::endl)
         }
 
@@ -282,42 +280,66 @@ void Map::interact()
     int x = this->m_player->getMapX();
     int y = this->m_player->getMapY();
 
-    //get the pos where the player look
+    // get the pos where the player look
     glm::vec3 frontVec = this->m_player->getCamera()->getFrontVector();
-    float xDir         = round(frontVec.x);
-    float yDir         = round(frontVec.z);
+    float     xDir     = round(frontVec.x);
+    float     yDir     = round(frontVec.z);
 
     x += xDir;
     y += yDir;
 
-    for (auto it = m_worldItems.begin(); it != m_worldItems.end(); ) {
+    for (auto it = m_worldItems.begin(); it != m_worldItems.end();) {
         Item* item = *it;
         if (item->getMapX() == x && item->getMapY() == y) {
             item->getClicked(this->m_player);
             it = m_worldItems.erase(it);
-            //remove associed shadow
-            for (auto it_sha = m_worldObjects.begin(); it_sha != m_worldObjects.end(); ) {
+            // remove associed shadow
+            for (auto it_sha = m_worldObjects.begin(); it_sha != m_worldObjects.end();) {
                 WorldObject* object = *it_sha;
                 if (object->getMapX() == x && object->getMapY() == y && object->getType() == DM_PROJECT_MAP_SHADOW) {
-                    it_sha = m_worldObjects.erase(it_sha);
+                    m_worldObjects.erase(it_sha);
                     break;
-                } else {
+                }
+                else {
                     ++it_sha;
                 }
             }
             delete item;
-        } else {
+        }
+        else {
             ++it;
             DEBUG_PRINT("No item to interact with" << std::endl);
         }
     }
-    for (Monster* monster : this->m_worldMonsters) {
+    for (auto it = m_worldMonsters.begin(); it != m_worldMonsters.end();) {
+        Monster* monster = *it;
         if (monster->getMapX() == x && monster->getMapY() == y) {
             monster->getClicked(this->m_player);
-
+            monster->getAttacked(this->m_player);
+            DEBUG_PRINT("Monster stats : Life => " << std::to_string(monster->getLife()) << " Defense => "
+                                                  << std::to_string(monster->getDefense()) << " Attack => "
+                                                  << std::to_string(monster->getAttack()) << std::endl)
+            if (monster->getLife() <= 0) {
+                it = m_worldMonsters.erase(it);
+                // remove associed shadow
+                for (auto it_sha = m_worldObjects.begin(); it_sha != m_worldObjects.end();) {
+                    WorldObject* object = *it_sha;
+                    if (object->getMapX() == x && object->getMapY() == y && object->getType() == DM_PROJECT_MAP_SHADOW) {
+                        m_worldObjects.erase(it_sha);
+                        break;
+                    }
+                    else {
+                        ++it_sha;
+                    }
+                }
+                delete monster;
+            }else{
+                ++it;
+            }
         }
         else {
             DEBUG_PRINT("No monster to interact with" << std::endl);
+            it++;
         }
     }
 
@@ -325,5 +347,4 @@ void Map::interact()
                                           << std::to_string(this->m_player->getLife()) << " Defense => "
                                           << std::to_string(this->m_player->getDefense()) << " Attack => "
                                           << std::to_string(this->m_player->getAttack()) << std::endl)
-
 }
