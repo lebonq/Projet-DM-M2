@@ -16,6 +16,7 @@
 #include "Player.hpp"
 #include "Util.hpp"
 #include "WorldObject.hpp"
+#include "Door.hpp"
 
 using json = nlohmann::json;
 
@@ -28,10 +29,13 @@ private:
     int m_nLevels;
     int m_currentLevel;
 
+    double m_monsterPreviousTime;
+
     std::vector<int> m_terrain; //used to store the type of every "chunck" of the map
     std::vector<WorldObject*> m_worldObjects; //owning pointers
     std::vector<Item*> m_worldItems; //owning pointers
     std::vector<Monster*> m_worldMonsters; //owning pointers
+    std::vector<Door*> m_worldDoors; //owning pointers
 
     Player* m_player;
     json m_data;
@@ -50,7 +54,7 @@ public:
     int getExitPos() const { return m_exitPos; }
     ~Map();
     void loadMap(const std::string& nameLevel);
-    void update();
+    void update(double current_time);
     void initInteractiveObject();
     Player* getPlayer() const { return this->m_player; }
     void    interact();

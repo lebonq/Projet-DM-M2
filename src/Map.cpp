@@ -251,6 +251,19 @@ void Map::initInteractiveObject()
         this->m_worldMonsters.push_back(monster_ptr);
         DEBUG_PRINT("Monster type : " << monster["type"] << " x : " << monster["pos_x"] << " y : " << monster["pos_y"] << std::endl);
     }
+
+    json listDoors = this->m_data["levels"][std::to_string(this->m_currentLevel)]["doors"];
+
+    for (auto door : listDoors) {
+        Model*    door_model = this->m_ModelsManager.getRefModel(DM_PROJECT_ID_MANAGER_DOOR);
+        int       x          = door["pos_x"];
+        int       y          = door["pos_y"];
+        glm::mat4 mmatrix(1.0f);
+        mmatrix = glm::translate(mmatrix, glm::vec3(x + 1, 0.50, y));
+        Door* door_ptr = new Door(door_model, mmatrix, x, y, door["price"]);
+        this->m_worldDoors.push_back(door_ptr);
+        DEBUG_PRINT("Door type : " << door["type"] << " x : " << door["pos_x"] << " y : " << door["pos_y"] << std::endl);
+    }
 }
 
 void Map::drawStatic()
@@ -259,8 +272,10 @@ void Map::drawStatic()
         if (object == nullptr) {
             DEBUG_PRINT("object of nullptr" << std::endl)
         }
-
         object->draw();
+    }
+    for (Door* door : this->m_worldDoors) {
+        door->draw();
     }
 }
 void Map::drawFacing()
@@ -272,18 +287,21 @@ void Map::drawFacing()
         monster->draw(this->m_player);
     }
 }
-void Map::update()
+void Map::update(double current_time)
 {
-    int p_x = this->m_player->getMapX();
-    int p_y = this->m_player->getMapY();
 
+    //Manage movement and monster attackinga
+    //if 1 second has passed we update monster position
+    if(current_time - this->m_monsterPreviousTime > 1000)
     for (auto monster : this->m_worldMonsters) {
+        int p_x = this->m_player->getMapX();
+        int p_y = this->m_player->getMapY();
         int m_x = monster->getMapX();
         int m_y = monster->getMapY();
 
-        // id monster is 4-adjencency of player
-        if ((abs(p_x - m_x) == 0 && abs(p_y - m_y) == 1) || (abs(p_x - m_x) == 1 && abs(p_y - m_y) == 0)) {
-            m_player->getAttacked(monster);
+        // if monster is 4-adjencency of player or onto the player
+        if ((abs(p_x - m_x) == 0 && abs(p_y - m_y) == 1) || (abs(p_x - m_x) == 1 && abs(p_y - m_y) == 0) || (p_x == m_x && p_y == m_y)) {
+            m_player->getAttacked(monster); //player get attacked
         }
         else {
             //le monstre ne se deplace que si il est a 6 de distance maximum (distance cartesienne)
@@ -334,12 +352,17 @@ void Map::update()
             monster->setPreviousCell(m_y * this->getWidth() + m_x);
 
         }
+        this->m_monsterPreviousTime = current_time;
     }
-    DEBUG_PRINT("Player stats : Gold => " << std::to_string(this->m_player->getGold()) << " Life => "
+
+    for(auto door : this->m_worldDoors){
+        door->update(current_time);
+    }
+    /*DEBUG_PRINT("Player stats : Gold => " << std::to_string(this->m_player->getGold()) << " Life => "
                                           << std::to_string(this->m_player->getLife()) << " Defense => "
                                           << std::to_string(this->m_player->getDefense()) << " Attack => "
                                           << std::to_string(this->m_player->getAttack()) << " X =>"
-                                          << std::to_string(this->m_player->getMapX()) << " Y =>" << std::to_string(this->m_player->getMapY()) << std::endl)
+                                          << std::to_string(this->m_player->getMapX()) << " Y =>" << std::to_string(this->m_player->getMapY()) << std::endl)*/
 }
 void Map::interact()
 {
@@ -406,6 +429,18 @@ void Map::interact()
         }
         else {
             DEBUG_PRINT("No monster to interact with" << std::endl);
+            it++;
+        }
+    }
+
+    for(auto it = this->m_worldDoors.begin();it != this->m_worldDoors.end();){
+        Door* door = *it;
+        if(door->getMapX() == x && door->getMapY() == y){
+            door->getClicked(this->m_player);
+            it++;
+        }
+        else{
+            DEBUG_PRINT("No door to interact with" << std::endl);
             it++;
         }
     }

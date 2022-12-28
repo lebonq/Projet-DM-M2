@@ -41,13 +41,15 @@ const int DM_PROJECT_ID_MANAGER_WATER = 2;
 const int DM_PROJECT_ID_MANAGER_GOLDCOIN = 3;
 const int DM_PROJECT_ID_MANAGER_SHADOW = 4;
 const int DM_PROJECT_ID_MANAGER_SKELETON = 5;
+const int DM_PROJECT_ID_MANAGER_DOOR = 6;
 
 const std::vector<std::string> DM_PROJECT_TEX = {"assets/textures/wall_up.png"/*Wall Texture in 0*/
                                                 ,"assets/textures/floor_up.png"/*Floor texture in 1*/
                                                 ,"assets/textures/water_up.png"
                                                 ,"assets/textures/Beer.png"
                                                 ,"assets/textures/shadow.png"
-,"assets/textures/Skeleton.png"};
+,"assets/textures/Skeleton.png",
+"assets/textures/door.png"};
 
 const std::vector<std::vector<glimac::ShapeVertex>> DM_PROJECT_MODEL_VERTICES = {{
              glimac::ShapeVertex{glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 0.0f)},  // bottom left
@@ -79,6 +81,16 @@ const std::vector<std::vector<glimac::ShapeVertex>> DM_PROJECT_MODEL_VERTICES = 
              glimac::ShapeVertex{glm::vec3( 0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 1.0f)},  // bottom right
              glimac::ShapeVertex{glm::vec3( 0.5f,  0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 0.0f)},  // top right
              glimac::ShapeVertex{glm::vec3(-0.5f,  0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 0.0f)}   // top left
+    },{
+             glimac::ShapeVertex{glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 0.0f)},  // bottom left
+             glimac::ShapeVertex{glm::vec3( 0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 0.0f)},  // bottom right
+             glimac::ShapeVertex{glm::vec3( 0.5f,  0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 1.0f)},  // top right
+             glimac::ShapeVertex{glm::vec3(-0.5f,  0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 1.0f)},   // top left
+                                                                                     //opposite normal
+             glimac::ShapeVertex{glm::vec3(-0.5f, -0.5f, -0.01f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 0.0f)},  // bottom left
+             glimac::ShapeVertex{glm::vec3( 0.5f, -0.5f, -0.01f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 0.0f)},  // bottom right
+             glimac::ShapeVertex{glm::vec3( 0.5f,  0.5f, -0.01f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 1.0f)},  // top right
+             glimac::ShapeVertex{glm::vec3(-0.5f,  0.5f, -0.01f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 1.0f)}   // top left
     }};
 
 const std::vector<std::vector<unsigned int>> DM_PROJECT_MODEL_INDICES = {{
@@ -99,12 +111,16 @@ const std::vector<std::vector<unsigned int>> DM_PROJECT_MODEL_INDICES = {{
 },{
     0, 1, 2,  // first triangle
     2, 3, 0   // second triangle
+},{
+    0, 1, 2,  // first triangle
+    2, 3, 0   // second triang
+    ,4, 5, 6,  // third triangle
+    6, 7, 4   // fourth triangle
 }};
 
-const std::vector<glm::vec3> DM_PROJECT_MODEL_KD = {glm::vec3(2),glm::vec3(2),glm::vec3(9),glm::vec3(3),glm::vec3(2),glm::vec3(2)};
-const std::vector<glm::vec3> DM_PROJECT_MODEL_KS = {glm::vec3(0),glm::vec3(0),glm::vec3(25),glm::vec3(4),glm::vec3(0),glm::vec3(0)};
-const std::vector<float> DM_PROJECT_MODEL_SHININESS = {2,2,20,7,2,2};
-
+const std::vector<glm::vec3> DM_PROJECT_MODEL_KD = {glm::vec3(2),glm::vec3(2),glm::vec3(9),glm::vec3(3),glm::vec3(2),glm::vec3(2),glm::vec3(2)};
+const std::vector<glm::vec3> DM_PROJECT_MODEL_KS = {glm::vec3(0),glm::vec3(0),glm::vec3(18),glm::vec3(2),glm::vec3(0),glm::vec3(0),glm::vec3(0)};
+const std::vector<float> DM_PROJECT_MODEL_SHININESS = {2,2,8,4,2,2,2};
 
 
 #endif // PROJET_DM_QUENTIN_LEBON_DATA_HPP

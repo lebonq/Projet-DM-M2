@@ -12,7 +12,7 @@ void CombatEntity::getAttacked(CombatEntity* attacker)
     int damage = attacker->getAttack() - this->getDefense();
     if (damage < 0)
     {
-        damage = 0;
+        return;
     }
     this->changeLife(-damage);
 }

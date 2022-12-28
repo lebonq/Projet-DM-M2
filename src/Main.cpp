@@ -232,18 +232,15 @@ int main()
             }
         }
 
-        //update the state of monster
-        if ((glfwGetTime() * 1000) - update_time > 1000) {
-            update_time = glfwGetTime() * 1000;
-            map->update();
-        }
+        //update the state of map object
+        map->update(glfwGetTime() * 1000);
 
         glClearColor(0.0f, 0.0f, 0.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         VMatrix                  = camera->getViewMatrix();
         glm::vec3 lightPos       = camera->getPosition();
-        glm::vec3 lightIntensity = glm::vec3(1);
+        glm::vec3 lightIntensity = glm::vec3(0.9);
 
 
         /*float frequency = 20.0f; // shaking frequency

@@ -29,6 +29,7 @@ TextRenderer::TextRenderer(int window_width, int window_height)
     // here we generate the quads and texture for every first 128 characters and put it in a map
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // disable byte-alignment restriction
 
+    unsigned int texture;
     for (unsigned char c = 0; c < 128; c++) {
         // load character glyph
         if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
@@ -36,7 +37,6 @@ TextRenderer::TextRenderer(int window_width, int window_height)
             continue;
         }
         // generate texture
-        unsigned int texture;
         glGenTextures(1, &texture);
         glBindTexture(GL_TEXTURE_2D, texture);
         glTexImage2D(
@@ -98,15 +98,16 @@ void TextRenderer::renderText(const std::string& text, float x, float y, float s
 
     // iterate through all characters
     std::string::const_iterator c;
+    float w,h,xpos,ypos;
     for (c = text.begin(); c != text.end(); c++)
     {
         Character ch = this->m_characters[*c];
 
-        float xpos = x + ch.Bearing.x * scale;
-        float ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
+        xpos = x + ch.Bearing.x * scale;
+        ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
 
-        float w = ch.Size.x * scale;
-        float h = ch.Size.y * scale;
+        w = ch.Size.x * scale;
+        h = ch.Size.y * scale;
         // update VBO for each character
         float vertices[6][4] = {
             { xpos,     ypos + h,   0.0f, 0.0f },

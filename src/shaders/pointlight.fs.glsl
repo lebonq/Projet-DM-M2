@@ -21,11 +21,11 @@ vec3 blinnPhong(){
     float d = distance(uLightPos_vs, vPosition_vs);
     vec3 corrected_intensity = clamp(uLightIntensity/(d*d),0.0,1.0);
     vec3 color = clamp(corrected_intensity*(uKd * max(dot(normalize(uLightPos_vs - vPosition_vs), vNormal_vs), 0.0) + uKs * pow(max(dot(halfVector, vNormal_vs), 0.0), uShininess)),0.0,1.0);
-    return corrected_intensity;
+    return color;
 }
 
 
 void main() {
     vec4 tex = texture(uTex_data, vTexCoords);
-    fFragColor = clamp(tex/*vec4(blinnPhong(),1)*/ ,0.0f,1.0f);
+    fFragColor = clamp(tex*vec4(blinnPhong(),1) ,0.0f,1.0f);
 }

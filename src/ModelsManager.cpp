@@ -24,6 +24,9 @@ ModelsManager::ModelsManager()
     DEBUG_PRINT("Load Skeleton Model " << std::endl);
     Model* skeleton = new Model(DM_PROJECT_ID_MANAGER_SKELETON, this->m_texManager.getTexId(DM_PROJECT_ID_MANAGER_SKELETON), this->m_shaderManagerFacing);
     this->m_listModels.push_back(skeleton);
+    DEBUG_PRINT("Load Door model " << std::endl);
+    Model* door = new Model(DM_PROJECT_ID_MANAGER_DOOR, this->m_texManager.getTexId(DM_PROJECT_ID_MANAGER_DOOR), this->m_shaderManagerStatic);
+    this->m_listModels.push_back(door);
 }
 
 ModelsManager::~ModelsManager()
