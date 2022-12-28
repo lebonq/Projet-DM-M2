@@ -11,13 +11,77 @@
           "amount_1": 0,
           "id_model": 3
         },
-        "GoldCoins2": {
+        "GoldIngot1": {
           "pos_x": 5,
           "pos_y": 5,
           "type": 0,
+          "amount_0": 400,
+          "amount_1": 0,
+          "id_model": 9
+        },
+        "Apple1": {
+          "pos_x": 5,
+          "pos_y": 6,
+          "type": 1,
           "amount_0": 40,
           "amount_1": 0,
-          "id_model": 3
+          "id_model": 10
+        },
+        "Beer1": {
+          "pos_x": 6,
+          "pos_y": 6,
+          "type": 1,
+          "amount_0": 40,
+          "amount_1": 0,
+          "id_model": 11
+        },
+        "Ham1": {
+          "pos_x": 7,
+          "pos_y": 6,
+          "type": 1,
+          "amount_0": 40,
+          "amount_1": 0,
+          "id_model": 12
+        },
+        "Meat1": {
+          "pos_x": 8,
+          "pos_y": 6,
+          "type": 1,
+          "amount_0": 40,
+          "amount_1": 0,
+          "id_model": 13
+        },
+        "Helmet1": {
+          "pos_x": 9,
+          "pos_y": 6,
+          "type": 2,
+          "amount_0": 40,
+          "amount_1": 0,
+          "id_model": 14
+        },
+        "Armor1": {
+          "pos_x": 9,
+          "pos_y": 7,
+          "type": 2,
+          "amount_0": 40,
+          "amount_1": 0,
+          "id_model": 15
+        },
+        "GoldSword1": {
+          "pos_x": 9,
+          "pos_y": 8,
+          "type": 4,
+          "amount_0": 10,
+          "amount_1": 2,
+          "id_model": 16
+        },
+        "WoodSword1": {
+          "pos_x": 9,
+          "pos_y": 9,
+          "type": 3,
+          "amount_0": 5,
+          "amount_1": 0,
+          "id_model": 17
         }
       },
       "monsters": {

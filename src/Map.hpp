@@ -37,6 +37,7 @@ private:
     std::vector<Item*> m_worldItems; //owning pointers
     std::vector<Monster*> m_worldMonsters; //owning pointers
     std::vector<Door*> m_worldDoors; //owning pointers
+    std::vector<InteractiveObject* > m_renderedObjectsTransparancy;
 
     Ladder* m_ladder;
 

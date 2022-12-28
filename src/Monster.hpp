@@ -26,8 +26,6 @@ public:
     ~Monster();
     void  update(Player* player);
     void  getClicked(Player* player) override;
-    void  draw() override;
-    void draw(Player *player);
     float getRealX() const
     {
         return m_real_x;

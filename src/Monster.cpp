@@ -32,10 +32,6 @@ void Monster::getClicked(Player* player)
     }
     player->getRealZ();
 }
-void Monster::draw()
-{
-    InteractiveObject::draw();
-}
 
 void Monster::moveOnX(int direction){
      glm::mat4 mmatrix(1.0f);
@@ -61,13 +57,7 @@ void Monster::moveOnY(int direction){
      this->m_real_z = this->getMapY();
 }
 
-void Monster::draw(Player *player)
-{
-    float x = player->getRealX();
-    float z = player->getRealZ();
-    glUniform3fv(this->m_Model->getShaderProgram()->getPlayerPos(),1,glm::value_ptr(glm::vec3(x,0,z)));
-    this->draw();
-}
+
 int Monster::getPreviousCell() const
 {
     return m_previousCell;

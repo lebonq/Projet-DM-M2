@@ -5,16 +5,17 @@
 #ifndef PROJET_DM_QUENTIN_LEBON_LADDER_HPP
 #define PROJET_DM_QUENTIN_LEBON_LADDER_HPP
 
+#include "InteractiveObject.hpp"
 #include "Player.hpp"
-#include "WorldObject.hpp"
-class Ladder: public WorldObject {
+
+class Ladder: public InteractiveObject {
 public:
     Ladder(int type, Model* model, const glm::mat4& mat, int mapX, int mapY);
-    void draw() override;
 
 public:
     ~Ladder() override;
-    void draw(Player* player);
+    void getClicked(Player* player) override;
+    void draw() override;
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_LADDER_HPP

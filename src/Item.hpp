@@ -19,8 +19,6 @@ public:
     Item(Model* model,WorldObject* shadow, int map_x, int map_y, int id,int amount1, int amount2): Item(model, glm::mat4(1.0f),shadow, map_x, map_y, id, amount1, amount2){};
     ~Item();
     void getClicked(Player* player) override;
-    void draw() override;
-    void draw(Player *player);
     //Override draw function
 
 

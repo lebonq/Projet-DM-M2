@@ -163,6 +163,18 @@ void Map::initWorldObject()
                 wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 0, 1));
             }
 
+            //Floor Above the hole of exit facing X
+            if(this->m_terrain[index] ==DM_PROJECT_MAP_EXIT ){
+                wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 2, 0));
+                wallMatrix = glm::rotate(wallMatrix, glm::radians(180.0f), glm::vec3(0, 1, 0)); // Those rotation allow us to orient the wall inside the room
+                this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_WALL, wall, wallMatrix, x, y));
+                wallMatrix = glm::rotate(wallMatrix, glm::radians(-180.0f), glm::vec3(0, 1, 0));
+                wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 0, -1));
+                this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_WALL, wall, wallMatrix, x, y));
+                wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 0, 1));
+                wallMatrix = glm::translate(wallMatrix, glm::vec3(0, -2, 0));
+            }
+
             wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 1, 0));
 
             // Wall touching the top
@@ -222,6 +234,18 @@ void Map::initWorldObject()
                 wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 0, 1));
             }
 
+            //Floor above the hole of exit facing Z
+            if(this->m_terrain[index] == DM_PROJECT_MAP_EXIT){
+                wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 2, 0));
+                wallMatrix = glm::rotate(wallMatrix, glm::radians(-180.0f), glm::vec3(0, 1, 0)); // Those rotation allow us to orient the wall inside the room
+                this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_WALL, wall, wallMatrix, x, y));
+                wallMatrix = glm::rotate(wallMatrix, glm::radians(180.0f), glm::vec3(0, 1, 0));
+                wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 0, -1));
+                this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_WALL, wall, wallMatrix, x, y));
+                wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 0, 1));
+                wallMatrix = glm::translate(wallMatrix, glm::vec3(0, -2, 0));
+            }
+
             wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 1, 0));
 
             wallMatrix = glm::translate(wallMatrix, glm::vec3(-0.5, 0, -0.5));
@@ -253,6 +277,7 @@ void Map::initWorldObject()
                 if(this->m_terrain[index] == DM_PROJECT_MAP_EXIT){
                     Model* ladder = this->m_ModelsManager.getRefModel(DM_PROJECT_ID_MANAGER_LADDER);
                     this->m_ladder = new Ladder(DM_PROJECT_ID_MANAGER_LADDER,ladder, floorMatrix, x, y);
+                    this->m_renderedObjectsTransparancy.push_back(this->m_ladder);
                     Model* shadow = this->m_ModelsManager.getRefModel(DM_PROJECT_ID_MANAGER_SHADOW);
                     glm::mat4 smatrix(1.0f);
                     smatrix = glm::translate(smatrix, glm::vec3(x + 1, 0.01f, y));
@@ -305,6 +330,7 @@ void Map::initInteractiveObject()
         smatrix = glm::translate(smatrix, glm::vec3(x + 1, 0.01f, y));
         this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_SHADOW, shadow, smatrix, x, y));
         Item* item_ptr = new Item(item_model, mmatrix, this->m_worldObjects.back(), x, y, item["type"], item["amount_0"], item["amount_1"]);
+        this->m_renderedObjectsTransparancy.push_back(item_ptr);
         this->m_worldItems.push_back(item_ptr);
         DEBUG_PRINT("Item type : " << item["type"] << " x : " << item["pos_x"] << " y : " << item["pos_y"] << std::endl);
     }
@@ -322,6 +348,7 @@ void Map::initInteractiveObject()
         smatrix = glm::translate(smatrix, glm::vec3(x + 1, 0.01f, y));
         this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_SHADOW, shadow, smatrix, x, y));
         Monster* monster_ptr = new Monster(monster_model, mmatrix, this->m_worldObjects.back(), x, y, monster["type"], monster["live"], monster["defense"], monster["attack"]);
+        this->m_renderedObjectsTransparancy.push_back(monster_ptr);
         this->m_worldMonsters.push_back(monster_ptr);
         DEBUG_PRINT("Monster type : " << monster["type"] << " x : " << monster["pos_x"] << " y : " << monster["pos_y"] << std::endl);
     }
@@ -355,13 +382,9 @@ void Map::drawStatic()
 }
 void Map::drawFacing()
 {
-    for (Item* item : this->m_worldItems) {
-        item->draw(this->m_player);
+    for (auto objectFacing : this->m_renderedObjectsTransparancy) {
+        objectFacing->draw(this->m_player);
     }
-    for (Monster* monster : this->m_worldMonsters) {
-        monster->draw(this->m_player);
-    }
-    this->m_ladder->draw(this->m_player);
 }
 void Map::update(double current_time)
 {
@@ -381,7 +404,6 @@ void Map::update(double current_time)
             else {
                 // le monstre ne se deplace que si il est a 6 de distance maximum (distance cartesienne)
                 float distance = sqrt(pow(p_x - m_x, 2) + pow(p_y - m_y, 2));
-                DEBUG_PRINT("distance : " << distance << std::endl);
                 if (distance >= 60) {
                     continue;
                 }

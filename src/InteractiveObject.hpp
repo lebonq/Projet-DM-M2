@@ -16,8 +16,10 @@ protected:
 public:
     InteractiveObject(Model* model, WorldObject* m_shadow, glm::mat4 mat, int map_x, int map_y);
     ~InteractiveObject() override = default;
-    virtual void getClicked(Player* player) = 0;
-    virtual void draw() override;
+    virtual bool getClicked(Player* player) = 0;
+    virtual void draw();
+    void draw(Player* player);
+    WorldObject* getMShadow() const;
     //Call update animation from main loop
     //One is to make the item face you other item move and fly
 };
