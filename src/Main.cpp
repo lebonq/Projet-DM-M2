@@ -9,6 +9,8 @@
 #include <glimac/glm.hpp>
 #include "Map.hpp"
 #include "ModelsManager.hpp"
+#include "TextRenderer.hpp"
+
 int window_width  = 1920;
 int window_height = 1080;
 
@@ -31,6 +33,11 @@ Player* player;
 FreeflyCamera* camera;
 
 double update_time = 0.0;
+
+int* player_life;
+int* player_defense;
+int* player_attack;
+int* player_gold;
 
 float randomFloat() {
   std::srand(std::time(nullptr));
@@ -149,6 +156,9 @@ int main()
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     //-200 for UI
     glViewport(0, 0, window_width, window_height-200);
+    //Init FreeType for text rendering
+    TextRenderer* textRenderer = new TextRenderer(window_height,window_width);
+
 
     // Default proj matrix
     PMatrix = glm::perspective(glm::radians(70.0f), static_cast<float>(window_width) / static_cast<float>(window_height), 0.25f, 100.f);
@@ -163,6 +173,11 @@ int main()
     player = map->getPlayer();
     camera = player->getCamera();
     // exit(0);
+
+    player_life = map->getPlayerLifePtr();
+    player_attack = map->getPlayerAttackPtr();
+    player_defense = map->getPlayerDefensePtr();
+    player_gold = map->getPlayerGoldPtr();
 
     std::vector<ShadersManager*> shaders;
     shaders.push_back(map->getShadersManagerFacing());
@@ -217,6 +232,7 @@ int main()
             }
         }
 
+        //update the state of monster
         if ((glfwGetTime() * 1000) - update_time > 1000) {
             update_time = glfwGetTime() * 1000;
             map->update();
@@ -245,10 +261,8 @@ int main()
                                       0.0f, 0.0f, 0.0f, 1.0f);*/
 
 
-        //************************DRAW UI  ************************
-        //glViewport(0, window_height-200, window_width, 200);
         //************************DRAW GAME************************
-        //glViewport(0, 0, window_width, window_height-200);
+        glViewport(0, 0, window_width, window_height);
         ShadersManager* shader;
         // draw static
         shader = shaders[1];
@@ -266,7 +280,14 @@ int main()
         glUniform3fv(shader->getLightPosVs(), 1, glm::value_ptr(glm::vec3(VMatrix * glm::vec4(lightPos, 1.0f))));
         glUniform3fv(shader->getLightIntensity(), 1, glm::value_ptr(lightIntensity));
         map->drawFacing();
-
+        //************************DRAW UI  ************************
+        glDisable(GL_DEPTH_TEST); //UI is flat no need to test depth
+        glViewport(0, window_height-200, window_width, 200);
+        textRenderer->renderText("Life : " + std::to_string(*player_life), 0.0f, 0.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+        textRenderer->renderText("Gold : " + std::to_string(*player_gold), 0.0f, 50.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+        textRenderer->renderText("Attack : " + std::to_string(*player_attack), 0.0f, 100.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+        textRenderer->renderText("Defense : " + std::to_string(*player_defense), 0.0f, 150.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+        glEnable(GL_DEPTH_TEST);
         // Swap front and back buffers
         glfwSwapBuffers(window);
         // Poll for and process events

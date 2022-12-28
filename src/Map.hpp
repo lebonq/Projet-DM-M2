@@ -54,6 +54,10 @@ public:
     void initInteractiveObject();
     Player* getPlayer() const { return this->m_player; }
     void    interact();
+    int* getPlayerLifePtr(){return this->m_player->getLifePtr();}
+    int* getPlayerDefensePtr(){return this->m_player->getDefensePtr();}
+    int* getPlayerAttackPtr(){return this->m_player->getAttackPtr();}
+    int* getPlayerGoldPtr(){return this->m_player->getGoldPtr();}
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_MAP_HPP

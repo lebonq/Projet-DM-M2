@@ -77,6 +77,10 @@ public:
     {
         return m_gold;
     };
+    int* getGoldPtr()
+    {
+        return &m_gold;
+    };
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_PLAYER_HPP

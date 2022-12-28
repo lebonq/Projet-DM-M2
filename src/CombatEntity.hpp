@@ -39,6 +39,18 @@ public:
     {
         return m_attack;
     };
+    int* getLifePtr()
+    {
+        return &m_life;
+    };
+    int* getDefensePtr()
+    {
+        return &m_defense;
+    };
+    int* getAttackPtr()
+    {
+        return &m_attack;
+    };
     void getAttacked(CombatEntity* attacker);
 
 };
