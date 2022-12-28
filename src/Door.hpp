@@ -12,8 +12,10 @@ public:
     void getClicked(Player* player) override;
     void draw() override;
     void update(double current_time);
-    bool getAnimated(){return this->m_Animated;}
-    bool animationFinished(){this->m_Animated = false;}
+    bool isOpen() const
+    {
+        return m_open;
+    };
 
 private:
     bool m_open = false;

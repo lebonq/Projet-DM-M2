@@ -12,7 +12,7 @@ Item::Item(Model* model, glm::mat4 mat,WorldObject* shadow, int map_x, int map_y
 
 void Item::getClicked(Player* player)//TO-DO pass player object
 {
-    if(this->m_ItemType == DM_PROJECT_ITEM_GOLD){
+    if(this->m_ItemType == DM_PROJECT_ITEM_GOLDCOIN){
         DEBUG_PRINT("We add gold to the player => gold coins " << std::to_string(this->m_ItemValue1) << std::endl);
         player->changeGold(this->m_ItemValue1);
     }

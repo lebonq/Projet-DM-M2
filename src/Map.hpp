@@ -10,13 +10,14 @@
 #include <string>
 #include <vector>
 #include "Data.hpp"
+#include "Door.hpp"
 #include "Item.hpp"
+#include "Ladder.hpp"
 #include "ModelsManager.hpp"
 #include "Monster.hpp"
 #include "Player.hpp"
 #include "Util.hpp"
 #include "WorldObject.hpp"
-#include "Door.hpp"
 
 using json = nlohmann::json;
 
@@ -37,7 +38,9 @@ private:
     std::vector<Monster*> m_worldMonsters; //owning pointers
     std::vector<Door*> m_worldDoors; //owning pointers
 
-    Player* m_player;
+    Ladder* m_ladder;
+
+    Player* m_player = nullptr;
     json m_data;
     ModelsManager m_ModelsManager;
 
@@ -62,6 +65,11 @@ public:
     int* getPlayerDefensePtr(){return this->m_player->getDefensePtr();}
     int* getPlayerAttackPtr(){return this->m_player->getAttackPtr();}
     int* getPlayerGoldPtr(){return this->m_player->getGoldPtr();}
+    bool    canItGoThere(int x, int y);
+    bool    isDoorOpenAt(int x, int y);
+    bool    isDoorOpenAtCell(int cell);
+    void    changeLevel(int direction);
+    void    startPlayerPosComputation();
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_MAP_HPP

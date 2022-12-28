@@ -18,12 +18,43 @@ Map::Map(const std::string& nameLevel)
     this->initWorldObject();
     this->initInteractiveObject();
 
+    this->startPlayerPosComputation();
+
+}
+
+void Map::startPlayerPosComputation(){
     // set starting pos player
     int pos_player = this->getEntrancePos();
     int cam_x      = pos_player % this->getWidth();
     int cam_z      = (pos_player - cam_x) / this->getWidth();
 
-    this->m_player = new Player(cam_x, cam_z, cam_x, cam_z, this->getHeight(), this->getWidth());
+    if(this->m_player == nullptr){
+        this->m_player = new Player(cam_x, cam_z, cam_x, cam_z, this->getHeight(), this->getWidth());
+    }
+    else{
+        this->m_player->moveLevel(cam_x, cam_z, cam_x, cam_z, this->getHeight(), this->getWidth());
+    }
+    this->m_player->rotateLeftCamera(0); // update lookat
+}
+
+void Map::changeLevel(int direction){
+    this->m_currentLevel += direction;
+    //Si on est deja au RDC on ne fait rien
+    if(this->m_currentLevel < 0){
+        this->m_currentLevel = 0;
+        return ;
+    }
+    //si on est deja tout en haut on ne fait rien
+    if(this->m_currentLevel >= this->m_nLevels){
+        this->m_currentLevel = this->m_nLevels - 1;
+        return ;
+    }
+    this->loadMap(this->m_data["levels"][std::to_string(this->m_currentLevel)]["image"]);
+    this->initWorldObject();
+    this->initInteractiveObject();
+    this->startPlayerPosComputation();
+    DEBUG_PRINT("Load level " << this->m_currentLevel << std::endl);
+
 }
 
 void Map::loadMap(const std::string& nameLevel)
@@ -122,6 +153,16 @@ void Map::initWorldObject()
                 this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_WALL, wall, wallMatrix, x, y));
                 wallMatrix = glm::rotate(wallMatrix, glm::radians(-180.0f), glm::vec3(0, 1, 0));
             }
+            //Floor under the hole of entrance facing X
+            if(this->m_terrain[index] == DM_PROJECT_MAP_ENTRANCE){
+                wallMatrix = glm::rotate(wallMatrix, glm::radians(180.0f), glm::vec3(0, 1, 0)); // Those rotation allow us to orient the wall inside the room
+                this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_WALL, wall, wallMatrix, x, y));
+                wallMatrix = glm::rotate(wallMatrix, glm::radians(-180.0f), glm::vec3(0, 1, 0));
+                wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 0, -1));
+                this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_WALL, wall, wallMatrix, x, y));
+                wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 0, 1));
+            }
+
             wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 1, 0));
 
             // Wall touching the top
@@ -135,6 +176,7 @@ void Map::initWorldObject()
                 }
                 wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 0, 1));
             }
+
 
             // Wall facing Z
             wallMatrix = glm::rotate(wallMatrix, glm::radians(90.0f), glm::vec3(0, 1, 0));
@@ -169,6 +211,17 @@ void Map::initWorldObject()
                 this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_WALL, wall, wallMatrix, x, y));
                 wallMatrix = glm::rotate(wallMatrix, glm::radians(-180.0f), glm::vec3(0, 1, 0));
             }
+
+            //Floor under the hole of entrance facing Z
+            if(this->m_terrain[index] == DM_PROJECT_MAP_ENTRANCE){
+                wallMatrix = glm::rotate(wallMatrix, glm::radians(-180.0f), glm::vec3(0, 1, 0)); // Those rotation allow us to orient the wall inside the room
+                this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_WALL, wall, wallMatrix, x, y));
+                wallMatrix = glm::rotate(wallMatrix, glm::radians(180.0f), glm::vec3(0, 1, 0));
+                wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 0, -1));
+                this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_WALL, wall, wallMatrix, x, y));
+                wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 0, 1));
+            }
+
             wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 1, 0));
 
             wallMatrix = glm::translate(wallMatrix, glm::vec3(-0.5, 0, -0.5));
@@ -188,18 +241,38 @@ void Map::initWorldObject()
                 this->m_terrain[index] == DM_PROJECT_MAP_ENTRANCE ||
                 this->m_terrain[index] == DM_PROJECT_MAP_EXIT ||
                 this->m_terrain[index] == DM_PROJECT_MAP_WATER) {
-                if (this->m_terrain[index] != DM_PROJECT_MAP_WATER)
+                //We place the floor
+                if(this->m_terrain[index] == DM_PROJECT_MAP_ENTRANCE){
+                    Model* hole = this->m_ModelsManager.getRefModel(DM_PROJECT_ID_MANAGER_FLOOR_HOLE);
+                    this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_ENTRANCE, hole, floorMatrix, x, y));
+                }
+                else if (this->m_terrain[index] != DM_PROJECT_MAP_WATER)
                     this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_EMPTY, floor, floorMatrix, x, y));
+
+                //Place Ladder
+                if(this->m_terrain[index] == DM_PROJECT_MAP_EXIT){
+                    Model* ladder = this->m_ModelsManager.getRefModel(DM_PROJECT_ID_MANAGER_LADDER);
+                    this->m_ladder = new Ladder(DM_PROJECT_ID_MANAGER_LADDER,ladder, floorMatrix, x, y);
+                    Model* shadow = this->m_ModelsManager.getRefModel(DM_PROJECT_ID_MANAGER_SHADOW);
+                    glm::mat4 smatrix(1.0f);
+                    smatrix = glm::translate(smatrix, glm::vec3(x + 1, 0.01f, y));
+                    this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_SHADOW, shadow, smatrix, x, y));
+                }
+
+                //We place the ceiling
                 floorMatrix = glm::translate(floorMatrix, glm::vec3(0, 1, 0));
                 floorMatrix = glm::rotate(floorMatrix, glm::radians(180.0f), glm::vec3(1, 0, 0)); // Make the floor face downward
-                this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_EMPTY, floor, floorMatrix, x, y));
+                if(this->m_terrain[index] == DM_PROJECT_MAP_EXIT){
+                    Model* hole = this->m_ModelsManager.getRefModel(DM_PROJECT_ID_MANAGER_FLOOR_HOLE);
+                    this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_EXIT, hole, floorMatrix, x, y));
+                }
+                    else this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_EMPTY, floor, floorMatrix, x, y));
                 floorMatrix = glm::rotate(floorMatrix, glm::radians(-180.0f), glm::vec3(1, 0, 0));
                 floorMatrix = glm::translate(floorMatrix, glm::vec3(0, -1, 0));
             }
         }
         floorMatrix = glm::translate(floorMatrix, glm::vec3(-this->m_width, 0, 1));
     }
-    floor->unBindModel();
 
     // Draw Water
     Model* water = this->m_ModelsManager.getRefModel(DM_PROJECT_ID_MANAGER_WATER);
@@ -236,6 +309,7 @@ void Map::initInteractiveObject()
         DEBUG_PRINT("Item type : " << item["type"] << " x : " << item["pos_x"] << " y : " << item["pos_y"] << std::endl);
     }
 
+    this->m_worldMonsters.clear();
     json listMonsters = this->m_data["levels"][std::to_string(this->m_currentLevel)]["monsters"];
 
     for (auto monster : listMonsters) {
@@ -252,6 +326,7 @@ void Map::initInteractiveObject()
         DEBUG_PRINT("Monster type : " << monster["type"] << " x : " << monster["pos_x"] << " y : " << monster["pos_y"] << std::endl);
     }
 
+    this->m_worldDoors.clear();
     json listDoors = this->m_data["levels"][std::to_string(this->m_currentLevel)]["doors"];
 
     for (auto door : listDoors) {
@@ -259,7 +334,7 @@ void Map::initInteractiveObject()
         int       x          = door["pos_x"];
         int       y          = door["pos_y"];
         glm::mat4 mmatrix(1.0f);
-        mmatrix = glm::translate(mmatrix, glm::vec3(x + 1, 0.50, y));
+        mmatrix        = glm::translate(mmatrix, glm::vec3(x + 1, 0.50, y));
         Door* door_ptr = new Door(door_model, mmatrix, x, y, door["price"]);
         this->m_worldDoors.push_back(door_ptr);
         DEBUG_PRINT("Door type : " << door["type"] << " x : " << door["pos_x"] << " y : " << door["pos_y"] << std::endl);
@@ -286,83 +361,77 @@ void Map::drawFacing()
     for (Monster* monster : this->m_worldMonsters) {
         monster->draw(this->m_player);
     }
+    this->m_ladder->draw(this->m_player);
 }
 void Map::update(double current_time)
 {
+    // Manage movement and monster attackinga
+    // if 1 second has passed we update monster position
+    if (current_time - this->m_monsterPreviousTime > 1000)
+        for (auto monster : this->m_worldMonsters) {
+            int p_x = this->m_player->getMapX();
+            int p_y = this->m_player->getMapY();
+            int m_x = monster->getMapX();
+            int m_y = monster->getMapY();
 
-    //Manage movement and monster attackinga
-    //if 1 second has passed we update monster position
-    if(current_time - this->m_monsterPreviousTime > 1000)
-    for (auto monster : this->m_worldMonsters) {
-        int p_x = this->m_player->getMapX();
-        int p_y = this->m_player->getMapY();
-        int m_x = monster->getMapX();
-        int m_y = monster->getMapY();
+            // if monster is 4-adjencency of player or onto the player
+            if ((abs(p_x - m_x) == 0 && abs(p_y - m_y) == 1) || (abs(p_x - m_x) == 1 && abs(p_y - m_y) == 0) || (p_x == m_x && p_y == m_y)) {
+                m_player->getAttacked(monster); // player get attacked
+            }
+            else {
+                // le monstre ne se deplace que si il est a 6 de distance maximum (distance cartesienne)
+                float distance = sqrt(pow(p_x - m_x, 2) + pow(p_y - m_y, 2));
+                DEBUG_PRINT("distance : " << distance << std::endl);
+                if (distance >= 60) {
+                    continue;
+                }
 
-        // if monster is 4-adjencency of player or onto the player
-        if ((abs(p_x - m_x) == 0 && abs(p_y - m_y) == 1) || (abs(p_x - m_x) == 1 && abs(p_y - m_y) == 0) || (p_x == m_x && p_y == m_y)) {
-            m_player->getAttacked(monster); //player get attacked
+                int direction_x = p_x < m_x ? -1 : p_x > m_x ? 1
+                                                             : 0;
+                int direction_y = p_y > m_y ? 1 : p_y < m_y ? -1
+                                                            : 0;
+
+                int cell_dir_x = m_y * this->getWidth() + m_x + direction_x;
+                int cell_dir_y = (m_y + direction_y) * this->getWidth() + m_x;
+
+                // Si la case vers laquelle on veut se déplacé n'est pas vide OU que la porte est fermée OU que l'on en vient
+                if ((this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_EMPTY && this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_ENTRANCE && this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_EXIT) || isDoorOpenAtCell(cell_dir_x) == false || monster->getPreviousCell() == cell_dir_x) {
+                    direction_x *= -1; // alors inverse la direction
+                    cell_dir_x = m_y * this->getWidth() + m_x + direction_x;
+                    //(Si cette nouvelle direct n'est pas vide OU que la porte est fermée OU que elle n'est pas sur la même ligne) ET que on ne veut pas se deaplcer en verticale
+                    if (((this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_EMPTY && this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_ENTRANCE && this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_EXIT) || isDoorOpenAtCell(cell_dir_x) == false || m_x + direction_x < 0 || m_x + direction_x >= this->getWidth()) && direction_y == 0) {
+                        direction_y = -(monster->getPreviousCell() - cell_dir_y) / this->getHeight(); // On force le deplacement vertical dans le sens opposé d'ou l'on vient
+                    }
+                }
+
+                if ((this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EMPTY && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_ENTRANCE && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EXIT) || isDoorOpenAtCell(cell_dir_y) == false || monster->getPreviousCell() == cell_dir_y) {
+                    direction_y *= -1; // inverse la direction
+                    cell_dir_y = (m_y + direction_y) * this->getWidth() + m_x;
+                    if (((this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EMPTY && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_ENTRANCE && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EXIT) || isDoorOpenAtCell(cell_dir_y) == false || m_y + direction_y < 0 || m_y + direction_y >= this->getHeight()) && direction_x == 0) {
+                        direction_x = -(monster->getPreviousCell() - cell_dir_x);
+                    }
+                }
+
+                if (canItGoThere(m_x + direction_x, m_y) && direction_x != 0) {
+                    monster->moveOnX(direction_x);
+                }
+                else if (canItGoThere(m_x, m_y + direction_y) && direction_y != 0) {
+                    monster->moveOnY(direction_y);
+                }
+                monster->setPreviousCell(m_y * this->getWidth() + m_x);
+            }
+            this->m_monsterPreviousTime = current_time;
         }
-        else {
-            //le monstre ne se deplace que si il est a 6 de distance maximum (distance cartesienne)
-            float distance = sqrt(pow(p_x - m_x, 2) + pow(p_y - m_y, 2));
-            DEBUG_PRINT("distance : " << distance << std::endl);
-            if (distance >= 6) {
-                continue;
-            }
 
-            int direction_x = p_x < m_x ? -1 : p_x > m_x ? 1
-                                                         : 0;
-            int direction_y = p_y > m_y ? 1 : p_y < m_y ? -1
-                                                        : 0;
-
-            int cell_dir_x = m_y * this->getWidth() + m_x + direction_x;
-            int cell_dir_y = (m_y + direction_y) * this->getWidth() + m_x;
-
-            //Si la case vers laquelle on veut se déplacé n'est pas vide OU que l'on en vient
-            if((this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_EMPTY && this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_ENTRANCE && this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_EXIT)
-                || monster->getPreviousCell() == cell_dir_x){
-                direction_x*=-1;// alors inverse la direction
-               cell_dir_x = m_y * this->getWidth() + m_x + direction_x;
-               //(Si cette nouvelle direct n'est pas vide OU que elle n'est pas sur la même ligne) ET que on ne veut pas se deaplcer en verticale
-               if(((this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_EMPTY && this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_ENTRANCE && this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_EXIT) || m_x+direction_x < 0 || m_x+direction_x >= this->getWidth())
-                   && direction_y == 0 ){
-                    direction_y = -(monster->getPreviousCell() - cell_dir_y)/this->getHeight();// On force le deplacement vertical dans le sens opposé d'ou l'on vient
-               }
-            }
-
-            if((this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EMPTY && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_ENTRANCE && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EXIT)
-                || monster->getPreviousCell() == cell_dir_y){
-                direction_y*=-1;//inverse la direction
-               cell_dir_y = (m_y + direction_y) * this->getWidth() + m_x;
-               if(((this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EMPTY && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_ENTRANCE && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EXIT) || m_y+direction_y < 0 || m_y+direction_y >= this->getHeight())
-                   && direction_x == 0 ){
-                    direction_x =  -(monster->getPreviousCell() - cell_dir_x);
-               }
-            }
-
-            if (direction_x != 0 && m_x+direction_x >= 0 && m_x+direction_x < this->getWidth() &&
-                (this->m_terrain[cell_dir_x] == DM_PROJECT_MAP_EMPTY || this->m_terrain[cell_dir_x] == DM_PROJECT_MAP_ENTRANCE || this->m_terrain[cell_dir_x] == DM_PROJECT_MAP_EXIT)) {
-                monster->moveOnX(direction_x);
-            }
-            else if(m_y + direction_y >= 0 && m_y + direction_y < this->getHeight() &&
-                (this->m_terrain[cell_dir_y] == DM_PROJECT_MAP_EMPTY || this->m_terrain[cell_dir_y] == DM_PROJECT_MAP_ENTRANCE || this->m_terrain[cell_dir_y] == DM_PROJECT_MAP_EXIT)) {
-                monster->moveOnY(direction_y);
-            }
-            monster->setPreviousCell(m_y * this->getWidth() + m_x);
-
-        }
-        this->m_monsterPreviousTime = current_time;
-    }
-
-    for(auto door : this->m_worldDoors){
+    for (auto door : this->m_worldDoors) {
         door->update(current_time);
     }
-    /*DEBUG_PRINT("Player stats : Gold => " << std::to_string(this->m_player->getGold()) << " Life => "
-                                          << std::to_string(this->m_player->getLife()) << " Defense => "
-                                          << std::to_string(this->m_player->getDefense()) << " Attack => "
-                                          << std::to_string(this->m_player->getAttack()) << " X =>"
-                                          << std::to_string(this->m_player->getMapX()) << " Y =>" << std::to_string(this->m_player->getMapY()) << std::endl)*/
+
+    /*    DEBUG_PRINT("Player stats : Gold => " << std::to_string(this->m_player->getGold()) << " Life => "
+                                              << std::to_string(this->m_player->getLife()) << " Defense => "
+                                              << std::to_string(this->m_player->getDefense()) << " Attack => "
+                                              << std::to_string(this->m_player->getAttack()) << " X =>"
+                                              << std::to_string(this->m_player->getMapX()) << " Y =>" << std::to_string(this->m_player->getMapY()) << std::endl)*/
 }
 void Map::interact()
 {
@@ -370,13 +439,13 @@ void Map::interact()
     int y = this->m_player->getMapY();
 
     // get the pos where the player look
-    glm::vec3 frontVec = this->m_player->getCamera()->getFrontVector();
-    float     xDir     = round(frontVec.x);
-    float     yDir     = round(frontVec.z);
+    float xDir = m_player->getXLookAt();
+    float yDir = m_player->getYLookAt();
 
-    x += xDir;
-    y += yDir;
+    x = xDir;
+    y = yDir;
 
+    //check if we interact with an item
     for (auto it = m_worldItems.begin(); it != m_worldItems.end();) {
         Item* item = *it;
         if (item->getMapX() == x && item->getMapY() == y) {
@@ -400,6 +469,8 @@ void Map::interact()
             DEBUG_PRINT("No item to interact with" << std::endl);
         }
     }
+
+    //check if we interact with a monster
     for (auto it = m_worldMonsters.begin(); it != m_worldMonsters.end();) {
         Monster* monster = *it;
         if (monster->getMapX() == x && monster->getMapY() == y) {
@@ -433,16 +504,58 @@ void Map::interact()
         }
     }
 
-    for(auto it = this->m_worldDoors.begin();it != this->m_worldDoors.end();){
+    //Check is we interact with a door
+    for (auto it = this->m_worldDoors.begin(); it != this->m_worldDoors.end();) {
         Door* door = *it;
-        if(door->getMapX() == x && door->getMapY() == y){
+        if (door->getMapX() == x && door->getMapY() == y) {
             door->getClicked(this->m_player);
             it++;
         }
-        else{
+        else {
             DEBUG_PRINT("No door to interact with" << std::endl);
             it++;
         }
     }
+
+    //if player is on the exit go up
+    if (this->m_terrain[y* this->getWidth() + x] == DM_PROJECT_MAP_EXIT) {
+        this->changeLevel(1);
+    }
+
+    //if player is on entrance go down
+    if (this->m_terrain[y* this->getWidth() + x] == DM_PROJECT_MAP_ENTRANCE) {
+        this->changeLevel(-1);
+    }
 }
 
+bool Map::canItGoThere(int x, int y)
+{
+    if (x < 0 || x >= this->getWidth() || y < 0 || y >= this->getHeight()) {
+        return false;
+    }
+    int cell = y * this->getWidth() + x;
+    if (this->m_terrain[cell] == DM_PROJECT_MAP_EMPTY || this->m_terrain[cell] == DM_PROJECT_MAP_ENTRANCE || this->m_terrain[cell] == DM_PROJECT_MAP_EXIT) {
+        return isDoorOpenAt(x, y);
+    }
+    return false;
+}
+
+bool Map::isDoorOpenAt(int x, int y)
+{
+    for (auto door : this->m_worldDoors) {
+        if (door->getMapX() == x && door->getMapY() == y) {
+            if (door->isOpen())
+                return true;
+            else
+                return false;
+        }
+    }
+    return true;
+}
+
+bool Map::isDoorOpenAtCell(int cell)
+{
+    int x = cell % this->getWidth();
+    int y = cell / this->getWidth();
+    return isDoorOpenAt(x, y);
+}

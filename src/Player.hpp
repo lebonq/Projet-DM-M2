@@ -15,6 +15,13 @@ private:
     float m_real_x;
     float m_real_z;
 
+    float m_xLookAt;
+    float m_yLookAt;
+
+public:
+    float getMXLookAt() const;
+
+private:
     int m_PosMapX;
     int m_PosMapY;
 
@@ -81,6 +88,12 @@ public:
     {
         return &m_gold;
     };
+    void rotateLeftCamera(double angle);
+    float getYLookAt() const;
+    float getXLookAt() const;
+    float getLookAtXValue() const;
+    float getLookAtYValue() const;
+    void  moveLevel(int map_x, int map_y, float real_x, float real_z, int mapHeight, int mapWidth);
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_PLAYER_HPP

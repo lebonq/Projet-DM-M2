@@ -1,12 +1,10 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
-#include <glimac/FilePath.hpp>
 #include <glimac/FreeflyCamera.hpp>
 #include <glimac/Image.hpp>
 #include <glimac/Program.hpp>
 #include <glimac/Sphere.hpp>
-#include <glimac/glm.hpp>
 #include "Map.hpp"
 #include "ModelsManager.hpp"
 #include "TextRenderer.hpp"
@@ -14,13 +12,10 @@
 int window_width  = 1920;
 int window_height = 1080;
 
-int old_xpos = 0.f;
-int old_ypos = 0.f;
-
-glm::mat4      PMatrix, VMatrix;
-int            rotation          = 0;
-float          doneRotation      = 0;
-float          doneRotation_real = 0;
+glm::mat4 PMatrix, VMatrix;
+int       rotation          = 0;
+float     doneRotation      = 0;
+float     doneRotation_real = 0;
 
 int    move          = 0;
 bool   moveFront     = false;
@@ -28,8 +23,8 @@ float  doneMove      = 0;
 float  doneMove_real = 0;
 double prevTime;
 
-Map*    map;
-Player* player;
+Map*           map;
+Player*        player;
 FreeflyCamera* camera;
 
 double update_time = 0.0;
@@ -39,43 +34,65 @@ int* player_defense;
 int* player_attack;
 int* player_gold;
 
-float randomFloat() {
-  std::srand(std::time(nullptr));
-  float f = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX);
-  f *=0.02f; // scale to 0.0 to 0.2
-  f -=0.01f; // scale to -0.1 to 0.1
-  return f;
+float randomFloat()
+{
+    std::srand(std::time(nullptr));
+    float f = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX);
+    f *= 0.02f; // scale to 0.0 to 0.2
+    f -= 0.01f; // scale to -0.1 to 0.1
+    return f;
 }
 
 static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/)
 {
     if (key == GLFW_KEY_W && action == GLFW_PRESS && rotation == 0 && move == 0) {
-        // camera->moveFront(1.0f);
-
-        move      = 1;
-        prevTime  = glfwGetTime() * 1000;
-        moveFront = true;
+        if (map->canItGoThere(player->getXLookAt(), player->getYLookAt())) {
+            move      = 1;
+            prevTime  = glfwGetTime() * 1000;
+            moveFront = true;
+        }
     }
 
     if (key == GLFW_KEY_S && action == GLFW_PRESS && rotation == 0 && move == 0) {
-        // camera->moveFront(-1.0f);
-        move      = -1;
-        prevTime  = glfwGetTime() * 1000;
-        moveFront = true;
+        if (map->canItGoThere(player->getXLookAt()-(player->getLookAtXValue()*2), player->getYLookAt()-(player->getLookAtYValue()*2))) {
+            move      = -1;
+            prevTime  = glfwGetTime() * 1000;
+            moveFront = true;
+        }
     }
 
     if (key == GLFW_KEY_D && action == GLFW_PRESS && rotation == 0 && move == 0) {
-        // camera->moveLeft(-1.0f);
-        move      = -1;
-        prevTime  = glfwGetTime() * 1000;
-        moveFront = false;
+        int x,y;
+        //on determine sur quel composante le joueur se deplace
+        if (abs(player->getLookAtXValue())-1 == 0){ //soit Y
+            x = player->getXLookAt() - player->getLookAtXValue();
+            y = player->getYLookAt() + player->getLookAtXValue();
+        } else {//soit X
+            x = player->getXLookAt() - player->getLookAtYValue();
+            y = player->getYLookAt() - player->getLookAtYValue();
+        }
+        if (map->canItGoThere(x,y)) {
+            move      = -1;
+            prevTime  = glfwGetTime() * 1000;
+            moveFront = false;
+        }
     }
 
     if (key == GLFW_KEY_A && action == GLFW_PRESS && rotation == 0 && move == 0) {
-        // camera->moveLeft(1.0f);
-        move      = 1;
-        prevTime  = glfwGetTime() * 1000;
-        moveFront = false;
+        int x,y;
+        if (abs(player->getLookAtXValue())-1 == 0){
+            x = player->getXLookAt() - player->getLookAtXValue();
+            y = player->getYLookAt() - player->getLookAtXValue();
+        } else {
+            x = player->getXLookAt() + player->getLookAtYValue();
+            y = player->getYLookAt() - player->getLookAtYValue();
+        }
+
+        if (map->canItGoThere(x,y)) {
+            move      = 1;
+            prevTime  = glfwGetTime() * 1000;
+            moveFront = false;
+        }
     }
     if (key == GLFW_KEY_Q && action == GLFW_PRESS && rotation == 0 && move == 0) {
         rotation = 1;
@@ -85,7 +102,7 @@ static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int acti
         rotation = -1;
         prevTime = glfwGetTime() * 1000;
     }
-    if( key == GLFW_KEY_SPACE && action == GLFW_PRESS){
+    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
         map->interact();
     }
     if (key == GLFW_KEY_ESCAPE) {
@@ -95,7 +112,6 @@ static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int acti
 
 static void mouse_button_callback(GLFWwindow* /*window*/, int /*button*/, int /*action*/, int /*mods*/)
 {
-
 }
 
 static void scroll_callback(GLFWwindow* /*window*/, double /*xoffset*/, double /*yoffset*/)
@@ -113,7 +129,7 @@ static void size_callback(GLFWwindow* window, int width, int height)
     int frame_width  = 0;
     int frame_height = 0;
     glfwGetFramebufferSize(window, &frame_width, &frame_height);
-    glViewport(0, 0, frame_width, frame_height-200);
+    glViewport(0, 0, frame_width, frame_height - 200);
     PMatrix = glm::perspective(glm::radians(70.0f), static_cast<float>(window_width) / static_cast<float>(window_height), 0.25f, 100.f);
 }
 
@@ -155,17 +171,18 @@ int main()
     // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     //-200 for UI
-    glViewport(0, 0, window_width, window_height-200);
-    //Init FreeType for text rendering
-    TextRenderer* textRenderer = new TextRenderer(window_height,window_width);
-
+    glViewport(0, 0, window_width, window_height - 200);
+    // Init FreeType for text rendering
+    TextRenderer* textRenderer = new TextRenderer(window_height, window_width);
 
     // Default proj matrix
     PMatrix = glm::perspective(glm::radians(70.0f), static_cast<float>(window_width) / static_cast<float>(window_height), 0.25f, 100.f);
 
+
+
     // For 3D
     glEnable(GL_DEPTH_TEST);
-    //for transparency
+    // for transparency
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -174,17 +191,16 @@ int main()
     camera = player->getCamera();
     // exit(0);
 
-    player_life = map->getPlayerLifePtr();
-    player_attack = map->getPlayerAttackPtr();
+    player_life    = map->getPlayerLifePtr();
+    player_attack  = map->getPlayerAttackPtr();
     player_defense = map->getPlayerDefensePtr();
-    player_gold = map->getPlayerGoldPtr();
+    player_gold    = map->getPlayerGoldPtr();
 
     std::vector<ShadersManager*> shaders;
     shaders.push_back(map->getShadersManagerFacing());
     shaders.push_back(map->getShadersManagerStatic());
 
-
-    update_time = glfwGetTime() * 1000;//init update time
+    update_time = glfwGetTime() * 1000; // init update time
     // Loop until the user closes the window
     while (!glfwWindowShouldClose(window)) {
         // IO
@@ -195,13 +211,13 @@ int main()
             doneRotation = glm::clamp(doneRotation, 0.0f, 90.0f); // we clamp the value at 90 to be sure to have a 90 degres rotation
             if (doneRotation == 90) {
                 rotate_angle = -(doneRotation_real - rotate_angle) + 90; // We recompute the angle to do our finale rotation and be at a cumulative rotation of 90 degree of the camera
-                camera->rotateLeft(rotate_angle * rotation);             // oriented roation
+                player->rotateLeftCamera(rotate_angle * rotation);       // oriented roation
                 doneRotation      = 0;
                 doneRotation_real = 0;
                 rotation          = 0;
             }
             else {
-                camera->rotateLeft(rotate_angle * rotation);
+                player->rotateLeftCamera(rotate_angle * rotation);
             }
         }
 
@@ -216,7 +232,7 @@ int main()
                 if (moveFront == true) {
                     player->moveToFrontCamera(move_distancef * static_cast<float>(move));
                 }
-                else{
+                else {
                     player->moveToLeftCamera(move_distancef * static_cast<float>(move));
                 }
                 doneMove      = 0;
@@ -232,7 +248,7 @@ int main()
             }
         }
 
-        //update the state of map object
+        // update the state of map object
         map->update(glfwGetTime() * 1000);
 
         glClearColor(0.0f, 0.0f, 0.f, 1.f);
@@ -241,7 +257,6 @@ int main()
         VMatrix                  = camera->getViewMatrix();
         glm::vec3 lightPos       = camera->getPosition();
         glm::vec3 lightIntensity = glm::vec3(0.9);
-
 
         /*float frequency = 20.0f; // shaking frequency
         float time = glfwGetTime(); // current time
@@ -256,7 +271,6 @@ int main()
                                                     0.0f, 1.0f+intensity2, 0.0f, 0.0f,
                                                     0.0f, 0.0f, 1.0f, 0.0f,
                                       0.0f, 0.0f, 0.0f, 1.0f);*/
-
 
         //************************DRAW GAME************************
         glViewport(0, 0, window_width, window_height);
@@ -278,8 +292,8 @@ int main()
         glUniform3fv(shader->getLightIntensity(), 1, glm::value_ptr(lightIntensity));
         map->drawFacing();
         //************************DRAW UI  ************************
-        glDisable(GL_DEPTH_TEST); //UI is flat no need to test depth
-        glViewport(0, window_height-200, window_width, 200);
+        glDisable(GL_DEPTH_TEST); // UI is flat no need to test depth
+        glViewport(0, window_height - 200, window_width, 200);
         textRenderer->renderText("Life : " + std::to_string(*player_life), 0.0f, 0.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
         textRenderer->renderText("Gold : " + std::to_string(*player_gold), 0.0f, 50.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
         textRenderer->renderText("Attack : " + std::to_string(*player_attack), 0.0f, 100.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));

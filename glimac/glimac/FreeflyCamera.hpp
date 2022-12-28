@@ -75,6 +75,15 @@ public:
     {
         return glm::lookAt(this->m_Position, this->m_Position + this->m_FrontVector, this->m_UpVector);
     };
+
+    void setPhi(float phi){
+        this->m_fPhi = glm::radians(phi);
+        computeDirectionVectors();
+    }
+
+    void setPosition(glm::vec3 pos){
+        this->m_Position = pos;
+    }
 };
 
 #endif // SIMPLEGLIMAC_FREEFLYCAMERA_HPP

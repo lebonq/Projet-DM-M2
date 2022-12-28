@@ -27,6 +27,12 @@ ModelsManager::ModelsManager()
     DEBUG_PRINT("Load Door model " << std::endl);
     Model* door = new Model(DM_PROJECT_ID_MANAGER_DOOR, this->m_texManager.getTexId(DM_PROJECT_ID_MANAGER_DOOR), this->m_shaderManagerStatic);
     this->m_listModels.push_back(door);
+    DEBUG_PRINT("Load Floor Hole model " << std::endl);
+    Model* hole = new Model(DM_PROJECT_ID_MANAGER_FLOOR_HOLE, this->m_texManager.getTexId(DM_PROJECT_ID_MANAGER_FLOOR_HOLE), this->m_shaderManagerStatic);
+    this->m_listModels.push_back(hole);
+    DEBUG_PRINT("Load Ladder model " << std::endl);
+    Model* ladder = new Model(DM_PROJECT_ID_MANAGER_LADDER, this->m_texManager.getTexId(DM_PROJECT_ID_MANAGER_LADDER), this->m_shaderManagerFacing);
+    this->m_listModels.push_back(ladder);
 }
 
 ModelsManager::~ModelsManager()
