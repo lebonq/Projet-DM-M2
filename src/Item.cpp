@@ -16,6 +16,26 @@ bool Item::getClicked(Player* player)//TO-DO pass player object
         DEBUG_PRINT("We add gold to the player => gold coins " << std::to_string(this->m_ItemValue1) << std::endl);
         player->changeGold(this->m_ItemValue1);
     }
+    else if(this->m_ItemType == DM_PROJECT_ITEM_LIVE){
+        DEBUG_PRINT("We add life to the player => life points " << std::to_string(this->m_ItemValue1) << std::endl);
+        player->changeLife(this->m_ItemValue1);
+    }
+    else if(this->m_ItemType == DM_PROJECT_ITEM_DEFENSE){
+        DEBUG_PRINT("We add defense to the player => defense points " << std::to_string(this->m_ItemValue1) << std::endl);
+        player->changeDefense(this->m_ItemValue1);
+    }
+    else if(this->m_ItemType == DM_PROJECT_ITEM_ATTACK){
+        DEBUG_PRINT("We add attack to the player => attack points " << std::to_string(this->m_ItemValue1) << std::endl);
+        player->changeAttack(this->m_ItemValue1);
+    }
+    else if(this->m_ItemType == DM_PROJECT_ITEM_DEFENSE_AND_ATTACK){
+        DEBUG_PRINT("We add attack and defense to the player =>  attack and defense points " << std::to_string(this->m_ItemValue1) << std::endl);
+        player->changeAttack(this->m_ItemValue1);
+        player->changeDefense(this->m_ItemValue2);
+    }
+    else{
+        DEBUG_PRINT("We add nothing to the player =>  Item unknown type" << std::endl);
+    }
     return true;
 }
 Item::~Item()

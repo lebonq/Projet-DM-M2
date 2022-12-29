@@ -60,6 +60,12 @@ ModelsManager::ModelsManager()
     DEBUG_PRINT("Load Wooden sword model " << std::endl);
     Model* woodSword = new Model(DM_PROJECT_ID_MANAGER_WOODEN_SWORD, this->m_texManager.getTexId(DM_PROJECT_ID_MANAGER_WOODEN_SWORD), this->m_shaderManagerFacing);
     this->m_listModels.push_back(woodSword);
+    DEBUG_PRINT("Load Goblin model " << std::endl);
+    Model* goblin = new Model(DM_PROJECT_ID_MANAGER_GOBLIN, this->m_texManager.getTexId(DM_PROJECT_ID_MANAGER_GOBLIN), this->m_shaderManagerFacing);
+    this->m_listModels.push_back(goblin);
+    DEBUG_PRINT("Load mushroom model " << std::endl);
+    Model* mushroom = new Model(DM_PROJECT_ID_MANAGER_MUSHROOM, this->m_texManager.getTexId(DM_PROJECT_ID_MANAGER_MUSHROOM), this->m_shaderManagerFacing);
+    this->m_listModels.push_back(mushroom);
 }
 
 ModelsManager::~ModelsManager()

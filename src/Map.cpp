@@ -45,7 +45,7 @@ void Map::changeLevel(int direction)
         this->m_currentLevel = 0;
         return;
     }
-    // si on est deja tout en haut on ne fait rien
+    // si on est deja tout en haut on fini le jeu
     if (this->m_currentLevel >= this->m_nLevels) {
         this->m_currentLevel = this->m_nLevels - 1;
         return;
@@ -123,6 +123,8 @@ void Map::initWorldObject()
     glm::mat4 wallMatrix(1);
     glm::mat4 floorMatrix(1);
     glm::mat4 waterMatrix(1);
+    glm::mat4 smatrix(1.0f);//MMatrix for the ladder shadow
+    int x_sha,y_sha;
 
     wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 0.5, 0.5));
     for (int y = 0; y < this->m_height; y++) {
@@ -276,11 +278,9 @@ void Map::initWorldObject()
                 if (this->m_terrain[index] == DM_PROJECT_MAP_EXIT) {
                     Model* ladder  = this->m_ModelsManager.getRefModel(DM_PROJECT_ID_MANAGER_LADDER);
                     this->m_ladder = new Ladder(DM_PROJECT_ID_MANAGER_LADDER, ladder, floorMatrix, x, y);
-                    //this->m_interactiveObjects.push_back(this->m_ladder);
-                    Model*    shadow = this->m_ModelsManager.getRefModel(DM_PROJECT_ID_MANAGER_SHADOW);
-                    glm::mat4 smatrix(1.0f);
                     smatrix = glm::translate(smatrix, glm::vec3(x + 1, 0.01f, y));
-                    this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_SHADOW, shadow, smatrix, x, y));
+                    x_sha = x;
+                    y_sha = y;
                 }
 
                 // We place the ceiling
@@ -313,6 +313,8 @@ void Map::initWorldObject()
         }
         waterMatrix = glm::translate(waterMatrix, glm::vec3(-this->m_width, 0, 1));
     }
+    Model*    shadow = this->m_ModelsManager.getRefModel(DM_PROJECT_ID_MANAGER_SHADOW);
+    this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_SHADOW, shadow, smatrix, x_sha, y_sha));
 }
 
 void Map::initInteractiveObject()

@@ -9,6 +9,18 @@ if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
     cmake_policy(SET CMP0135 NEW)
 endif()
 
+# Print with color
+if(NOT WIN32)
+  string(ASCII 27 Esc)
+  set(Reset "${Esc}[m")
+  set(Red         "${Esc}[31m")
+  set(Green       "${Esc}[32m")
+
+endif()
+
+
+message(STATUS "${Green} # - Starting Cmake Build - # ${Reset}")
+
 # Set the folder where the executables are created
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
 
@@ -18,17 +30,18 @@ add_subdirectory(glimac)
 
 FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz)
 FetchContent_MakeAvailable(json)
+message(STATUS "${Green} Downloading JSON for modern C++ ${Reset}")
 FetchContent_Declare(
 	freetype
 	GIT_REPOSITORY https://github.com/aseprite/freetype2.git
 	GIT_TAG		   master
 )
-
 FetchContent_GetProperties(freetype)
 if(NOT freetype_POPULATED)
 	FetchContent_Populate(freetype)
 	add_subdirectory(${freetype_SOURCE_DIR} ${freetype_BINARY_DIR})
 endif()
+message(STATUS "${Green} Downloading FreeType2 ${Reset}")
 
 
 set(TARGET_NAME ${PROJECT_NAME}_exe)
