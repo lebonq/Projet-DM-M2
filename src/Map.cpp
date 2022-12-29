@@ -124,7 +124,8 @@ void Map::initWorldObject()
     glm::mat4 floorMatrix(1);
     glm::mat4 waterMatrix(1);
     glm::mat4 smatrix(1.0f);//MMatrix for the ladder shadow
-    int x_sha,y_sha;
+    int x_sha = 0;
+    int y_sha = 0;
 
     wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 0.5, 0.5));
     for (int y = 0; y < this->m_height; y++) {
