@@ -21,6 +21,7 @@ private:
     GLuint m_uKd;
     GLuint m_uKs;
     GLuint m_uShininess;
+    GLuint m_uRedness;
 
     GLuint m_uLightPos_vs;
     GLuint m_uLightIntensity;
@@ -40,6 +41,7 @@ public:
     GLuint getLightPosVs() const { return m_uLightPos_vs; }
     GLuint getLightIntensity() const { return m_uLightIntensity; }
     GLuint getPlayerPos() const { return m_playerPos; }
+    GLuint getRedness() const { return m_uRedness; }
 
 };
 

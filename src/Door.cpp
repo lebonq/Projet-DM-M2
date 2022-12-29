@@ -8,7 +8,7 @@ Door::Door(Model* model, const glm::mat4& mat, int mapX, int mapY, int price)
     : InteractiveObject(model, nullptr, mat, mapX, mapY), m_price(price)
 {
 }
-bool Door::getClicked(Player* player)
+bool Door::getClicked(Player* player, std::string& message, bool* printMessage)
 {
     if (player->getGold() >= this->m_price && !this->m_paid) {
         player->changeGold(-this->m_price);
@@ -16,6 +16,8 @@ bool Door::getClicked(Player* player)
         this->m_paid     = true;
         this->m_Animated = true;
         this->m_moveDirection = 1;
+        message = "Door Opened";
+        *printMessage = true;
         DEBUG_PRINT("Door opended" << std::endl);
     }
     //si on a paye la porte et qu'elle n'est pas actuellement animée on l'ouvre ou la ferme
@@ -32,6 +34,10 @@ bool Door::getClicked(Player* player)
             this->m_moveDirection = 1;
             DEBUG_PRINT("Door opened" << std::endl);
         }
+    }
+    else{
+        *printMessage = true;
+        message = "Cannot not open. Price is " + std::to_string(this->m_price);
     }
     return false;
 }

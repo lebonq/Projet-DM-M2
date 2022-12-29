@@ -21,6 +21,7 @@ Player::Player(int map_x, int map_y, float real_x, float real_z, int mapHeight, 
 }
 Player::~Player()
 {
+    delete this->m_camera;
 }
 
 void Player::moveLevel(int map_x, int map_y, float real_x, float real_z, int mapHeight, int mapWidth){
@@ -43,6 +44,9 @@ void Player::moveLevel(int map_x, int map_y, float real_x, float real_z, int map
 
 void Player::update()
 {
+    if(this->getLife() <= 0){
+        this->m_dead = true;
+    }
 }
 
 void Player::moveToLeftCamera(double distance)

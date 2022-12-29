@@ -12,8 +12,8 @@ Ladder::~Ladder()
     DEBUG_PRINT("Ladder destructor" << std::endl);
     InteractiveObject::~InteractiveObject();
 }
-bool Ladder::getClicked(Player* player)
-{
+bool Ladder::getClicked(Player* player, std::string& message, bool* printMessage)
+{;
     return false;
 }
 void Ladder::draw()

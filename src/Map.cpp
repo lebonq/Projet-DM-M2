@@ -43,13 +43,20 @@ void Map::changeLevel(int direction)
     // Si on est deja au RDC on ne fait rien
     if (this->m_currentLevel < 0) {
         this->m_currentLevel = 0;
+        this->m_message = "You are already at the ground floor";
+        this->m_printMessage = true;
         return;
     }
     // si on est deja tout en haut on fini le jeu
     if (this->m_currentLevel >= this->m_nLevels) {
         this->m_currentLevel = this->m_nLevels - 1;
+        this->m_message = "You have finished the game! Congrats !";
+        this->m_gameFinished = true;
+        this->m_printMessage = true;
         return;
     }
+    this->m_message = "You are now at level " + std::to_string(this->m_currentLevel);
+    this->m_printMessage = true;
     this->loadMap(this->m_data["levels"][std::to_string(this->m_currentLevel)]["image"]);
     this->initWorldObject();
     this->initInteractiveObject();
@@ -106,6 +113,7 @@ Map::~Map()
         delete interactiveObject;
     }
     delete this->m_player;
+
 }
 
 void Map::initWorldObject()
@@ -383,6 +391,7 @@ void Map::drawStatic()
         if((dynamic_cast<const Door*>(objectFacing) != nullptr) )objectFacing->draw(this->m_player);
     }
 }
+
 void Map::drawFacing()
 {
     Player* p = this->m_player;
@@ -397,6 +406,7 @@ void Map::drawFacing()
         if((dynamic_cast<const Door*>(objectFacing) == nullptr) )objectFacing->draw(this->m_player);
     }
 }
+
 void Map::update(double current_time)
 {
     // Manage movement and monster attackinga
@@ -414,7 +424,12 @@ void Map::update(double current_time)
 
             // if monster is 4-adjencency of player or onto the player
             if ((abs(p_x - m_x) == 0 && abs(p_y - m_y) == 1) || (abs(p_x - m_x) == 1 && abs(p_y - m_y) == 0) || (p_x == m_x && p_y == m_y)) {
+                int lifeBefore = this->m_player->getLife();
                 m_player->getAttacked(monster); // player get attacked
+                int lifeAfter = this->m_player->getLife();
+                this->m_message = "You loose " + std::to_string(lifeBefore - lifeAfter) + " hp";
+                this->m_printMessage = true;
+                this->m_playerIsHit = true;
             }
             else {
                 // le monstre ne se deplace que si il est a 6 de distance maximum (distance cartesienne)
@@ -466,12 +481,20 @@ void Map::update(double current_time)
         door->update(current_time);
     }
 
+    this->m_player->update();
+
+    if(*this->m_player->getDeadPtr()){
+        this->m_message = "You died. Press R to restart";
+        this->m_printMessage = true;
+    }
+
     /*    DEBUG_PRINT("Player stats : Gold => " << std::to_string(this->m_player->getGold()) << " Life => "
                                               << std::to_string(this->m_player->getLife()) << " Defense => "
                                               << std::to_string(this->m_player->getDefense()) << " Attack => "
                                               << std::to_string(this->m_player->getAttack()) << " X =>"
                                               << std::to_string(this->m_player->getMapX()) << " Y =>" << std::to_string(this->m_player->getMapY()) << std::endl)*/
 }
+
 void Map::interact()
 {
     int x = this->m_player->getMapX();
@@ -488,7 +511,7 @@ void Map::interact()
     for (auto it = this->m_interactiveObjects.begin(); it != m_interactiveObjects.end();) {
         InteractiveObject* object = *it;
         if (object->getMapX() == x && object->getMapY() == y) {
-            bool removable = object->getClicked(this->m_player);
+            bool removable = object->getClicked(this->m_player, this->m_message, &this->m_printMessage);
 
             if (removable) {
                 if (object->getMShadow() != nullptr) {
@@ -559,4 +582,20 @@ bool Map::isDoorOpenAtCell(int cell)
     int x = cell % this->getWidth();
     int y = cell / this->getWidth();
     return isDoorOpenAt(x, y);
+}
+std::string* Map::getStrMessagePtr()
+{
+    return &(this->m_message);
+}
+bool* Map::getBoolMessagePtr()
+{
+    return &this->m_printMessage;
+}
+bool* Map::getPlayerIsHitPtr()
+{
+    return &this->m_playerIsHit;
+}
+bool* Map::getGameFinishedPtr()
+{
+    return &this->m_gameFinished;
 }

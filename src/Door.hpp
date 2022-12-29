@@ -9,7 +9,7 @@
 class Door : public InteractiveObject{
 public:
     Door(Model* model,  const glm::mat4& mat, int mapX, int mapY, int price);
-    bool getClicked(Player* player) override;
+    bool getClicked(Player* player, std::string& message, bool* printMessage) override;
     void draw() override;
     void update(double current_time);
     bool isOpen() const

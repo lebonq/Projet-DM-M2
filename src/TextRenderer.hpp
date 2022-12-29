@@ -34,7 +34,9 @@ private:
 public:
     TextRenderer(int windowWidth, int windowHeight);
     ~TextRenderer();
-    void renderText(const std::string& text, float x, float y, float scale, glm::vec3 color);
+    void renderText(const std::string& text, float x, float y, float scale, glm::vec4 color);
+    void updatePMatrix(glm::mat4 PMatrix){this->m_projection = PMatrix;}
+    float getSizeText(const std::string& text, float scale);
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_TEXTRENDERER_HPP

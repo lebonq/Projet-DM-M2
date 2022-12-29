@@ -16,6 +16,7 @@ ShadersManager::ShadersManager(std::string vs,std::string fs)
     this->m_uKd        = glGetUniformLocation(this->m_shaderProgram.getGLId(), "uKd");
     this->m_uKs        = glGetUniformLocation(this->m_shaderProgram.getGLId(), "uKs");
     this->m_uShininess = glGetUniformLocation(this->m_shaderProgram.getGLId(), "uShininess");
+    this->m_uRedness  = glGetUniformLocation(this->m_shaderProgram.getGLId(), "uRedness");
 
     this->m_uLightPos_vs    = glGetUniformLocation(this->m_shaderProgram.getGLId(), "uLightPos_vs");
     this->m_uLightIntensity = glGetUniformLocation(this->m_shaderProgram.getGLId(), "uLightIntensity");

@@ -9,6 +9,7 @@ out vec4 fFragColor;
 uniform vec3 uKd;
 uniform vec3 uKs;
 uniform float uShininess;
+uniform float uRedness;
 
 uniform vec3 uLightPos_vs; //position de la lumiere transformé dans l'espace View
 uniform vec3 uLightIntensity;
@@ -27,5 +28,5 @@ vec3 blinnPhong(){
 
 void main() {
     vec4 tex = texture(uTex_data, vTexCoords);
-    fFragColor = clamp(tex*vec4(blinnPhong(),1) ,0.0f,1.0f);
+    fFragColor = clamp(tex*vec4(blinnPhong(),1) ,0.0f,1.0f)*vec4(1.0f+uRedness,1.0f-uRedness,1.0f-uRedness,1.0f);
 }

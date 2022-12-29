@@ -30,6 +30,9 @@ private:
     int m_nLevels;
     int m_currentLevel;
 
+    bool m_gameFinished = false;
+    bool m_playerIsHit = false;
+
     double m_monsterPreviousTime;
 
     std::vector<int> m_terrain; //used to store the type of every "chunck" of the map
@@ -41,6 +44,10 @@ private:
     Player* m_player = nullptr;
     json m_data;
     ModelsManager m_ModelsManager;
+
+    //storing message to access it from anywhere
+    std::string m_message = "Init";
+    bool m_printMessage = false;
 
 public:
     Map(const std::string& nameLevel);
@@ -59,15 +66,15 @@ public:
     void initInteractiveObject();
     Player* getPlayer() const { return this->m_player; }
     void    interact();
-    int* getPlayerLifePtr(){return this->m_player->getLifePtr();}
-    int* getPlayerDefensePtr(){return this->m_player->getDefensePtr();}
-    int* getPlayerAttackPtr(){return this->m_player->getAttackPtr();}
-    int* getPlayerGoldPtr(){return this->m_player->getGoldPtr();}
     bool    canItGoThere(int x, int y);
     bool    isDoorOpenAt(int x, int y);
     bool    isDoorOpenAtCell(int cell);
     void    changeLevel(int direction);
     void    startPlayerPosComputation();
+    std::string* getStrMessagePtr();
+    bool*        getBoolMessagePtr();
+    bool* getPlayerIsHitPtr();
+    bool* getGameFinishedPtr();
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_MAP_HPP

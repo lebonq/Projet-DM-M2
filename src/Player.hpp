@@ -24,6 +24,7 @@ public:
 private:
     int m_PosMapX;
     int m_PosMapY;
+    bool m_dead = false;
 
     FreeflyCamera* m_camera;
 
@@ -87,6 +88,9 @@ public:
     int* getGoldPtr()
     {
         return &m_gold;
+    };
+    bool* getDeadPtr(){
+        return&m_dead;
     };
     void rotateLeftCamera(double angle);
     float getYLookAt() const;

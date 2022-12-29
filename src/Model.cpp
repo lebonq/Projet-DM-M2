@@ -3,7 +3,7 @@
 //
 
 #include "Model.hpp"
-#include <iostream>
+
 Model::Model(const int ID, const GLuint texID, ShadersManager* mShaderProgram)
     : m_shaderProgram(mShaderProgram)
 {

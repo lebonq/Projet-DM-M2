@@ -20,7 +20,7 @@ TexturesManager::TexturesManager()
         glBindTexture(GL_TEXTURE_2D,0);
         //Add texture into the manage at the right index
         this->m_texIds.push_back(tex_id);
-        tex_image.release();
+        tex_image = nullptr;
     }
 }
 

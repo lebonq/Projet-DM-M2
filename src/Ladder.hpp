@@ -14,7 +14,7 @@ public:
 
 public:
     ~Ladder() override;
-    bool getClicked(Player* player) override;
+    bool getClicked(Player* player, std::string& message, bool* printMessage) override;
     void draw() override;
 };
 

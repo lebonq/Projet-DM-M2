@@ -28,7 +28,7 @@ mat3 rotation(float alpha) {
     return mat3(vec3(cos(alpha),sin(alpha),0),vec3(-sin(alpha),cos(alpha),0),vec3(0,0,1));
 }
 
-//from here https://www.neilmendoza.com/glsl-rotation-about-an-arbitrary-axis/
+//Computation of rotation matrix come from here https://www.neilmendoza.com/glsl-rotation-about-an-arbitrary-axis/
 mat4 rotationMatrix(vec3 axis, float angle)
 {
     axis = normalize(axis);
@@ -44,11 +44,10 @@ mat4 rotationMatrix(vec3 axis, float angle)
 
 float calcAngle(vec3 a, vec3 b) {
   float dotProduct = dot(a, b);
-  float aMagnitude = length(a);
-  float bMagnitude = length(b);
+  float aLen= length(a);
+  float bLen = length(b);
 
-  float cosine = dotProduct / (aMagnitude * bMagnitude);
-  return acos(cosine);
+  return acos(dotProduct / (aLen * bLen));
 }
 
 void main() {
