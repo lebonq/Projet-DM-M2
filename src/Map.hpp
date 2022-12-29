@@ -34,10 +34,7 @@ private:
 
     std::vector<int> m_terrain; //used to store the type of every "chunck" of the map
     std::vector<WorldObject*> m_worldObjects; //owning pointers
-    std::vector<Item*> m_worldItems; //owning pointers
-    std::vector<Monster*> m_worldMonsters; //owning pointers
-    std::vector<Door*> m_worldDoors; //owning pointers
-    std::vector<InteractiveObject* > m_renderedObjectsTransparancy;
+    std::vector<InteractiveObject* > m_interactiveObjects;//owning pointers
 
     Ladder* m_ladder;
 

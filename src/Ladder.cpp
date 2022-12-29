@@ -9,9 +9,12 @@ Ladder::Ladder(int type, Model* model, const glm::mat4& mat, int mapX, int mapY)
 
 Ladder::~Ladder()
 {
+    DEBUG_PRINT("Ladder destructor" << std::endl);
+    InteractiveObject::~InteractiveObject();
 }
-void Ladder::getClicked(Player* player)
+bool Ladder::getClicked(Player* player)
 {
+    return false;
 }
 void Ladder::draw()
 {

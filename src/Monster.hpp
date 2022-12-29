@@ -25,7 +25,7 @@ public:
     Monster(Model* model, glm::mat4 mat,WorldObject* shadow, int map_x, int map_y,int type,int life, int defense, int attack);
     ~Monster();
     void  update(Player* player);
-    void  getClicked(Player* player) override;
+    bool  getClicked(Player* player) override;
     float getRealX() const
     {
         return m_real_x;

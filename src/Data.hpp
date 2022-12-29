@@ -67,7 +67,7 @@ const std::vector<std::string> DM_PROJECT_TEX = {"assets/textures/static_object/
                                                  ,"assets/textures/static_object/water.png"
                                                  ,"assets/textures/money/Gold-coin.png"
                                                  ,"assets/textures/shadow.png"
-                                                 ,"assets/textures/Skeleton.png"
+                                                 ,"assets/textures/skeleton.png"
                                                  ,"assets/textures/static_object/door.png"
                                                  ,"assets/textures/static_object/floor_hole.png"
                                                  ,"assets/textures/ladder.png"/*8*/

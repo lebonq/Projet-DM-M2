@@ -8,7 +8,7 @@ Door::Door(Model* model, const glm::mat4& mat, int mapX, int mapY, int price)
     : InteractiveObject(model, nullptr, mat, mapX, mapY), m_price(price)
 {
 }
-void Door::getClicked(Player* player)
+bool Door::getClicked(Player* player)
 {
     if (player->getGold() >= this->m_price && !this->m_paid) {
         player->changeGold(-this->m_price);
@@ -33,6 +33,7 @@ void Door::getClicked(Player* player)
             DEBUG_PRINT("Door opened" << std::endl);
         }
     }
+    return false;
 }
 void Door::draw()
 {

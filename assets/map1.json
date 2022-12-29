@@ -89,7 +89,7 @@
           "pos_x": 2,
           "pos_y": 0,
           "type": 0,
-          "live": 100,
+          "live": 10,
           "attack": 20,
           "defense": 5,
           "id_model": 5

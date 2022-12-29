@@ -19,42 +19,42 @@ Map::Map(const std::string& nameLevel)
     this->initInteractiveObject();
 
     this->startPlayerPosComputation();
-
 }
 
-void Map::startPlayerPosComputation(){
+void Map::startPlayerPosComputation()
+{
     // set starting pos player
     int pos_player = this->getEntrancePos();
     int cam_x      = pos_player % this->getWidth();
     int cam_z      = (pos_player - cam_x) / this->getWidth();
 
-    if(this->m_player == nullptr){
+    if (this->m_player == nullptr) {
         this->m_player = new Player(cam_x, cam_z, cam_x, cam_z, this->getHeight(), this->getWidth());
     }
-    else{
+    else {
         this->m_player->moveLevel(cam_x, cam_z, cam_x, cam_z, this->getHeight(), this->getWidth());
     }
     this->m_player->rotateLeftCamera(0); // update lookat
 }
 
-void Map::changeLevel(int direction){
+void Map::changeLevel(int direction)
+{
     this->m_currentLevel += direction;
-    //Si on est deja au RDC on ne fait rien
-    if(this->m_currentLevel < 0){
+    // Si on est deja au RDC on ne fait rien
+    if (this->m_currentLevel < 0) {
         this->m_currentLevel = 0;
-        return ;
+        return;
     }
-    //si on est deja tout en haut on ne fait rien
-    if(this->m_currentLevel >= this->m_nLevels){
+    // si on est deja tout en haut on ne fait rien
+    if (this->m_currentLevel >= this->m_nLevels) {
         this->m_currentLevel = this->m_nLevels - 1;
-        return ;
+        return;
     }
     this->loadMap(this->m_data["levels"][std::to_string(this->m_currentLevel)]["image"]);
     this->initWorldObject();
     this->initInteractiveObject();
     this->startPlayerPosComputation();
     DEBUG_PRINT("Load level " << this->m_currentLevel << std::endl);
-
 }
 
 void Map::loadMap(const std::string& nameLevel)
@@ -102,11 +102,8 @@ Map::~Map()
     for (auto& worldObject : this->m_worldObjects) {
         delete worldObject;
     }
-    for (auto& worldItem : this->m_worldItems) {
-        delete worldItem;
-    }
-    for (auto& worldMonster : this->m_worldMonsters) {
-        delete worldMonster;
+    for (auto& interactiveObject : this->m_interactiveObjects) {
+        delete interactiveObject;
     }
     delete this->m_player;
 }
@@ -117,6 +114,9 @@ void Map::initWorldObject()
     int index_bot   = 0;
     int index       = 0;
 
+    for (auto& worldObject : this->m_worldObjects) {
+        delete worldObject;
+    }
     this->m_worldObjects.clear();
 
     Model*    wall = this->m_ModelsManager.getRefModel(DM_PROJECT_ID_MANAGER_WALL);
@@ -153,8 +153,8 @@ void Map::initWorldObject()
                 this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_WALL, wall, wallMatrix, x, y));
                 wallMatrix = glm::rotate(wallMatrix, glm::radians(-180.0f), glm::vec3(0, 1, 0));
             }
-            //Floor under the hole of entrance facing X
-            if(this->m_terrain[index] == DM_PROJECT_MAP_ENTRANCE){
+            // Floor under the hole of entrance facing X
+            if (this->m_terrain[index] == DM_PROJECT_MAP_ENTRANCE) {
                 wallMatrix = glm::rotate(wallMatrix, glm::radians(180.0f), glm::vec3(0, 1, 0)); // Those rotation allow us to orient the wall inside the room
                 this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_WALL, wall, wallMatrix, x, y));
                 wallMatrix = glm::rotate(wallMatrix, glm::radians(-180.0f), glm::vec3(0, 1, 0));
@@ -163,8 +163,8 @@ void Map::initWorldObject()
                 wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 0, 1));
             }
 
-            //Floor Above the hole of exit facing X
-            if(this->m_terrain[index] ==DM_PROJECT_MAP_EXIT ){
+            // Floor Above the hole of exit facing X
+            if (this->m_terrain[index] == DM_PROJECT_MAP_EXIT) {
                 wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 2, 0));
                 wallMatrix = glm::rotate(wallMatrix, glm::radians(180.0f), glm::vec3(0, 1, 0)); // Those rotation allow us to orient the wall inside the room
                 this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_WALL, wall, wallMatrix, x, y));
@@ -188,7 +188,6 @@ void Map::initWorldObject()
                 }
                 wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 0, 1));
             }
-
 
             // Wall facing Z
             wallMatrix = glm::rotate(wallMatrix, glm::radians(90.0f), glm::vec3(0, 1, 0));
@@ -224,8 +223,8 @@ void Map::initWorldObject()
                 wallMatrix = glm::rotate(wallMatrix, glm::radians(-180.0f), glm::vec3(0, 1, 0));
             }
 
-            //Floor under the hole of entrance facing Z
-            if(this->m_terrain[index] == DM_PROJECT_MAP_ENTRANCE){
+            // Floor under the hole of entrance facing Z
+            if (this->m_terrain[index] == DM_PROJECT_MAP_ENTRANCE) {
                 wallMatrix = glm::rotate(wallMatrix, glm::radians(-180.0f), glm::vec3(0, 1, 0)); // Those rotation allow us to orient the wall inside the room
                 this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_WALL, wall, wallMatrix, x, y));
                 wallMatrix = glm::rotate(wallMatrix, glm::radians(180.0f), glm::vec3(0, 1, 0));
@@ -234,8 +233,8 @@ void Map::initWorldObject()
                 wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 0, 1));
             }
 
-            //Floor above the hole of exit facing Z
-            if(this->m_terrain[index] == DM_PROJECT_MAP_EXIT){
+            // Floor above the hole of exit facing Z
+            if (this->m_terrain[index] == DM_PROJECT_MAP_EXIT) {
                 wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 2, 0));
                 wallMatrix = glm::rotate(wallMatrix, glm::radians(-180.0f), glm::vec3(0, 1, 0)); // Those rotation allow us to orient the wall inside the room
                 this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_WALL, wall, wallMatrix, x, y));
@@ -265,33 +264,34 @@ void Map::initWorldObject()
                 this->m_terrain[index] == DM_PROJECT_MAP_ENTRANCE ||
                 this->m_terrain[index] == DM_PROJECT_MAP_EXIT ||
                 this->m_terrain[index] == DM_PROJECT_MAP_WATER) {
-                //We place the floor
-                if(this->m_terrain[index] == DM_PROJECT_MAP_ENTRANCE){
+                // We place the floor
+                if (this->m_terrain[index] == DM_PROJECT_MAP_ENTRANCE) {
                     Model* hole = this->m_ModelsManager.getRefModel(DM_PROJECT_ID_MANAGER_FLOOR_HOLE);
                     this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_ENTRANCE, hole, floorMatrix, x, y));
                 }
                 else if (this->m_terrain[index] != DM_PROJECT_MAP_WATER)
                     this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_EMPTY, floor, floorMatrix, x, y));
 
-                //Place Ladder
-                if(this->m_terrain[index] == DM_PROJECT_MAP_EXIT){
-                    Model* ladder = this->m_ModelsManager.getRefModel(DM_PROJECT_ID_MANAGER_LADDER);
-                    this->m_ladder = new Ladder(DM_PROJECT_ID_MANAGER_LADDER,ladder, floorMatrix, x, y);
-                    this->m_renderedObjectsTransparancy.push_back(this->m_ladder);
-                    Model* shadow = this->m_ModelsManager.getRefModel(DM_PROJECT_ID_MANAGER_SHADOW);
+                // Place Ladder
+                if (this->m_terrain[index] == DM_PROJECT_MAP_EXIT) {
+                    Model* ladder  = this->m_ModelsManager.getRefModel(DM_PROJECT_ID_MANAGER_LADDER);
+                    this->m_ladder = new Ladder(DM_PROJECT_ID_MANAGER_LADDER, ladder, floorMatrix, x, y);
+                    //this->m_interactiveObjects.push_back(this->m_ladder);
+                    Model*    shadow = this->m_ModelsManager.getRefModel(DM_PROJECT_ID_MANAGER_SHADOW);
                     glm::mat4 smatrix(1.0f);
                     smatrix = glm::translate(smatrix, glm::vec3(x + 1, 0.01f, y));
                     this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_SHADOW, shadow, smatrix, x, y));
                 }
 
-                //We place the ceiling
+                // We place the ceiling
                 floorMatrix = glm::translate(floorMatrix, glm::vec3(0, 1, 0));
                 floorMatrix = glm::rotate(floorMatrix, glm::radians(180.0f), glm::vec3(1, 0, 0)); // Make the floor face downward
-                if(this->m_terrain[index] == DM_PROJECT_MAP_EXIT){
+                if (this->m_terrain[index] == DM_PROJECT_MAP_EXIT) {
                     Model* hole = this->m_ModelsManager.getRefModel(DM_PROJECT_ID_MANAGER_FLOOR_HOLE);
                     this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_EXIT, hole, floorMatrix, x, y));
                 }
-                    else this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_EMPTY, floor, floorMatrix, x, y));
+                else
+                    this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_EMPTY, floor, floorMatrix, x, y));
                 floorMatrix = glm::rotate(floorMatrix, glm::radians(-180.0f), glm::vec3(1, 0, 0));
                 floorMatrix = glm::translate(floorMatrix, glm::vec3(0, -1, 0));
             }
@@ -317,7 +317,10 @@ void Map::initWorldObject()
 
 void Map::initInteractiveObject()
 {
-    this->m_worldItems.clear();
+    for (auto& interactiveObject : this->m_interactiveObjects) {
+        delete interactiveObject;
+    }
+    this->m_interactiveObjects.clear();
     json   listItems = this->m_data["levels"][std::to_string(this->m_currentLevel)]["items"];
     Model* shadow    = this->m_ModelsManager.getRefModel(DM_PROJECT_ID_MANAGER_SHADOW);
     for (auto item : listItems) {
@@ -330,12 +333,10 @@ void Map::initInteractiveObject()
         smatrix = glm::translate(smatrix, glm::vec3(x + 1, 0.01f, y));
         this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_SHADOW, shadow, smatrix, x, y));
         Item* item_ptr = new Item(item_model, mmatrix, this->m_worldObjects.back(), x, y, item["type"], item["amount_0"], item["amount_1"]);
-        this->m_renderedObjectsTransparancy.push_back(item_ptr);
-        this->m_worldItems.push_back(item_ptr);
+        this->m_interactiveObjects.push_back(item_ptr);
         DEBUG_PRINT("Item type : " << item["type"] << " x : " << item["pos_x"] << " y : " << item["pos_y"] << std::endl);
     }
 
-    this->m_worldMonsters.clear();
     json listMonsters = this->m_data["levels"][std::to_string(this->m_currentLevel)]["monsters"];
 
     for (auto monster : listMonsters) {
@@ -348,12 +349,10 @@ void Map::initInteractiveObject()
         smatrix = glm::translate(smatrix, glm::vec3(x + 1, 0.01f, y));
         this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_SHADOW, shadow, smatrix, x, y));
         Monster* monster_ptr = new Monster(monster_model, mmatrix, this->m_worldObjects.back(), x, y, monster["type"], monster["live"], monster["defense"], monster["attack"]);
-        this->m_renderedObjectsTransparancy.push_back(monster_ptr);
-        this->m_worldMonsters.push_back(monster_ptr);
+        this->m_interactiveObjects.push_back(monster_ptr);
         DEBUG_PRINT("Monster type : " << monster["type"] << " x : " << monster["pos_x"] << " y : " << monster["pos_y"] << std::endl);
     }
 
-    this->m_worldDoors.clear();
     json listDoors = this->m_data["levels"][std::to_string(this->m_currentLevel)]["doors"];
 
     for (auto door : listDoors) {
@@ -363,7 +362,7 @@ void Map::initInteractiveObject()
         glm::mat4 mmatrix(1.0f);
         mmatrix        = glm::translate(mmatrix, glm::vec3(x + 1, 0.50, y));
         Door* door_ptr = new Door(door_model, mmatrix, x, y, door["price"]);
-        this->m_worldDoors.push_back(door_ptr);
+        this->m_interactiveObjects.push_back(door_ptr);
         DEBUG_PRINT("Door type : " << door["type"] << " x : " << door["pos_x"] << " y : " << door["pos_y"] << std::endl);
     }
 }
@@ -376,14 +375,23 @@ void Map::drawStatic()
         }
         object->draw();
     }
-    for (Door* door : this->m_worldDoors) {
-        door->draw();
+    //On draw uniquement les portes
+    for (auto objectFacing : this->m_interactiveObjects) {
+        if((dynamic_cast<const Door*>(objectFacing) != nullptr) )objectFacing->draw(this->m_player);
     }
 }
 void Map::drawFacing()
 {
-    for (auto objectFacing : this->m_renderedObjectsTransparancy) {
-        objectFacing->draw(this->m_player);
+    Player* p = this->m_player;
+    //on trie les objets et monstre par leur distance au joueur, cela permet de gerer la transparence correctement
+    std::sort(begin(this->m_interactiveObjects),
+          end(this->m_interactiveObjects),
+          [p](const InteractiveObject* o1,const InteractiveObject* o2){ return sqrt(pow(p->getMapX() - o1->getMapX(), 2) + pow(p->getMapY() - o1->getMapY(), 2)) > sqrt(pow(p->getMapX() - o2->getMapX(), 2) + pow(p->getMapY() - o2->getMapY(),  2)); });
+
+    this->m_ladder->draw();
+    //on ne draw pas les portes
+    for (auto objectFacing : this->m_interactiveObjects) {
+        if((dynamic_cast<const Door*>(objectFacing) == nullptr) )objectFacing->draw(this->m_player);
     }
 }
 void Map::update(double current_time)
@@ -391,7 +399,11 @@ void Map::update(double current_time)
     // Manage movement and monster attackinga
     // if 1 second has passed we update monster position
     if (current_time - this->m_monsterPreviousTime > 1000)
-        for (auto monster : this->m_worldMonsters) {
+        for (auto o : this->m_interactiveObjects) {
+            if(!(dynamic_cast<const Monster*>(o) != nullptr))continue;
+
+            Monster* monster = dynamic_cast<Monster*>(o);
+
             int p_x = this->m_player->getMapX();
             int p_y = this->m_player->getMapY();
             int m_x = monster->getMapX();
@@ -445,7 +457,9 @@ void Map::update(double current_time)
             this->m_monsterPreviousTime = current_time;
         }
 
-    for (auto door : this->m_worldDoors) {
+    for (auto obj : this->m_interactiveObjects) {
+        if((dynamic_cast<const Door*>(obj) == nullptr) )continue;
+        Door* door = dynamic_cast<Door*>(obj);
         door->update(current_time);
     }
 
@@ -467,85 +481,45 @@ void Map::interact()
     x = xDir;
     y = yDir;
 
-    //check if we interact with an item
-    for (auto it = m_worldItems.begin(); it != m_worldItems.end();) {
-        Item* item = *it;
-        if (item->getMapX() == x && item->getMapY() == y) {
-            item->getClicked(this->m_player);
-            it = m_worldItems.erase(it);
-            // remove associed shadow
-            for (auto it_sha = m_worldObjects.begin(); it_sha != m_worldObjects.end();) {
-                WorldObject* object = *it_sha;
-                if (object->getMapX() == x && object->getMapY() == y && object->getType() == DM_PROJECT_MAP_SHADOW) {
-                    m_worldObjects.erase(it_sha);
-                    break;
-                }
-                else {
-                    ++it_sha;
-                }
-            }
-            delete item;
-        }
-        else {
-            ++it;
-            DEBUG_PRINT("No item to interact with" << std::endl);
-        }
-    }
+    // check if we interact with an item
+    for (auto it = this->m_interactiveObjects.begin(); it != m_interactiveObjects.end();) {
+        InteractiveObject* object = *it;
+        if (object->getMapX() == x && object->getMapY() == y) {
+            bool removable = object->getClicked(this->m_player);
 
-    //check if we interact with a monster
-    for (auto it = m_worldMonsters.begin(); it != m_worldMonsters.end();) {
-        Monster* monster = *it;
-        if (monster->getMapX() == x && monster->getMapY() == y) {
-            monster->getClicked(this->m_player);
-            monster->getAttacked(this->m_player);
-            DEBUG_PRINT("Monster stats : Life => " << std::to_string(monster->getLife()) << " Defense => "
-                                                   << std::to_string(monster->getDefense()) << " Attack => "
-                                                   << std::to_string(monster->getAttack()) << std::endl)
-            if (monster->getLife() <= 0) {
-                it = m_worldMonsters.erase(it);
-                // remove associed shadow
-                for (auto it_sha = m_worldObjects.begin(); it_sha != m_worldObjects.end();) {
-                    WorldObject* object = *it_sha;
-                    if (object->getMapX() == x && object->getMapY() == y && object->getType() == DM_PROJECT_MAP_SHADOW) {
-                        m_worldObjects.erase(it_sha);
-                        break;
-                    }
-                    else {
-                        ++it_sha;
+            if (removable) {
+                if (object->getMShadow() != nullptr) {
+                    // remove associed shadow
+                    for (auto it_sha = m_worldObjects.begin(); it_sha != m_worldObjects.end();) {
+                        WorldObject* shadow = *it_sha;
+                        if (shadow->getMapX() == x && shadow->getMapY() == y && shadow->getType() == DM_PROJECT_MAP_SHADOW) {
+                            m_worldObjects.erase(it_sha);
+                            break;
+                        }
+                        else {
+                            ++it_sha;
+                        }
                     }
                 }
-                delete monster;
+                it = this->m_interactiveObjects.erase(it);
+                delete object;
             }
-            else {
+            else{
                 ++it;
             }
         }
         else {
-            DEBUG_PRINT("No monster to interact with" << std::endl);
-            it++;
+            ++it;
         }
     }
 
-    //Check is we interact with a door
-    for (auto it = this->m_worldDoors.begin(); it != this->m_worldDoors.end();) {
-        Door* door = *it;
-        if (door->getMapX() == x && door->getMapY() == y) {
-            door->getClicked(this->m_player);
-            it++;
-        }
-        else {
-            DEBUG_PRINT("No door to interact with" << std::endl);
-            it++;
-        }
-    }
-
-    //if player is on the exit go up
-    if (this->m_terrain[y* this->getWidth() + x] == DM_PROJECT_MAP_EXIT) {
+    // if player is on the exit go up
+    if (this->m_terrain[y * this->getWidth() + x] == DM_PROJECT_MAP_EXIT) {
         this->changeLevel(1);
     }
 
-    //if player is on entrance go down
-    if (this->m_terrain[y* this->getWidth() + x] == DM_PROJECT_MAP_ENTRANCE) {
+    // if player is on entrance go down
+    if (this->m_terrain[y * this->getWidth() + x] == DM_PROJECT_MAP_ENTRANCE) {
         this->changeLevel(-1);
     }
 }
@@ -564,7 +538,9 @@ bool Map::canItGoThere(int x, int y)
 
 bool Map::isDoorOpenAt(int x, int y)
 {
-    for (auto door : this->m_worldDoors) {
+    for (auto obj : this->m_interactiveObjects) {
+        if((dynamic_cast<const Door*>(obj) == nullptr) )continue;
+        Door* door = dynamic_cast<Door*>(obj);
         if (door->getMapX() == x && door->getMapY() == y) {
             if (door->isOpen())
                 return true;

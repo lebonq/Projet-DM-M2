@@ -10,16 +10,16 @@ Item::Item(Model* model, glm::mat4 mat,WorldObject* shadow, int map_x, int map_y
 }
 
 
-void Item::getClicked(Player* player)//TO-DO pass player object
+bool Item::getClicked(Player* player)//TO-DO pass player object
 {
     if(this->m_ItemType == DM_PROJECT_ITEM_MONEY){
         DEBUG_PRINT("We add gold to the player => gold coins " << std::to_string(this->m_ItemValue1) << std::endl);
         player->changeGold(this->m_ItemValue1);
     }
+    return true;
 }
 Item::~Item()
 {
     DEBUG_PRINT("Item destructor" << std::endl);
-    delete this->m_shadow;
     InteractiveObject::~InteractiveObject();
 }

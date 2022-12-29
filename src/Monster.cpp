@@ -12,6 +12,8 @@ Monster::Monster(Model* model, glm::mat4 mat,WorldObject* shadow, int map_x, int
 
 Monster::~Monster()
 {
+    DEBUG_PRINT("Monster destructor" << std::endl);
+    InteractiveObject::~InteractiveObject();
 }
 
 std::ostream& operator<<(std::ostream& os, const Monster& monster)
@@ -25,12 +27,15 @@ void Monster::update(Player* player)
     player->getMapY();
 }
 
-void Monster::getClicked(Player* player)
+bool Monster::getClicked(Player* player)
 {
-    if(this->m_type == DM_PROJECT_MONSTER_SKELETON){
-        DEBUG_PRINT("You just hit a skeleton " << this->getAttack() << std::endl);
-    }
-    player->getRealZ();
+    this->getAttacked(player);
+    DEBUG_PRINT("Monster stats : Life => " << std::to_string(this->getLife()) << " Defense => "
+                                       << std::to_string(this->getDefense()) << " Attack => "
+                                       << std::to_string(this->getAttack()) << std::endl)
+
+    if (this->getLife() <= 0) return true;
+    return false;
 }
 
 void Monster::moveOnX(int direction){
