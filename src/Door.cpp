@@ -55,17 +55,17 @@ void Door::update(double current_time)
         if (this->m_doneMove == 0.8f) {
             float     move_distancef = -(this->m_doneMove_real - static_cast<float>(move_distance)) + 0.80f;
             glm::mat4 mmatrix = this->m_MMatrix;
-            this->m_currentAltitude += move_distancef*static_cast<float>(this->m_moveDirection);
-            mmatrix = glm::translate(mmatrix, glm::vec3(0.f, this->m_currentAltitude, 0.f));
+            float delta_move = move_distancef*static_cast<float>(this->m_moveDirection);
+            mmatrix = glm::translate(mmatrix, glm::vec3(0.f, delta_move, 0.f));
             this->updateModelMatrix(mmatrix);
             this->m_Animated = false;
             this->m_doneMove      = 0;
             this->m_doneMove_real = 0;
         }
         else {
-            this->m_currentAltitude += move_distance*this->m_moveDirection;
+            float delta_move = move_distance*this->m_moveDirection;
             glm::mat4 mmatrix = this->m_MMatrix;
-            mmatrix = glm::translate(mmatrix, glm::vec3(0,  this->m_currentAltitude,0));//fix door TODO
+            mmatrix = glm::translate(mmatrix, glm::vec3(0, delta_move,0));
             this->updateModelMatrix(mmatrix);
         }
     }
