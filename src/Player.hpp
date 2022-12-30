@@ -10,7 +10,7 @@
 #include "Model.hpp"
 class Player : public CombatEntity {
 private:
-    int m_gold    = 2345;
+    int m_gold    = 0;
 
     float m_real_x;
     float m_real_z;
