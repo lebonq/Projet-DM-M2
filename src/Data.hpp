@@ -42,6 +42,8 @@ const int DM_PROJECT_MONSTER_SKELETON = 0;
 const int DM_PROJECT_MONSTER_GOBLIN = 1;
 const int DM_PROJECT_MONSTER_MUSHROOM = 2;
 
+const float DM_PROJECT_VISION_MONSTER = 6.0f;
+
 //In json this is the "model_id" field
 const int DM_PROJECT_ID_MANAGER_WALL = 0; //Index of the wall texture in the Texture Manager
 const int DM_PROJECT_ID_MANAGER_FLOOR = 1;

@@ -372,6 +372,9 @@ void Map::initInteractiveObject()
         int       y          = door["pos_y"];
         glm::mat4 mmatrix(1.0f);
         mmatrix        = glm::translate(mmatrix, glm::vec3(x + 1, 0.50, y));
+        //orientate the door in function of the terrain
+        if(this->m_terrain[(y+1)* this->m_width + x] != DM_PROJECT_MAP_EMPTY && this->m_terrain[(y-1)* this->m_width + x] != DM_PROJECT_MAP_EMPTY)
+            mmatrix = glm::rotate(mmatrix, glm::radians(90.0f), glm::vec3(0, 1, 0));
         Door* door_ptr = new Door(door_model, mmatrix, x, y, door["price"]);
         this->m_interactiveObjects.push_back(door_ptr);
         DEBUG_PRINT("Door type : " << door["type"] << " x : " << door["pos_x"] << " y : " << door["pos_y"] << std::endl);
@@ -434,7 +437,7 @@ void Map::update(double current_time)
             else {
                 // le monstre ne se deplace que si il est a 6 de distance maximum (distance cartesienne)
                 float distance = sqrt(pow(p_x - m_x, 2) + pow(p_y - m_y, 2));
-                if (distance >= 60) {
+                if (distance >= DM_PROJECT_VISION_MONSTER) {
                     continue;
                 }
 

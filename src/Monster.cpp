@@ -28,11 +28,7 @@ void Monster::update(Player* player)
 
 bool Monster::getClicked(Player* player, std::string& message, bool* printMessage)
 {
-    int lifebefore = this->getLife();
     this->getAttacked(player);
-    int lifeAfter = this->getLife();
-    message       = "You did " + std::to_string(lifebefore - lifeAfter) + " damage";
-    *printMessage = true;
     DEBUG_PRINT("Monster stats : Life => " << std::to_string(this->getLife()) << " Defense => "
                                            << std::to_string(this->getDefense()) << " Attack => "
                                            << std::to_string(this->getAttack()) << std::endl)

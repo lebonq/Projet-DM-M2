@@ -3,6 +3,96 @@
     "0": {
       "image": "assets/map1_0.ppm",
       "items": {
+        "GoldIngot1": {
+          "pos_x": 4,
+          "pos_y": 5,
+          "type": 0,
+          "amount_0": 140,
+          "amount_1": 0,
+          "id_model": 9
+        },
+        "Beer1": {
+          "pos_x": 8,
+          "pos_y": 0,
+          "type": 1,
+          "amount_0": 10,
+          "amount_1": 0,
+          "id_model": 11
+        },
+        "Beer2": {
+          "pos_x": 3,
+          "pos_y": 2,
+          "type": 1,
+          "amount_0": 10,
+          "amount_1": 0,
+          "id_model": 11
+        },
+        "GoldSword1": {
+          "pos_x": 14,
+          "pos_y": 9,
+          "type": 4,
+          "amount_0": 10,
+          "amount_1": 4,
+          "id_model": 16
+        },
+        "GoldCoins1": {
+          "pos_x": 8,
+          "pos_y": 9,
+          "type": 0,
+          "amount_0": 20,
+          "amount_1": 0,
+          "id_model": 3
+        }
+      },
+      "monsters": {
+        "Goblin1": {
+          "pos_x": 3,
+          "pos_y": 2,
+          "type": 0,
+          "live": 50,
+          "attack": 15,
+          "defense": 5,
+          "id_model": 18
+        },
+        "Goblin2": {
+          "pos_x": 3,
+          "pos_y": 4,
+          "type": 0,
+          "live": 75,
+          "attack": 15,
+          "defense": 5,
+          "id_model": 18
+        },
+        "Goblin3": {
+          "pos_x": 12,
+          "pos_y": 8,
+          "type": 0,
+          "live": 75,
+          "attack": 15,
+          "defense": 5,
+          "id_model": 18
+        },
+        "Skeleton1": {
+          "pos_x": 14,
+          "pos_y": 0,
+          "type": 0,
+          "live": 150,
+          "attack": 25,
+          "defense": 15,
+          "id_model": 5
+        }
+      },
+      "doors": {
+        "0": {
+          "pos_x": 13,
+          "pos_y": 0,
+          "price": 150
+        }
+      }
+    },
+    "1": {
+      "image": "assets/map1_1.ppm",
+      "items": {
         "GoldCoins1": {
           "pos_x": 0,
           "pos_y": 3,
@@ -23,7 +113,7 @@
           "pos_x": 5,
           "pos_y": 6,
           "type": 1,
-          "amount_0": 40,
+          "amount_0": 25,
           "amount_1": 0,
           "id_model": 10
         },
@@ -31,7 +121,7 @@
           "pos_x": 6,
           "pos_y": 6,
           "type": 1,
-          "amount_0": 40,
+          "amount_0": 10,
           "amount_1": 0,
           "id_model": 11
         },
@@ -39,7 +129,7 @@
           "pos_x": 7,
           "pos_y": 6,
           "type": 1,
-          "amount_0": 40,
+          "amount_0": 30,
           "amount_1": 0,
           "id_model": 12
         },
@@ -47,7 +137,7 @@
           "pos_x": 8,
           "pos_y": 6,
           "type": 1,
-          "amount_0": 40,
+          "amount_0": 35,
           "amount_1": 0,
           "id_model": 13
         },
@@ -82,37 +172,6 @@
           "amount_0": 5,
           "amount_1": 0,
           "id_model": 17
-        }
-      },
-      "monsters": {
-        "Skeleton": {
-          "pos_x": 2,
-          "pos_y": 0,
-          "type": 0,
-          "live": 10,
-          "attack": 20,
-          "defense": 5,
-          "id_model": 19
-        }
-      },
-      "doors": {
-        "0": {
-          "pos_x": 7,
-          "pos_y": 1,
-         "price" : 120
-        }
-      }
-    },
-    "1": {
-      "image": "assets/map1_1.ppm",
-      "items": {
-        "0": {
-          "pos_x": 0,
-          "pos_y": 0,
-          "type": 0,
-          "amount_0": 0,
-          "amount_1": 120,
-          "id_model": 3
         }
       },
       "monsters": {

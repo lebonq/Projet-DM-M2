@@ -35,7 +35,7 @@ bool Door::getClicked(Player* player, std::string& message, bool* printMessage)
             DEBUG_PRINT("Door opened" << std::endl);
         }
     }
-    else{
+    else if(!this->m_paid){
         *printMessage = true;
         message = "Cannot not open. Price is " + std::to_string(this->m_price);
     }
@@ -54,9 +54,9 @@ void Door::update(double current_time)
         this->m_doneMove = glm::clamp(this->m_doneMove, 0.0f, 0.80f);
         if (this->m_doneMove == 0.8f) {
             float     move_distancef = -(this->m_doneMove_real - static_cast<float>(move_distance)) + 0.80f;
-            glm::mat4 mmatrix(1.0f);
-            this->m_currentAltitude += move_distancef*this->m_moveDirection ;
-            mmatrix = glm::translate(mmatrix, glm::vec3(this->getMapX() + 1, this->m_currentAltitude, this->getMapY()));
+            glm::mat4 mmatrix = this->m_MMatrix;
+            this->m_currentAltitude += move_distancef*static_cast<float>(this->m_moveDirection);
+            mmatrix = glm::translate(mmatrix, glm::vec3(0.f, this->m_currentAltitude, 0.f));
             this->updateModelMatrix(mmatrix);
             this->m_Animated = false;
             this->m_doneMove      = 0;
@@ -64,8 +64,8 @@ void Door::update(double current_time)
         }
         else {
             this->m_currentAltitude += move_distance*this->m_moveDirection;
-            glm::mat4 mmatrix(1.0f);
-            mmatrix = glm::translate(mmatrix, glm::vec3(this->getMapX() + 1,  this->m_currentAltitude,this->getMapY()));
+            glm::mat4 mmatrix = this->m_MMatrix;
+            mmatrix = glm::translate(mmatrix, glm::vec3(0,  this->m_currentAltitude,0));//fix door TODO
             this->updateModelMatrix(mmatrix);
         }
     }
