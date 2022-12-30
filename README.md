@@ -1,29 +1,38 @@
-# Simple-Glimac-Setup
+# Dugeon Master Project
 
-This is an alternative setup to follow [these tutorials](https://igm.univ-mlv.fr/~biri/Enseignement/IMAC2/opengl-TPs/opengl.php?section=teaching&teaching=opengl&teaching_section=tds). It has the advantage that **it is easy to use an all platforms** (Linux, Windows and Mac). It also fixes an annoying thing with the original setup: with this one you don't need to re-run CMake when you modify your shaders. The changes will be detected and handled automatically.
+The movement is done with the ZQSD keys (or WASD if QWERTY keyboard). The A key turns the camera to the left (Q for QWERTY) and the E key to the right. The space bar allows you to interact with ladders, holes, doors, items and attack monsters. If the player dies, the R key will reload the game. The ladders allow you to go up to the next level, the holes to go down.
 
-## Compiling
+At any time, the player can check his statistics via the interface at the top right. A text is eventually displayed during an action to better understand what is happening in the game.
 
-You need to install [CMake](https://cmake.org/download/).
+# Requierment
 
-To use CMake I recommend this VS Code extension : [ms-vscode.cmake-tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools). You will need to setup the extension with a compiler. Here is [the tutorial](https://code.visualstudio.com/docs/cpp/cmake-linux). It is based on Linux but at the bottom of the page you will find the explanations to adapt it for [Windows](https://code.visualstudio.com/docs/cpp/config-msvc) and [Mac](https://code.visualstudio.com/docs/cpp/config-clang-mac).
+Dedicated GPU, to build CMake 3.20 and C++ 11.
 
-Alternatively you can just create a *build* folder at the root of this project, open a terminal and run `cmake ..` ; chances are it will detect what compiler you have installed and generate the appropriate Makefile / Visual Studio solution / Xcode project.
+---
 
-## TPs
+# References
 
-I have already made 9 TP directories that are ready for you to code.
-If you ever need more, simply duplicate one of them and update CMakeLists.txt (at the bottom of the file you will see the registration of all the TP folders : 
-```cmake
-setup_tp(TP1)
-setup_tp(TP2)
-# ...
-```
+## Graphics
 
-## User inputs
+Item sont issus https://cainos.itch.io/pixel-art-icon-pack-rpg Pixel Art Icon Pack RPG par Cainos.
 
-To learn more about the parameters you receive in the callbacks, read [glfw's documentation](https://www.glfw.org/docs/latest/input_guide.html).
+Monstres sont issus https://luizmelo.itch.io/monsters-creatures-fantasy Monsters Creatures Fantasy par LuizMelo.
 
-## assets
+Textures des murs, eau, sol et portes sont issues https://screamingbrainstudios.itch.io/tiny-texture-pack-2 Tiny texturepack 2 par	Screaming Brain Studios. (Upscale grâce à https://upscayl.github.io/ Upscayl)
+ 
+Police d'écriture utilisée https://www.dafont.com/dungeon-sn.font Dungeon SN Font.
 
-The *assets* folder will be copied to the folder where your executable is created. You can put all the assets that your project needs in there, like textures, shaders, 3D models *etc.*
+## Code C++ utilisées
+
+La fonction GLSL `mat4  rotationMatrix()` dans le fichier `3D_Facing.vs.glsl` est issue du site de https://www.neilmendoza.com/glsl-rotation-about-an-arbitrary-axis/ Neil Mendoza.
+
+### Rendu de texte
+
+Pour cette partie du projet, j'ai suivi le site conseillé dans les ressources de TD : https://learnopengl.com/In-Practice/Text-Rendering LearnOpenGL section Text Rendering.
+
+Les fichiers `text.vs.glsl` and `text.fs.glsl` sont similaires au tutoriel (delta les noms de variables).
+La classe `TextRenderer.cpp `qui permet de stocker les glyphes, générer les quads correspondants à chaque lettre d'une string et calculer la taille (en pixel) d'une chaine de caractères. Le constructeur et la fonction `renderText()` utilisent du code du tutoriel, celui-ci a été modifié pour l'adapter pour à la POO.
+
+## Bibliothèques utilisées
+
+GLFW, GLAD, Glimac, https://github.com/g-truc/glm}{GLM}, https://github.com/leimao/PPMIo PPMIO and https://github.com/nlohmann/json Json for modern C++.

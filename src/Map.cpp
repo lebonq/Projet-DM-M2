@@ -81,9 +81,6 @@ void Map::loadMap(const std::string& nameLevel)
         case DM_PROJECT_COLOR_EMPTY:
             this->m_terrain.push_back(DM_PROJECT_MAP_EMPTY);
             break;
-        case DM_PROJECT_COLOR_DOOR:
-            this->m_terrain.push_back(DM_PROJECT_MAP_DOOR);
-            break;
         case DM_PROJECT_COLOR_WATER:
             this->m_terrain.push_back(DM_PROJECT_MAP_WATER);
             break;
