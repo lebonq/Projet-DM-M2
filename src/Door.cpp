@@ -63,7 +63,7 @@ void Door::update(double current_time)
             this->m_doneMove_real = 0;
         }
         else {
-            float delta_move = move_distance*this->m_moveDirection;
+            float delta_move = static_cast<float>(move_distance)*this->m_moveDirection;
             glm::mat4 mmatrix = this->m_MMatrix;
             mmatrix = glm::translate(mmatrix, glm::vec3(0, delta_move,0));
             this->updateModelMatrix(mmatrix);

@@ -99,7 +99,7 @@ static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int acti
 
     }
     else if (key == GLFW_KEY_W && action == GLFW_PRESS && rotation == 0 && move == 0) {
-        if (map->canItGoThere(player->getXLookAt(), player->getYLookAt())) {
+        if (map->canItGoThere(static_cast<int>(player->getXLookAt()),static_cast<int>( player->getYLookAt()))) {
             move      = 1;
             prevTime  = glfwGetTime() * 1000;
             moveFront = true;
@@ -107,7 +107,7 @@ static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int acti
     }
 
     else if (key == GLFW_KEY_S && action == GLFW_PRESS && rotation == 0 && move == 0) {
-        if (map->canItGoThere(player->getXLookAt() - (player->getLookAtXValue() * 2), player->getYLookAt() - (player->getLookAtYValue() * 2))) {
+        if (map->canItGoThere(static_cast<int>(player->getXLookAt() - (player->getLookAtXValue() * 2)),static_cast<int>( player->getYLookAt() - (player->getLookAtYValue() * 2)))) {
             move      = -1;
             prevTime  = glfwGetTime() * 1000;
             moveFront = true;
@@ -118,12 +118,12 @@ static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int acti
         int x, y;
         // on determine sur quel composante le joueur se deplace
         if (abs(player->getLookAtXValue()) - 1 == 0) { // soit Y
-            x = player->getXLookAt() - player->getLookAtXValue();
-            y = player->getYLookAt() + player->getLookAtXValue();
+            x = static_cast<int>(player->getXLookAt() - player->getLookAtXValue());
+            y = static_cast<int>(player->getYLookAt() + player->getLookAtXValue());
         }
         else { // soit X
-            x = player->getXLookAt() - player->getLookAtYValue();
-            y = player->getYLookAt() - player->getLookAtYValue();
+            x = static_cast<int>(player->getXLookAt() - player->getLookAtYValue());
+            y = static_cast<int>(player->getYLookAt() - player->getLookAtYValue());
         }
         if (map->canItGoThere(x, y)) {
             move      = -1;
@@ -135,12 +135,12 @@ static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int acti
     else if (key == GLFW_KEY_A && action == GLFW_PRESS && rotation == 0 && move == 0) {
         int x, y;
         if (abs(player->getLookAtXValue()) - 1 == 0) {
-            x = player->getXLookAt() - player->getLookAtXValue();
-            y = player->getYLookAt() - player->getLookAtXValue();
+            x = static_cast<int>(player->getXLookAt() - player->getLookAtXValue());
+            y = static_cast<int>(player->getYLookAt() - player->getLookAtXValue());
         }
         else {
-            x = player->getXLookAt() + player->getLookAtYValue();
-            y = player->getYLookAt() - player->getLookAtYValue();
+            x = static_cast<int>(player->getXLookAt() + player->getLookAtYValue());
+            y = static_cast<int>(player->getYLookAt() - player->getLookAtYValue());
         }
 
         if (map->canItGoThere(x, y)) {
@@ -253,8 +253,8 @@ int main()
         // IO
         if (rotation != 0) {
             double rotate_angle = ((current_time- prevTime) * 90) / 900; // we compute the rotation needed to go to 90 degree in function of the elapsed time
-            doneRotation += rotate_angle;
-            doneRotation_real += rotate_angle;
+            doneRotation += static_cast<float>(rotate_angle);
+            doneRotation_real += static_cast<float>(rotate_angle);
             doneRotation = glm::clamp(doneRotation, 0.0f, 90.0f); // we clamp the value at 90 to be sure to have a 90 degres rotation
             if (doneRotation == 90) {
                 rotate_angle = -(doneRotation_real - rotate_angle) + 90; // We recompute the angle to do our finale rotation and be at a cumulative rotation of 90 degree of the camera
@@ -318,14 +318,14 @@ int main()
 
         VMatrix                  = camera->getViewMatrix();
         glm::vec3 lightPos       = camera->getPosition();
-        glm::vec3 lightIntensity = glm::vec3(0.9);
+        glm::vec3 lightIntensity = glm::vec3(0.9f);
 
         if(hit_start) {
             if(current_time - hit_start_time > 500) {
                 hit_start = false;
             }else {
-                float intensity1 = glm::sin(current_time * frequency) * 0.03f;
-                float intensity2 = glm::cos(current_time * frequency) * 0.03f;
+                float intensity1 = static_cast<float>(glm::sin(current_time * frequency) * 0.03f);
+                float intensity2 = static_cast<float>(glm::cos(current_time * frequency) * 0.03f);
 
                 // Default proj matrix
                 PMatrix = glm::perspective(glm::radians(70.0f), static_cast<float>(window_width) / static_cast<float>(window_height), 0.25f, 100.f);

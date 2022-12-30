@@ -3,8 +3,8 @@
 //
 
 #include "Player.hpp"
-Player::Player(int map_x, int map_y, float real_x, float real_z, int mapHeight, int mapWidth)
-    : CombatEntity(100,0,100), m_real_x(real_x), m_real_z(real_z), m_PosMapX(map_x), m_PosMapY(map_y)
+Player::Player(int map_x, int map_y, int real_x, int real_z, int mapHeight, int mapWidth)
+    : CombatEntity(100,0,100), m_real_x(static_cast<float>(real_x)), m_real_z(static_cast<float>(real_z)), m_PosMapX(map_x), m_PosMapY(map_y)
 {
     float phi_cam = 0.f;
     int   cam_x   = real_x;
@@ -24,7 +24,7 @@ Player::~Player()
     delete this->m_camera;
 }
 
-void Player::moveLevel(int map_x, int map_y, float real_x, float real_z, int mapHeight, int mapWidth){
+void Player::moveLevel(int map_x, int map_y, int real_x, int real_z, int mapHeight, int mapWidth){
     float phi_cam = 0.f;
     int   cam_x   = real_x;
     int   cam_z   = real_z;
@@ -51,7 +51,7 @@ void Player::update()
 
 void Player::moveToLeftCamera(double distance)
 {
-    this->m_camera->moveLeft(distance);
+    this->m_camera->moveLeft(static_cast<float>(distance));
     this->updateRealPos();
 }
 
@@ -69,13 +69,13 @@ void Player::updateRealPos()
 
 void Player::moveToFrontCamera(double distance)
 {
-    this->m_camera->moveFront(distance);
+    this->m_camera->moveFront(static_cast<float>(distance));
     this->updateRealPos();
 }
 
 void Player::rotateLeftCamera(double angle)
 {
-    this->m_camera->rotateLeft(angle);
+    this->m_camera->rotateLeft(static_cast<float>(angle));
     glm::vec3 frontVec = this->getCamera()->getFrontVector();
     this->m_xLookAt     = round(frontVec.x);
     this->m_yLookAt      = round(frontVec.z);

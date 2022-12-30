@@ -1,10 +1,12 @@
 //
 // Created by lebonq on 16/12/22.
 //
-#include <glimac/glm.hpp>
-
 #ifndef SIMPLEGLIMAC_FREEFLYCAMERA_HPP
 #define SIMPLEGLIMAC_FREEFLYCAMERA_HPP
+
+#include <glimac/glm.hpp>
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 class FreeflyCamera {
 private:
@@ -14,7 +16,7 @@ private:
     void computeDirectionVectors()
     {
         this->m_FrontVector = glm::vec3(glm::cos(m_fTheta) * glm::sin(m_fPhi), glm::sin(m_fTheta), glm::cos(m_fTheta) * glm::cos(m_fPhi));
-        this->m_LeftVector  = glm::vec3(glm::sin(this->m_fPhi + (M_PI / 2)), 0, glm::cos(this->m_fPhi + (M_PI / 2)));
+        this->m_LeftVector  = glm::vec3(glm::sin(this->m_fPhi + ( M_PI / 2)), 0, glm::cos(this->m_fPhi + (M_PI / 2)));
         this->m_UpVector    = glm::cross(this->m_FrontVector, this->m_LeftVector);
     };
 
@@ -32,7 +34,7 @@ public:
         computeDirectionVectors();
     };
     FreeflyCamera()
-        : FreeflyCamera(glm::vec3(1, 0.5, 0),M_PI_2f * 2) {}
+        : FreeflyCamera(glm::vec3(1, 0.5, 0),static_cast<float>(M_PI) * 2) {}
     ~FreeflyCamera(){
 
     };

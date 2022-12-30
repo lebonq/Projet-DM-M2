@@ -4,11 +4,11 @@
 
 #include "Util.hpp"
 
-uint Util::RGB_to_hexa(unsigned int R, unsigned int G, unsigned int B) {
+unsigned int Util::RGB_to_hexa(unsigned int R, unsigned int G, unsigned int B) {
     return (R << 16) | (G << 8) | B;
 }
 
-std::vector<uint> Util::readImageFile(const std::string filePath,int * width, int* height){
+std::vector<unsigned int> Util::readImageFile(const std::string filePath,int * width, int* height){
     PPM ppmIn(filePath);
     // Get image height
     *height = ppmIn.getH();
@@ -17,7 +17,7 @@ std::vector<uint> Util::readImageFile(const std::string filePath,int * width, in
     // Get image handler
     uint8_t * pImage = ppmIn.getImageHandler();
     uint8_t R,G,B;
-    std::vector<uint> data;
+    std::vector<unsigned int> data;
     for (int i = 0; i < (*width * *height)*3; i+=3) {
             R = pImage[i];
             G = pImage[i+1];

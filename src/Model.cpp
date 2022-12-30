@@ -11,7 +11,7 @@ Model::Model(const int ID, const GLuint texID, ShadersManager* mShaderProgram)
     this->m_ID = ID;
     this->m_Vertices = DM_PROJECT_MODEL_VERTICES[this->m_ID];
     this->m_ibos = DM_PROJECT_MODEL_INDICES[this->m_ID];
-    this->m_nVertexCount = m_Vertices.size();
+    this->m_nVertexCount = static_cast<GLsizei>(m_Vertices.size());
     this->m_textureId = texID;
     this->m_ks = DM_PROJECT_MODEL_KS[ID];
     this->m_kd = DM_PROJECT_MODEL_KD[ID];
@@ -64,7 +64,7 @@ Model::~Model()
 void Model::draw(const glm::mat4& mmatrix)
 {
     glUniformMatrix4fv(this->m_shaderProgram->getMMatrix(),1,GL_FALSE,glm::value_ptr(mmatrix));
-    glDrawElements(GL_TRIANGLES,this->m_ibos.size(),GL_UNSIGNED_INT,0);
+    glDrawElements(GL_TRIANGLES,static_cast<GLsizei>(this->m_ibos.size()),GL_UNSIGNED_INT,0);
 }
 
 void Model::bindModel()

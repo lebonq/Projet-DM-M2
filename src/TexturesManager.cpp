@@ -21,13 +21,14 @@ TexturesManager::TexturesManager()
         //Add texture into the manage at the right index
         this->m_texIds.push_back(tex_id);
         tex_image = nullptr;
+        DEBUG_PRINT("Load texture " + image << std::endl)
     }
 }
 
 TexturesManager::~TexturesManager()
 {
     DEBUG_PRINT("Delete TextureManager " << std::endl);
-    glDeleteTextures(this->m_texIds.size(),this->m_texIds.data());
+    glDeleteTextures(static_cast<GLsizei>(this->m_texIds.size()),this->m_texIds.data());
 
 }
 GLuint TexturesManager::getTexId(const int ID)

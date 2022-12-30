@@ -5,7 +5,7 @@
 #include "ShadersManager.hpp"
 ShadersManager::ShadersManager(std::string vs,std::string fs)
 {
-    DEBUG_PRINT("Build ShaderManage" << std::endl);
+    DEBUG_PRINT("Build ShaderManager" << std::endl);
     this->m_shaderProgram= glimac::loadProgram(vs, fs);
     // get our uniform vairable fromt the shader
     this->m_uMMatrix = glGetUniformLocation(this->m_shaderProgram.getGLId(), "uMMatrix");

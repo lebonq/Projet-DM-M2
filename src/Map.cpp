@@ -10,7 +10,7 @@ Map::Map(const std::string& nameLevel)
     std::ifstream json_file(nameLevel + ".json");
     this->m_data = json::parse(json_file);
 
-    this->m_nLevels      = this->m_data["levels"].size();
+    this->m_nLevels      = static_cast<int>(this->m_data["levels"].size());
     this->m_currentLevel = 0;
     this->loadMap(this->m_data["levels"]["0"]["image"]);
 
@@ -50,12 +50,12 @@ void Map::changeLevel(int direction)
     // si on est deja tout en haut on fini le jeu
     if (this->m_currentLevel >= this->m_nLevels) {
         this->m_currentLevel = this->m_nLevels - 1;
-        this->m_message = "You have finished the game! Congrats !";
+        this->m_message = "You have finished the game! Congrats !!! :)";
         this->m_gameFinished = true;
         this->m_printMessage = true;
         return;
     }
-    this->m_message = "You are now at level " + std::to_string(this->m_currentLevel);
+    this->m_message = "You are now at floor " + std::to_string(this->m_currentLevel);
     this->m_printMessage = true;
     this->loadMap(this->m_data["levels"][std::to_string(this->m_currentLevel)]["image"]);
     this->initWorldObject();
@@ -67,7 +67,7 @@ void Map::changeLevel(int direction)
 void Map::loadMap(const std::string& nameLevel)
 {
     int               width, height;
-    std::vector<uint> image_data = Util::readImageFile(nameLevel, &width, &height);
+    std::vector<unsigned int> image_data = Util::readImageFile(nameLevel, &width, &height);
     this->m_width                = width;
     this->m_height               = height;
 
@@ -144,12 +144,21 @@ void Map::initWorldObject()
 
             wallMatrix = glm::translate(wallMatrix, glm::vec3(1, 0, 0));
 
+            int element_bot;
+            // si l'on sort du vecteur
+            if (y < this->m_height - 1) {
+                element_bot = this->m_terrain[index_bot];
+            }
+            else {
+                element_bot = DM_PROJECT_MAP_WALL; // si l'on sort du vecteur l'élément est un mur car on veut draw des murs aux limites de la map
+            }
+
             // For real wall facing X
-            if (this->m_terrain[index_bot] != DM_PROJECT_MAP_WALL && this->m_terrain[index] == DM_PROJECT_MAP_WALL)
+            if (element_bot != DM_PROJECT_MAP_WALL && this->m_terrain[index] == DM_PROJECT_MAP_WALL)
                 this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_WALL, wall, wallMatrix, x, y));
             // || index_bot >= this->m_width*this->m_height  is for when we touch the border of the map to make sure we draw our wall
             // Si index n'est pas un mur et que index_bot est un mur ou hors du tableau alors on draw
-            if (this->m_terrain[index] != DM_PROJECT_MAP_WALL && (this->m_terrain[index_bot] == DM_PROJECT_MAP_WALL || y + 1 >= this->m_height)) {
+            if (this->m_terrain[index] != DM_PROJECT_MAP_WALL && (element_bot == DM_PROJECT_MAP_WALL || y + 1 >= this->m_height)) {
                 wallMatrix = glm::rotate(wallMatrix, glm::radians(180.0f), glm::vec3(0, 1, 0)); // Those rotation allow us to orient the wall inside the room
                 this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_WALL, wall, wallMatrix, x, y));
                 wallMatrix = glm::rotate(wallMatrix, glm::radians(-180.0f), glm::vec3(0, 1, 0));
@@ -157,9 +166,9 @@ void Map::initWorldObject()
 
             // For wall bewteen water and floor
             wallMatrix = glm::translate(wallMatrix, glm::vec3(0, -1, 0));
-            if (this->m_terrain[index] != DM_PROJECT_MAP_WATER && this->m_terrain[index_bot] == DM_PROJECT_MAP_WATER)
+            if (this->m_terrain[index] != DM_PROJECT_MAP_WATER && element_bot == DM_PROJECT_MAP_WATER)
                 this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_WALL, wall, wallMatrix, x, y));
-            if ((this->m_terrain[index_bot] != DM_PROJECT_MAP_WATER || y + 1 >= this->m_height) && this->m_terrain[index] == DM_PROJECT_MAP_WATER) {
+            if ((element_bot != DM_PROJECT_MAP_WATER || y + 1 >= this->m_height) && this->m_terrain[index] == DM_PROJECT_MAP_WATER) {
                 wallMatrix = glm::rotate(wallMatrix, glm::radians(180.0f), glm::vec3(0, 1, 0)); // Those rotation allow us to orient the wall inside the room
                 this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_WALL, wall, wallMatrix, x, y));
                 wallMatrix = glm::rotate(wallMatrix, glm::radians(-180.0f), glm::vec3(0, 1, 0));
@@ -204,10 +213,20 @@ void Map::initWorldObject()
             wallMatrix = glm::rotate(wallMatrix, glm::radians(90.0f), glm::vec3(0, 1, 0));
             wallMatrix = glm::translate(wallMatrix, glm::vec3(0.5, 0, 0.5));
             // x -(y*width)
-            if (this->m_terrain[index_right] != DM_PROJECT_MAP_WALL && this->m_terrain[index] == DM_PROJECT_MAP_WALL)
+            int element_right;
+
+            if (x < this->m_width - 1) {
+                element_right = this->m_terrain[index_right];
+            }
+            // si l'on sort du vecteur
+            else {
+                element_right = DM_PROJECT_MAP_WALL; // l'élément est un mur car on veut draw des murs aux limites de la map
+            }
+
+            if (element_right != DM_PROJECT_MAP_WALL && this->m_terrain[index] == DM_PROJECT_MAP_WALL)
                 this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_WALL, wall, wallMatrix, x, y));
             //|| x+1 >= this->m_width) To check is we are  on the right side of the maze
-            if (this->m_terrain[index] != DM_PROJECT_MAP_WALL && (this->m_terrain[index_right] == DM_PROJECT_MAP_WALL || x + 1 >= this->m_width)) {
+            if (this->m_terrain[index] != DM_PROJECT_MAP_WALL && (element_right == DM_PROJECT_MAP_WALL || x + 1 >= this->m_width)) {
                 wallMatrix = glm::rotate(wallMatrix, glm::radians(180.0f), glm::vec3(0, 1, 0));
                 this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_WALL, wall, wallMatrix, x, y));
                 wallMatrix = glm::rotate(wallMatrix, glm::radians(-180.0f), glm::vec3(0, 1, 0));
@@ -226,9 +245,9 @@ void Map::initWorldObject()
 
             // Florr to water
             wallMatrix = glm::translate(wallMatrix, glm::vec3(0, -1, 0));
-            if (this->m_terrain[index] != DM_PROJECT_MAP_WATER && this->m_terrain[index_right] == DM_PROJECT_MAP_WATER)
+            if (this->m_terrain[index] != DM_PROJECT_MAP_WATER && element_right == DM_PROJECT_MAP_WATER)
                 this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_WALL, wall, wallMatrix, x, y));
-            if ((this->m_terrain[index_right] != DM_PROJECT_MAP_WATER || x + 1 >= this->m_width) && this->m_terrain[index] == DM_PROJECT_MAP_WATER) {
+            if ((element_right != DM_PROJECT_MAP_WATER || x + 1 >= this->m_width) && this->m_terrain[index] == DM_PROJECT_MAP_WATER) {
                 wallMatrix = glm::rotate(wallMatrix, glm::radians(180.0f), glm::vec3(0, 1, 0)); // Those rotation allow us to orient the wall inside the room
                 this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_WALL, wall, wallMatrix, x, y));
                 wallMatrix = glm::rotate(wallMatrix, glm::radians(-180.0f), glm::vec3(0, 1, 0));
@@ -255,7 +274,6 @@ void Map::initWorldObject()
                 wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 0, 1));
                 wallMatrix = glm::translate(wallMatrix, glm::vec3(0, -2, 0));
             }
-
             wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 1, 0));
 
             wallMatrix = glm::translate(wallMatrix, glm::vec3(-0.5, 0, -0.5));
@@ -373,7 +391,20 @@ void Map::initInteractiveObject()
         glm::mat4 mmatrix(1.0f);
         mmatrix        = glm::translate(mmatrix, glm::vec3(x + 1, 0.50, y));
         //orientate the door in function of the terrain
-        if(this->m_terrain[(y+1)* this->m_width + x] != DM_PROJECT_MAP_EMPTY && this->m_terrain[(y-1)* this->m_width + x] != DM_PROJECT_MAP_EMPTY)
+
+        int element_down,element_up;
+
+        if (x < this->m_width - 1 && y < this->m_height -1 && x > 0 && y > 0) {
+            element_up = this->m_terrain[(y+1)* this->m_width + x];
+            element_down = this->m_terrain[(y-1)* this->m_width + x];
+        }
+        // si l'on sort du vecteur
+        else {
+            element_up = DM_PROJECT_MAP_WALL; // l'élément est un mur car on veut draw des murs aux limites de la map
+            element_down = DM_PROJECT_MAP_WALL; // l'élément est un mur car on veut draw des murs aux limites de la map
+        }
+
+        if(element_up != DM_PROJECT_MAP_EMPTY && element_down != DM_PROJECT_MAP_EMPTY)
             mmatrix = glm::rotate(mmatrix, glm::radians(90.0f), glm::vec3(0, 1, 0));
         Door* door_ptr = new Door(door_model, mmatrix, x, y, door["price"]);
         this->m_interactiveObjects.push_back(door_ptr);
@@ -436,7 +467,7 @@ void Map::update(double current_time)
             }
             else {
                 // le monstre ne se deplace que si il est a 6 de distance maximum (distance cartesienne)
-                float distance = sqrt(pow(p_x - m_x, 2) + pow(p_y - m_y, 2));
+                float distance = static_cast<float>(sqrt(pow(p_x - m_x, 2) + pow(p_y - m_y, 2)));
                 if (distance >= DM_PROJECT_VISION_MONSTER) {
                     continue;
                 }
@@ -454,7 +485,11 @@ void Map::update(double current_time)
                     direction_x *= -1; // alors inverse la direction
                     cell_dir_x = m_y * this->getWidth() + m_x + direction_x;
                     //(Si cette nouvelle direct n'est pas vide OU que la porte est fermée OU que elle n'est pas sur la même ligne) ET que on ne veut pas se deaplcer en verticale
+                    if((cell_dir_x < this->m_terrain.size()) ||cell_dir_x >= 0) {
                     if (((this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_EMPTY && this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_ENTRANCE && this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_EXIT) || isDoorOpenAtCell(cell_dir_x) == false || m_x + direction_x < 0 || m_x + direction_x >= this->getWidth()) && direction_y == 0) {
+                        direction_y = -(monster->getPreviousCell() - cell_dir_y) / this->getHeight(); // On force le deplacement vertical dans le sens opposé d'ou l'on vient
+                    }}
+                    else{
                         direction_y = -(monster->getPreviousCell() - cell_dir_y) / this->getHeight(); // On force le deplacement vertical dans le sens opposé d'ou l'on vient
                     }
                 }
@@ -462,9 +497,15 @@ void Map::update(double current_time)
                 if ((this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EMPTY && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_ENTRANCE && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EXIT) || isDoorOpenAtCell(cell_dir_y) == false || monster->getPreviousCell() == cell_dir_y) {
                     direction_y *= -1; // inverse la direction
                     cell_dir_y = (m_y + direction_y) * this->getWidth() + m_x;
-                    if (((this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EMPTY && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_ENTRANCE && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EXIT) || isDoorOpenAtCell(cell_dir_y) == false || m_y + direction_y < 0 || m_y + direction_y >= this->getHeight()) && direction_x == 0) {
-                        direction_x = -(monster->getPreviousCell() - cell_dir_x);
+                    if((cell_dir_y < this->m_terrain.size())||cell_dir_y >= 0) {
+                        if (((this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EMPTY && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_ENTRANCE && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EXIT) || isDoorOpenAtCell(cell_dir_y) == false || m_y + direction_y < 0 || m_y + direction_y >= this->getHeight()) && direction_x == 0) {
+                            direction_x = -(monster->getPreviousCell() - cell_dir_x);
+                        }
                     }
+                        else{
+                            direction_x = -(monster->getPreviousCell() - cell_dir_x);
+                        }
+
                 }
 
                 if (canItGoThere(m_x + direction_x, m_y) && direction_x != 0) {
@@ -507,8 +548,8 @@ void Map::interact()
     float xDir = m_player->getXLookAt();
     float yDir = m_player->getYLookAt();
 
-    x = xDir;
-    y = yDir;
+    x = static_cast<int>(xDir);
+    y = static_cast<int>(yDir);
 
     // check if we interact with an item
     for (auto it = this->m_interactiveObjects.begin(); it != m_interactiveObjects.end();) {

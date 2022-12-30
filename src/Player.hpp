@@ -29,7 +29,7 @@ private:
     FreeflyCamera* m_camera;
 
 public:
-    Player(int map_x, int map_y, float real_x, float real_z,int mapHeight, int mapWidth);
+    Player(int map_x, int map_y, int real_x, int real_z,int mapHeight, int mapWidth);
     ~Player();
     void  update();
     float getRealX() const
@@ -97,7 +97,7 @@ public:
     float getXLookAt() const;
     float getLookAtXValue() const;
     float getLookAtYValue() const;
-    void  moveLevel(int map_x, int map_y, float real_x, float real_z, int mapHeight, int mapWidth);
+    void  moveLevel(int map_x, int map_y, int real_x, int real_z, int mapHeight, int mapWidth);
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_PLAYER_HPP
