@@ -32,8 +32,18 @@ private:
     int m_windowWidth;
     int m_windowHeight;
 public:
+    /**
+     * @source https://learnopengl.com/In-Practice/Text-Rendering
+     * @param windowWidth
+     * @param windowHeight
+     */
     TextRenderer(int windowWidth, int windowHeight);
     ~TextRenderer();
+    /**
+     * @source https://learnopengl.com/In-Practice/Text-Rendering
+     * @param windowWidth
+     * @param windowHeight
+     */
     void renderText(const std::string& text, float x, float y, float scale, glm::vec4 color);
     void updatePMatrix(glm::mat4 PMatrix){this->m_projection = PMatrix;}
     float getSizeText(const std::string& text, float scale);
