@@ -70,7 +70,7 @@ static void initMap(GLFWwindow* window){
     glfwSwapBuffers(window);
 
     //reload the map
-    map    = new Map("assets/map1");
+    map    = new Map("assets/dungeon_1");
 
     player = map->getPlayer();
     camera = player->getCamera();

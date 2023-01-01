@@ -50,7 +50,7 @@
           "pos_y": 2,
           "type": 0,
           "live": 50,
-          "attack": 15,
+          "attack": 5,
           "defense": 5,
           "id_model": 18
         },
@@ -76,7 +76,7 @@
           "pos_x": 14,
           "pos_y": 0,
           "type": 0,
-          "live": 150,
+          "live": 100,
           "attack": 25,
           "defense": 15,
           "id_model": 5

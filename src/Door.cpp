@@ -45,6 +45,11 @@ void Door::draw()
 {
     InteractiveObject::draw();
 }
+
+/**
+ * This function allow us to interpolate the animation of the door
+ * @param current_time
+ */
 void Door::update(double current_time)
 {
     if (this->m_Animated) {

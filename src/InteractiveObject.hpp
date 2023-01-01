@@ -10,9 +10,12 @@
 #include "RenderedObject.hpp"
 #include "WorldObject.hpp"
 
+/**
+ * This class is used by object which need to interact with the player
+ */
 class InteractiveObject : public RenderedObject {
 protected:
-    WorldObject* m_shadow;
+    WorldObject* m_shadow; //allow us to store a shadow object if needed
 public:
     InteractiveObject(Model* model, WorldObject* m_shadow, glm::mat4 mat, int map_x, int map_y);
     ~InteractiveObject() override = default;

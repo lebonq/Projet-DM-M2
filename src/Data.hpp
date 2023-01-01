@@ -22,6 +22,7 @@ const int DM_PROJECT_COLOR_WATER = 0x0000FF;
 const int DM_PROJECT_COLOR_ENTRANCE = 0xFF0000;
 const int DM_PROJECT_COLOR_EXIT = 0x00FF00;
 
+//ID of the type of chunck
 const int DM_PROJECT_MAP_WALL = 0;
 const int DM_PROJECT_MAP_EMPTY = 1;
 const int DM_PROJECT_MAP_DOOR = 2;
