@@ -19,13 +19,13 @@
           "amount_1": 0,
           "id_model": 11
         },
-        "Beer2": {
+        "Meat1": {
           "pos_x": 3,
           "pos_y": 2,
           "type": 1,
-          "amount_0": 10,
+          "amount_0": 20,
           "amount_1": 0,
-          "id_model": 11
+          "id_model": 13
         },
         "GoldSword1": {
           "pos_x": 14,
@@ -75,7 +75,7 @@
         "Skeleton1": {
           "pos_x": 14,
           "pos_y": 0,
-          "type": 0,
+          "type": 1,
           "live": 100,
           "attack": 25,
           "defense": 15,
@@ -94,98 +94,181 @@
       "image": "assets/map1_1.ppm",
       "items": {
         "GoldCoins1": {
-          "pos_x": 0,
-          "pos_y": 3,
+          "pos_x": 4,
+          "pos_y": 9,
           "type": 0,
-          "amount_0": 120,
+          "amount_0": 50,
+          "amount_1": 0,
+          "id_model": 3
+        },
+        "GoldCoins2": {
+          "pos_x": 4,
+          "pos_y": 7,
+          "type": 0,
+          "amount_0": 50,
           "amount_1": 0,
           "id_model": 3
         },
         "GoldIngot1": {
-          "pos_x": 5,
-          "pos_y": 5,
+          "pos_x": 10,
+          "pos_y": 9,
           "type": 0,
-          "amount_0": 400,
+          "amount_0": 100,
           "amount_1": 0,
           "id_model": 9
         },
-        "Apple1": {
-          "pos_x": 5,
-          "pos_y": 6,
-          "type": 1,
-          "amount_0": 25,
-          "amount_1": 0,
-          "id_model": 10
-        },
-        "Beer1": {
-          "pos_x": 6,
-          "pos_y": 6,
-          "type": 1,
-          "amount_0": 10,
-          "amount_1": 0,
-          "id_model": 11
-        },
-        "Ham1": {
-          "pos_x": 7,
-          "pos_y": 6,
+        "Meat1": {
+          "pos_x": 2,
+          "pos_y": 7,
           "type": 1,
           "amount_0": 30,
           "amount_1": 0,
-          "id_model": 12
+          "id_model": 13
         },
-        "Meat1": {
-          "pos_x": 8,
-          "pos_y": 6,
+        "Meat2": {
+          "pos_x": 12,
+          "pos_y": 13,
           "type": 1,
-          "amount_0": 35,
+          "amount_0": 30,
           "amount_1": 0,
           "id_model": 13
         },
+        "Ham1": {
+          "pos_x": 6,
+          "pos_y": 4,
+          "type": 1,
+          "amount_0": 45,
+          "amount_1": 0,
+          "id_model": 12
+        },
         "Helmet1": {
-          "pos_x": 9,
-          "pos_y": 6,
+          "pos_x": 2,
+          "pos_y": 5,
           "type": 2,
-          "amount_0": 40,
+          "amount_0": 5,
           "amount_1": 0,
           "id_model": 14
         },
         "Armor1": {
-          "pos_x": 9,
-          "pos_y": 7,
+          "pos_x": 10,
+          "pos_y": 13,
           "type": 2,
-          "amount_0": 40,
+          "amount_0": 10,
           "amount_1": 0,
           "id_model": 15
         },
-        "GoldSword1": {
-          "pos_x": 9,
-          "pos_y": 8,
-          "type": 4,
-          "amount_0": 10,
-          "amount_1": 2,
-          "id_model": 16
-        },
         "WoodSword1": {
-          "pos_x": 9,
-          "pos_y": 9,
+          "pos_x": 2,
+          "pos_y": 2,
           "type": 3,
           "amount_0": 5,
           "amount_1": 0,
           "id_model": 17
+        },
+        "GoldSword1": {
+          "pos_x": 8,
+          "pos_y": 9,
+          "type": 4,
+          "amount_0": 10,
+          "amount_1": 2,
+          "id_model": 16
         }
       },
       "monsters": {
-        "0": {
+        "Goblin1": {
           "pos_x": 2,
-          "pos_y": 0,
+          "pos_y": 9,
           "type": 0,
-          "live": 100,
+          "live": 75,
+          "attack": 15,
+          "defense": 5,
+          "id_model": 18
+        },
+        "Goblin2": {
+          "pos_x": 8,
+          "pos_y": 3,
+          "type": 0,
+          "live": 75,
+          "attack": 17,
+          "defense": 5,
+          "id_model": 18
+        },
+        "Goblin3": {
+          "pos_x": 13,
+          "pos_y": 11,
+          "type": 0,
+          "live": 75,
           "attack": 20,
           "defense": 5,
+          "id_model": 18
+        },
+        "Skeleton1": {
+          "pos_x": 6,
+          "pos_y": 6,
+          "type": 1,
+          "live": 150,
+          "attack": 30,
+          "defense": 15,
           "id_model": 5
         }
       },
-      "doors": {}
+      "doors": {
+        "0": {
+          "pos_x": 10,
+          "pos_y": 7,
+          "price": 200
+        }
+      }
+    },
+    "2": {
+      "image": "assets/map1_2.ppm",
+      "items": {
+        "Apple1": {
+          "pos_x": 2,
+          "pos_y": 1,
+          "type": 1,
+          "amount_0": 10,
+          "amount_1": 0,
+          "id_model": 10
+        },
+        "Apple2": {
+          "pos_x": 5,
+          "pos_y": 1,
+          "type": 1,
+          "amount_0": 10,
+          "amount_1": 0,
+          "id_model": 10
+        },
+        "Apple3": {
+          "pos_x": 2,
+          "pos_y": 7,
+          "type": 1,
+          "amount_0": 10,
+          "amount_1": 0,
+          "id_model": 10
+        },
+        "Apple4": {
+          "pos_x": 5,
+          "pos_y": 7,
+          "type": 1,
+          "amount_0": 10,
+          "amount_1": 0,
+          "id_model": 10
+        }
+      },
+      "monsters": {
+        "Mushrooms": {
+          "pos_x": 3,
+          "pos_y": 4,
+          "type": 2,
+          "live": 600,
+          "attack": 35,
+          "defense": 25,
+          "id_model": 19
+        }
+      },
+      "doors": {
+      }
     }
   }
 }

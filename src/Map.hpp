@@ -33,7 +33,7 @@ private:
     bool m_gameFinished = false;
     bool m_playerIsHit = false;
 
-    double m_monsterPreviousTime;
+    double m_monsterPreviousTime = 0.0;
 
     std::vector<int> m_terrain; //used to store the type of every "chunck" of the map
     std::vector<WorldObject*> m_worldObjects; //owning pointers
