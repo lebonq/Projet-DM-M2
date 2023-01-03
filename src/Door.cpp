@@ -12,16 +12,16 @@ bool Door::getClicked(Player* player, std::string& message, bool* printMessage)
 {
     if (player->getGold() >= this->m_price && !this->m_paid) {
         player->changeGold(-this->m_price);
-        this->m_open     = true;
-        this->m_paid     = true;
-        this->m_Animated = true;
+        this->m_open          = true;
+        this->m_paid          = true;
+        this->m_Animated      = true;
         this->m_moveDirection = 1;
-        message = "Door Opened";
-        *printMessage = true;
+        message               = "Door Opened";
+        *printMessage         = true;
         DEBUG_PRINT("Door opended" << std::endl);
     }
-    //si on a paye la porte et qu'elle n'est pas actuellement animée on l'ouvre ou la ferme
-    else if(this->m_paid && !this->m_Animated) {
+    // si on a paye la porte et qu'elle n'est pas actuellement animée on l'ouvre ou la ferme
+    else if (this->m_paid && !this->m_Animated) {
         if (this->m_open) {
             this->m_Animated      = true;
             this->m_open          = false;
@@ -35,9 +35,9 @@ bool Door::getClicked(Player* player, std::string& message, bool* printMessage)
             DEBUG_PRINT("Door opened" << std::endl);
         }
     }
-    else if(!this->m_paid){
+    else if (!this->m_paid) {
         *printMessage = true;
-        message = "Cannot not open. Price is " + std::to_string(this->m_price);
+        message       = "Cannot not open. Price is " + std::to_string(this->m_price);
     }
     return false;
 }
@@ -53,24 +53,24 @@ void Door::draw()
 void Door::update(double current_time)
 {
     if (this->m_Animated) {
-        double move_distance = ((current_time - this->m_previousTime)*0.8) / 1700;
+        double move_distance = ((current_time - this->m_previousTime) * 0.8) / 1700;
         this->m_doneMove += static_cast<float>(move_distance);
         this->m_doneMove_real += static_cast<float>(move_distance);
         this->m_doneMove = glm::clamp(this->m_doneMove, 0.0f, 0.80f);
         if (this->m_doneMove == 0.8f) {
             float     move_distancef = -(this->m_doneMove_real - static_cast<float>(move_distance)) + 0.80f;
-            glm::mat4 mmatrix = this->m_MMatrix;
-            float delta_move = move_distancef*static_cast<float>(this->m_moveDirection);
-            mmatrix = glm::translate(mmatrix, glm::vec3(0.f, delta_move, 0.f));
+            glm::mat4 mmatrix        = this->m_MMatrix;
+            float     delta_move     = move_distancef * static_cast<float>(this->m_moveDirection);
+            mmatrix                  = glm::translate(mmatrix, glm::vec3(0.f, delta_move, 0.f));
             this->updateModelMatrix(mmatrix);
-            this->m_Animated = false;
+            this->m_Animated      = false;
             this->m_doneMove      = 0;
             this->m_doneMove_real = 0;
         }
         else {
-            float delta_move = static_cast<float>(move_distance)*this->m_moveDirection;
-            glm::mat4 mmatrix = this->m_MMatrix;
-            mmatrix = glm::translate(mmatrix, glm::vec3(0, delta_move,0));
+            float     delta_move = static_cast<float>(move_distance) * this->m_moveDirection;
+            glm::mat4 mmatrix    = this->m_MMatrix;
+            mmatrix              = glm::translate(mmatrix, glm::vec3(0, delta_move, 0));
             this->updateModelMatrix(mmatrix);
         }
     }

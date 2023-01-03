@@ -10,7 +10,7 @@
 #include "Model.hpp"
 class Player : public CombatEntity {
 private:
-    int m_gold    = 0;
+    int m_gold = 0;
 
     float m_real_x;
     float m_real_z;
@@ -22,14 +22,14 @@ public:
     float getMXLookAt() const;
 
 private:
-    int m_PosMapX;
-    int m_PosMapY;
+    int  m_PosMapX;
+    int  m_PosMapY;
     bool m_dead = false;
 
     FreeflyCamera* m_camera;
 
 public:
-    Player(int map_x, int map_y, int real_x, int real_z,int mapHeight, int mapWidth);
+    Player(int map_x, int map_y, int real_x, int real_z, int mapHeight, int mapWidth);
     ~Player();
     void  update();
     float getRealX() const
@@ -52,14 +52,14 @@ public:
     {
         return m_camera;
     };
-    void  setRealX(float x)
+    void setRealX(float x)
     {
-        m_real_x = x;
-        m_PosMapX = static_cast<int>(x)-1;
+        m_real_x  = x;
+        m_PosMapX = static_cast<int>(x) - 1;
     };
-    void  setRealZ(float z)
+    void setRealZ(float z)
     {
-        m_real_z = z;
+        m_real_z  = z;
         m_PosMapY = static_cast<int>(z);
     };
 
@@ -89,10 +89,11 @@ public:
     {
         return &m_gold;
     };
-    bool* getDeadPtr(){
-        return&m_dead;
+    bool* getDeadPtr()
+    {
+        return &m_dead;
     };
-    void rotateLeftCamera(double angle);
+    void  rotateLeftCamera(double angle);
     float getYLookAt() const;
     float getXLookAt() const;
     float getLookAtXValue() const;

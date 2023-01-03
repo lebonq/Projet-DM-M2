@@ -71,7 +71,7 @@ ModelsManager::ModelsManager()
 ModelsManager::~ModelsManager()
 {
     DEBUG_PRINT("Delete ModelsManager " << std::endl);
-    for (auto model :this->m_listModels) {
+    for (auto model : this->m_listModels) {
         delete model;
     }
 }

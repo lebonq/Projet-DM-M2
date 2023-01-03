@@ -8,7 +8,6 @@
 #include "RenderedObject.hpp"
 
 class WorldObject : public RenderedObject {
-
 private:
     int m_objType;
 

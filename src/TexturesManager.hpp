@@ -8,13 +8,13 @@
 #include <glad/glad.h>
 #include <glimac/Image.hpp>
 #include <vector>
-
 #include "Data.hpp"
 #include "Util.hpp"
 
 class TexturesManager {
 private:
     std::vector<GLuint> m_texIds;
+
 public:
     TexturesManager();
     ~TexturesManager();

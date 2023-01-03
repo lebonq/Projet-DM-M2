@@ -52,7 +52,6 @@ public:
         return &m_attack;
     };
     void getAttacked(CombatEntity* attacker);
-
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_COMBATENTITY_HPP

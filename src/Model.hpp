@@ -14,30 +14,31 @@
 
 class Model {
 private:
-    int m_ID;
+    int                              m_ID;
     std::vector<glimac::ShapeVertex> m_Vertices;
-    std::vector<unsigned int> m_ibos;
+    std::vector<unsigned int>        m_ibos;
 
     GLsizei m_nVertexCount; // Nombre de sommets
 
-    GLuint m_textureId;
-    ShadersManager* m_shaderProgram; //Not owning pointer
+    GLuint          m_textureId;
+    ShadersManager* m_shaderProgram; // Not owning pointer
 
     glm::vec3 m_kd;
     glm::vec3 m_ks;
-    GLfloat m_shininess;
+    GLfloat   m_shininess;
 
     GLuint m_vbo;
     GLuint m_vao;
     GLuint m_ibo;
+
 public:
     Model(const int ID, const GLuint texID, ShadersManager* mShaderProgram);
     ~Model();
-    void draw(const glm::mat4& mmatrix);
-    void bindModel();
-    void unBindModel();
+    void                       draw(const glm::mat4& mmatrix);
+    void                       bindModel();
+    void                       unBindModel();
     const glimac::ShapeVertex* getDataPointer() const;
-    ShadersManager* getShaderProgram() const{return this->m_shaderProgram;}
+    ShadersManager*            getShaderProgram() const { return this->m_shaderProgram; }
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_MODEL_HPP

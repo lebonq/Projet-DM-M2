@@ -12,7 +12,7 @@
 class ShadersManager {
 private:
     glimac::Program m_shaderProgram;
-    //get our uniform vairable fromt the shader
+    // get our uniform vairable fromt the shader
     GLuint m_uMMatrix;
     GLuint m_uVMatrix;
     GLuint m_uPMatrix;
@@ -27,10 +27,11 @@ private:
     GLuint m_uLightIntensity;
 
     GLuint m_playerPos;
+
 public:
-    ShadersManager(std::string vs,std::string fs);
+    ShadersManager(std::string vs, std::string fs);
     ~ShadersManager();
-    void use(){this->m_shaderProgram.use();};
+    void   use() { this->m_shaderProgram.use(); };
     GLuint getMMatrix() const { return m_uMMatrix; }
     GLuint getVMatrix() const { return m_uVMatrix; }
     GLuint getPMatrix() const { return m_uPMatrix; }
@@ -42,7 +43,6 @@ public:
     GLuint getLightIntensity() const { return m_uLightIntensity; }
     GLuint getPlayerPos() const { return m_playerPos; }
     GLuint getRedness() const { return m_uRedness; }
-
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_SHADERSMANAGER_HPP

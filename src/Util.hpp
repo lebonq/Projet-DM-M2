@@ -20,13 +20,10 @@
 #include "third-party/ppmio/include/ppm_io.h"
 #include "vector"
 
-
 class Util {
-
-
 public:
-    static std::vector<unsigned int> readImageFile(const std::string filePath,int * width, int* height);
-    static unsigned RGB_to_hexa(unsigned int R, unsigned int G, unsigned int B);
+    static std::vector<unsigned int> readImageFile(const std::string filePath, int* width, int* height);
+    static unsigned                  RGB_to_hexa(unsigned int R, unsigned int G, unsigned int B);
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_UTIL_HPP

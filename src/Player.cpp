@@ -4,7 +4,7 @@
 
 #include "Player.hpp"
 Player::Player(int map_x, int map_y, int real_x, int real_z, int mapHeight, int mapWidth)
-    : CombatEntity(100,0,10), m_real_x(static_cast<float>(real_x)), m_real_z(static_cast<float>(real_z)), m_PosMapX(map_x), m_PosMapY(map_y)
+    : CombatEntity(100, 0, 10), m_real_x(static_cast<float>(real_x)), m_real_z(static_cast<float>(real_z)), m_PosMapX(map_x), m_PosMapY(map_y)
 {
     float phi_cam = 0.f;
     int   cam_x   = real_x;
@@ -24,7 +24,8 @@ Player::~Player()
     delete this->m_camera;
 }
 
-void Player::moveLevel(int map_x, int map_y, int real_x, int real_z, int mapHeight, int mapWidth){
+void Player::moveLevel(int map_x, int map_y, int real_x, int real_z, int mapHeight, int mapWidth)
+{
     float phi_cam = 0.f;
     int   cam_x   = real_x;
     int   cam_z   = real_z;
@@ -44,7 +45,7 @@ void Player::moveLevel(int map_x, int map_y, int real_x, int real_z, int mapHeig
 
 void Player::update()
 {
-    if(this->getLife() <= 0){
+    if (this->getLife() <= 0) {
         this->m_dead = true;
     }
 }
@@ -57,7 +58,7 @@ void Player::moveToLeftCamera(double distance)
 
 void Player::updateMapPos()
 {
-    this->m_PosMapX = static_cast<int>(this->m_real_x)-1;
+    this->m_PosMapX = static_cast<int>(this->m_real_x) - 1;
     this->m_PosMapY = static_cast<int>(this->m_real_z);
 }
 
@@ -77,8 +78,8 @@ void Player::rotateLeftCamera(double angle)
 {
     this->m_camera->rotateLeft(static_cast<float>(angle));
     glm::vec3 frontVec = this->getCamera()->getFrontVector();
-    this->m_xLookAt     = round(frontVec.x);
-    this->m_yLookAt      = round(frontVec.z);
+    this->m_xLookAt    = round(frontVec.x);
+    this->m_yLookAt    = round(frontVec.z);
 }
 float Player::getXLookAt() const
 {
@@ -86,7 +87,7 @@ float Player::getXLookAt() const
 }
 float Player::getYLookAt() const
 {
-    return m_PosMapY +m_yLookAt;
+    return m_PosMapY + m_yLookAt;
 }
 float Player::getLookAtXValue() const
 {

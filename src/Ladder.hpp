@@ -8,7 +8,7 @@
 #include "InteractiveObject.hpp"
 #include "Player.hpp"
 
-class Ladder: public InteractiveObject {
+class Ladder : public InteractiveObject {
 public:
     Ladder(int type, Model* model, const glm::mat4& mat, int mapX, int mapY);
 

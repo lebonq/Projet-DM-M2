@@ -3,15 +3,15 @@
 //
 
 #include "CombatEntity.hpp"
-CombatEntity::CombatEntity(int life, int defense, int attack):m_life(life), m_defense(defense), m_attack(attack)
+CombatEntity::CombatEntity(int life, int defense, int attack)
+    : m_life(life), m_defense(defense), m_attack(attack)
 {
 }
 
 void CombatEntity::getAttacked(CombatEntity* attacker)
 {
     int damage = attacker->getAttack() - this->getDefense();
-    if (damage < 0)
-    {
+    if (damage < 0) {
         return;
     }
     this->changeLife(-damage);

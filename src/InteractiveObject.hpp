@@ -15,16 +15,16 @@
  */
 class InteractiveObject : public RenderedObject {
 protected:
-    WorldObject* m_shadow; //allow us to store a shadow object if needed
+    WorldObject* m_shadow; // allow us to store a shadow object if needed
 public:
     InteractiveObject(Model* model, WorldObject* m_shadow, glm::mat4 mat, int map_x, int map_y);
-    ~InteractiveObject() override = default;
+    ~InteractiveObject() override                                                     = default;
     virtual bool getClicked(Player* player, std::string& message, bool* printMessage) = 0;
     virtual void draw();
-    void draw(Player* player);
+    void         draw(Player* player);
     WorldObject* getMShadow() const;
-    //Call update animation from main loop
-    //One is to make the item face you other item move and fly
+    // Call update animation from main loop
+    // One is to make the item face you other item move and fly
 };
 
 #endif // PROJET_DM_QUENTIN_LEBON_INTERACTIVEOBJECT_HPP

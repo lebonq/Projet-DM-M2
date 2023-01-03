@@ -13,9 +13,9 @@ int window_height = 1080;
 
 glm::mat4 PMatrix, VMatrix, PMatrix_player_stats, PMatrix_message;
 
-float size_square_message;
+float  size_square_message;
 double big_message_start_time = 0.0;
-bool big_message_start = false;
+bool   big_message_start      = false;
 
 int   rotation          = 0;
 float doneRotation      = 0;
@@ -27,79 +27,73 @@ float  doneMove      = 0;
 float  doneMove_real = 0;
 double prevTime;
 
-Map*           map;
-Player*        player;
-FreeflyCamera* camera;
+Map*                         map;
+Player*                      player;
+FreeflyCamera*               camera;
 std::vector<ShadersManager*> shaders;
 
 double update_time = 0.0;
 
-int* player_life;
-int* player_defense;
-int* player_attack;
-int* player_gold;
+int*  player_life;
+int*  player_defense;
+int*  player_attack;
+int*  player_gold;
 bool* player_isDead;
 bool* player_isHit;
 bool* gameFinished;
 
-//Message to print
-std::string* big_message;
-bool* big_printMessage;
+// Message to print
+std::string*  big_message;
+bool*         big_printMessage;
 TextRenderer* textRenderer;
 
-//Hit effect
+// Hit effect
 double hit_start_time = 0.0;
 bool   hit_start      = false;
 
-static void initMap(GLFWwindow* window){
-
-    //allow us to draw "Loading map" On the screen
+static void initMap(GLFWwindow* window)
+{
+    // allow us to draw "Loading map" On the screen
     glClearColor(0.0f, 0.0f, 0.f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, window_width, window_height);
     glDisable(GL_DEPTH_TEST); // UI is flat no need to test depth
     textRenderer->updatePMatrix(glm::ortho(0.0f, static_cast<GLfloat>(window_width), 0.0f, static_cast<GLfloat>(window_height)));
-    float size_text = textRenderer->getSizeText("LOADING MAP",1.f);
-            // Drawing the actuel text in the middle of the screen
-    textRenderer->renderText("LOADING MAP"
-                             ,((window_width - size_text)/2.f)
-                             ,static_cast<GLfloat>(window_height)/2.f
-                             ,1.0f
-                             ,glm::vec4(1.f, 1.f, 1.f,1.f));
+    float size_text = textRenderer->getSizeText("LOADING MAP", 1.f);
+    // Drawing the actuel text in the middle of the screen
+    textRenderer->renderText("LOADING MAP", ((window_width - size_text) / 2.f), static_cast<GLfloat>(window_height) / 2.f, 1.0f, glm::vec4(1.f, 1.f, 1.f, 1.f));
     glEnable(GL_DEPTH_TEST); // UI is flat no need to test depth
     glfwSwapBuffers(window);
 
-    //reload the map
-    map    = new Map("assets/dungeon_1");
+    // reload the map
+    map = new Map("assets/dungeon_1");
 
     player = map->getPlayer();
     camera = player->getCamera();
 
-    player_life    = player->getLifePtr();
-    player_attack  = player->getAttackPtr();
-    player_defense = player->getDefensePtr();
-    player_gold    = player->getGoldPtr();
-    player_isDead = player->getDeadPtr();
-    big_message = map->getStrMessagePtr();
+    player_life      = player->getLifePtr();
+    player_attack    = player->getAttackPtr();
+    player_defense   = player->getDefensePtr();
+    player_gold      = player->getGoldPtr();
+    player_isDead    = player->getDeadPtr();
+    big_message      = map->getStrMessagePtr();
     big_printMessage = map->getBoolMessagePtr();
-    gameFinished = map->getGameFinishedPtr();
-    player_isHit = map->getPlayerIsHitPtr();
+    gameFinished     = map->getGameFinishedPtr();
+    player_isHit     = map->getPlayerIsHitPtr();
 
     shaders.clear();
     shaders.push_back(map->getShadersManagerFacing());
     shaders.push_back(map->getShadersManagerStatic());
 
     update_time = glfwGetTime() * 1000; // init update time
-
 }
 
 static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/)
 {
-    if(*player_isDead){
-
+    if (*player_isDead) {
     }
     else if (key == GLFW_KEY_W && action == GLFW_PRESS && rotation == 0 && move == 0) {
-        if (map->canItGoThere(static_cast<int>(player->getXLookAt()),static_cast<int>( player->getYLookAt()))) {
+        if (map->canItGoThere(static_cast<int>(player->getXLookAt()), static_cast<int>(player->getYLookAt()))) {
             move      = 1;
             prevTime  = glfwGetTime() * 1000;
             moveFront = true;
@@ -107,7 +101,7 @@ static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int acti
     }
 
     else if (key == GLFW_KEY_S && action == GLFW_PRESS && rotation == 0 && move == 0) {
-        if (map->canItGoThere(static_cast<int>(player->getXLookAt() - (player->getLookAtXValue() * 2)),static_cast<int>( player->getYLookAt() - (player->getLookAtYValue() * 2)))) {
+        if (map->canItGoThere(static_cast<int>(player->getXLookAt() - (player->getLookAtXValue() * 2)), static_cast<int>(player->getYLookAt() - (player->getLookAtYValue() * 2)))) {
             move      = -1;
             prevTime  = glfwGetTime() * 1000;
             moveFront = true;
@@ -149,7 +143,7 @@ static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int acti
             moveFront = false;
         }
     }
-   else if (key == GLFW_KEY_Q && action == GLFW_PRESS && rotation == 0 && move == 0) {
+    else if (key == GLFW_KEY_Q && action == GLFW_PRESS && rotation == 0 && move == 0) {
         rotation = 1;
         prevTime = glfwGetTime() * 1000;
     }
@@ -160,7 +154,7 @@ static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int acti
     else if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
         map->interact();
     }
-    if( key == GLFW_KEY_R && action == GLFW_PRESS && *player_isDead){
+    if (key == GLFW_KEY_R && action == GLFW_PRESS && *player_isDead) {
         delete map;
         initMap(window);
     }
@@ -187,7 +181,7 @@ static void size_callback(GLFWwindow* window, int width, int height)
     glfwGetFramebufferSize(window, &frame_width, &frame_height);
     PMatrix             = glm::perspective(glm::radians(70.0f), static_cast<float>(window_width) / static_cast<float>(window_height), 0.25f, 100.f);
     size_square_message = static_cast<float>(glm::min(window_width, window_height));
-    PMatrix_message      = glm::ortho(glm::abs(size_square_message - static_cast<float>(window_width)) / 2.0f, (glm::abs(size_square_message - static_cast<float>(window_width)) / 2.0f) + size_square_message, glm::abs(size_square_message - static_cast<float>(window_height)) / 2.0f, size_square_message);
+    PMatrix_message     = glm::ortho(glm::abs(size_square_message - static_cast<float>(window_width)) / 2.0f, (glm::abs(size_square_message - static_cast<float>(window_width)) / 2.0f) + size_square_message, glm::abs(size_square_message - static_cast<float>(window_height)) / 2.0f, size_square_message);
 }
 
 int main()
@@ -252,7 +246,7 @@ int main()
 
         // IO
         if (rotation != 0) {
-            double rotate_angle = ((current_time- prevTime) * 90) / 900; // we compute the rotation needed to go to 90 degree in function of the elapsed time
+            double rotate_angle = ((current_time - prevTime) * 90) / 900; // we compute the rotation needed to go to 90 degree in function of the elapsed time
             doneRotation += static_cast<float>(rotate_angle);
             doneRotation_real += static_cast<float>(rotate_angle);
             doneRotation = glm::clamp(doneRotation, 0.0f, 90.0f); // we clamp the value at 90 to be sure to have a 90 degres rotation
@@ -296,34 +290,34 @@ int main()
         }
 
         // update the state of map object if player not dead
-        if(!*player_isDead)map->update(current_time);
+        if (!*player_isDead)
+            map->update(current_time);
 
-        //get our time to compute the delta time and fade the big text
-        if(*big_printMessage){
-            *big_printMessage = false;
+        // get our time to compute the delta time and fade the big text
+        if (*big_printMessage) {
+            *big_printMessage      = false;
             big_message_start_time = current_time;
-            big_message_start = true;
+            big_message_start      = true;
         }
 
-        if(*player_isHit){
-            *player_isHit = false;
+        if (*player_isHit) {
+            *player_isHit  = false;
             hit_start_time = current_time;
-            hit_start = true;
+            hit_start      = true;
         }
-
-
 
         glClearColor(0.0f, 0.0f, 0.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         VMatrix                  = camera->getViewMatrix();
         glm::vec3 lightPos       = camera->getPosition();
-        glm::vec3 lightIntensity = glm::vec3(0.9f);
+        glm::vec3 lightIntensity = glm::vec3(0.8f);
 
-        if(hit_start) {
-            if(current_time - hit_start_time > 500) {
+        if (hit_start) {
+            if (current_time - hit_start_time > 500) {
                 hit_start = false;
-            }else {
+            }
+            else {
                 float intensity1 = static_cast<float>(glm::sin(current_time * frequency) * 0.03f);
                 float intensity2 = static_cast<float>(glm::cos(current_time * frequency) * 0.03f);
 
@@ -347,8 +341,10 @@ int main()
         glUniformMatrix4fv(shader->getVMatrix(), 1, GL_FALSE, glm::value_ptr(VMatrix));
         glUniform3fv(shader->getLightPosVs(), 1, glm::value_ptr(glm::vec3(VMatrix * glm::vec4(lightPos, 1.0f))));
         glUniform3fv(shader->getLightIntensity(), 1, glm::value_ptr(lightIntensity));
-        if(hit_start || *player_isDead) glUniform1f(shader->getRedness(), .35f); //if player hit we make a red effect
-        else glUniform1f(shader->getRedness(), 0.0f);
+        if (hit_start || *player_isDead)
+            glUniform1f(shader->getRedness(), .35f); // if player hit we make a red effect
+        else
+            glUniform1f(shader->getRedness(), 0.0f);
         map->drawStatic();
         // draw facing
         shader = shaders[0];
@@ -357,42 +353,40 @@ int main()
         glUniformMatrix4fv(shader->getVMatrix(), 1, GL_FALSE, glm::value_ptr(VMatrix));
         glUniform3fv(shader->getLightPosVs(), 1, glm::value_ptr(glm::vec3(VMatrix * glm::vec4(lightPos, 1.0f))));
         glUniform3fv(shader->getLightIntensity(), 1, glm::value_ptr(lightIntensity));
-        if(hit_start || *player_isDead) glUniform1f(shader->getRedness(), .35f); //if player hit we make a red effect
-        else glUniform1f(shader->getRedness(), 0.0f);
+        if (hit_start || *player_isDead)
+            glUniform1f(shader->getRedness(), .35f); // if player hit we make a red effect
+        else
+            glUniform1f(shader->getRedness(), 0.0f);
         map->drawFacing();
         //************************DRAW UI  ************************
         glDisable(GL_DEPTH_TEST); // UI is flat no need to test depth
         glViewport(window_width - 220, window_height - 220, 220, 220);
         textRenderer->updatePMatrix(PMatrix_player_stats);
-        textRenderer->renderText("Life : " + std::to_string(*player_life), 0.0f, 0.0f, 0.20f, glm::vec4(0.5f, 0.8f, 0.2f,1.0f));
-        textRenderer->renderText("Gold : " + std::to_string(*player_gold), 0.0f, 50.0f, 0.20F, glm::vec4(1.0f, 0.84f, 0.0f,1.0f));
-        textRenderer->renderText("Attack : " + std::to_string(*player_attack), 0.0f, 100.0f, 0.20f, glm::vec4(1.0f, 0.3f, 0.3f,1.0f));
-        textRenderer->renderText("Defense : " + std::to_string(*player_defense), 0.0f, 150.0f, 0.20f, glm::vec4(0.30f, 0.53f, 1.00f,1.0f));
+        textRenderer->renderText("Life : " + std::to_string(*player_life), 0.0f, 0.0f, 0.20f, glm::vec4(0.5f, 0.8f, 0.2f, 1.0f));
+        textRenderer->renderText("Gold : " + std::to_string(*player_gold), 0.0f, 50.0f, 0.20F, glm::vec4(1.0f, 0.84f, 0.0f, 1.0f));
+        textRenderer->renderText("Attack : " + std::to_string(*player_attack), 0.0f, 100.0f, 0.20f, glm::vec4(1.0f, 0.3f, 0.3f, 1.0f));
+        textRenderer->renderText("Defense : " + std::to_string(*player_defense), 0.0f, 150.0f, 0.20f, glm::vec4(0.30f, 0.53f, 1.00f, 1.0f));
 
-        //Printing the big text with a fade effect
-        if(big_message_start){
-                        float text_opacity = 1.0f;
-                        double time_elapsed = current_time-big_message_start_time;
-                        //computing the fade effect and keep the text draw if the player is dead
-                        if(time_elapsed < 500.0){
-                            text_opacity = glm::clamp(static_cast<float>(time_elapsed)/500.f,0.f,1.f);
-                        }
-                        else if(time_elapsed > 1500.0 && !*player_isDead){
-                            text_opacity = 1-glm::clamp(static_cast<float>(time_elapsed-1500)/500.f,0.f,1.f);
-                        }
-                        if(time_elapsed > 2000.0 && !*player_isDead){
-                            big_message_start=false;
-                        }
+        // Printing the big text with a fade effect
+        if (big_message_start) {
+            float  text_opacity = 1.0f;
+            double time_elapsed = current_time - big_message_start_time;
+            // computing the fade effect and keep the text draw if the player is dead
+            if (time_elapsed < 500.0) {
+                text_opacity = glm::clamp(static_cast<float>(time_elapsed) / 500.f, 0.f, 1.f);
+            }
+            else if (time_elapsed > 1500.0 && !*player_isDead) {
+                text_opacity = 1 - glm::clamp(static_cast<float>(time_elapsed - 1500) / 500.f, 0.f, 1.f);
+            }
+            if (time_elapsed > 2000.0 && !*player_isDead) {
+                big_message_start = false;
+            }
 
             glViewport(abs((static_cast<int>(size_square_message) - window_width)) / 2, 0, static_cast<int>(size_square_message), static_cast<int>(size_square_message));
             textRenderer->updatePMatrix(PMatrix_message);
             // Drawing the actuel text in the middle of the screen
-            float size_text = textRenderer->getSizeText(*big_message,0.250f);
-            textRenderer->renderText(*big_message
-                                     , (glm::abs(size_square_message - static_cast<float>(window_width)) / 2.f)  + ((size_square_message - size_text)/2.f)
-                                     , (glm::abs(size_square_message - static_cast<float>(window_height)) / 2.f) + (size_square_message/1.15f)
-                                     , .250f
-                                     , glm::vec4(1.f, 1.f, 1.f,text_opacity));
+            float size_text = textRenderer->getSizeText(*big_message, 0.250f);
+            textRenderer->renderText(*big_message, (glm::abs(size_square_message - static_cast<float>(window_width)) / 2.f) + ((size_square_message - size_text) / 2.f), (glm::abs(size_square_message - static_cast<float>(window_height)) / 2.f) + (size_square_message / 1.15f), .250f, glm::vec4(1.f, 1.f, 1.f, text_opacity));
         }
         glEnable(GL_DEPTH_TEST);
         // Swap front and back buffers

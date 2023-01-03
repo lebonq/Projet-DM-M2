@@ -8,7 +8,8 @@
 #include <ostream>
 #include "InteractiveObject.hpp"
 #include "Player.hpp"
-class Monster : public InteractiveObject, public CombatEntity {
+class Monster : public InteractiveObject
+    , public CombatEntity {
 private:
     int m_type;
 
@@ -22,7 +23,7 @@ public:
     void setPreviousCell(int previousCell);
 
 public:
-    Monster(Model* model, glm::mat4 mat,WorldObject* shadow, int map_x, int map_y,int type,int life, int defense, int attack);
+    Monster(Model* model, glm::mat4 mat, WorldObject* shadow, int map_x, int map_y, int type, int life, int defense, int attack);
     ~Monster();
     void  update(Player* player);
     bool  getClicked(Player* player, std::string& message, bool* printMessage) override;
@@ -34,11 +35,11 @@ public:
     {
         return m_real_z;
     };
-    void  setRealX(float x)
+    void setRealX(float x)
     {
         m_real_x = x;
     };
-    void  setRealZ(float z)
+    void setRealZ(float z)
     {
         m_real_z = z;
     }

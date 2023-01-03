@@ -1,6 +1,5 @@
-
 #version 330 core
-layout (location = 0) in vec4 aVertexAndTexPosition; //xy pos and zw tex
+layout (location = 0) in vec4 aVertexAndTexPosition;//xy pos and zw tex
 out vec2 vTexCoords;
 
 uniform mat4 uPMatrix;

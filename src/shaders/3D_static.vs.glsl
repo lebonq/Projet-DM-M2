@@ -9,20 +9,20 @@ uniform mat4 uMMatrix;
 uniform mat4 uVMatrix;
 uniform mat4 uPMatrix;
 
-out vec3 vPosition_vs; // Position du sommet transformé dans l'espace View
-out vec3 vNormal_vs; // Normale du sommet transformé dans l'espace View
-out vec2 vTexCoords; // Coordonnées de texture du sommet
+out vec3 vPosition_vs;// Position du sommet transformé dans l'espace View
+out vec3 vNormal_vs;// Normale du sommet transformé dans l'espace View
+out vec2 vTexCoords;// Coordonnées de texture du sommet
 
 mat3 translate(float tx, float ty) {
-    return mat3(vec3(1,0,0),vec3(0,1,0),vec3(tx,ty,1));
+    return mat3(vec3(1, 0, 0), vec3(0, 1, 0), vec3(tx, ty, 1));
 }
 
 mat3 scale(float sx, float sy) {
-    return mat3(vec3(sx,0,0),vec3(0,sy,0),vec3(0,0,1));
+    return mat3(vec3(sx, 0, 0), vec3(0, sy, 0), vec3(0, 0, 1));
 }
 
 mat3 rotation(float alpha) {
-    return mat3(vec3(cos(alpha),sin(alpha),0),vec3(-sin(alpha),cos(alpha),0),vec3(0,0,1));
+    return mat3(vec3(cos(alpha), sin(alpha), 0), vec3(-sin(alpha), cos(alpha), 0), vec3(0, 0, 1));
 }
 
 void main() {

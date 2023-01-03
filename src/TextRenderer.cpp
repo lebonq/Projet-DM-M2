@@ -132,21 +132,21 @@ void TextRenderer::renderText(const std::string& text, float x, float y, float s
 float TextRenderer::getSizeText(const std::string& text, float scale)
 {
     std::string::const_iterator c;
-    float w_tot = 0.f;
-    float xpos_begin = 0.f;
-    float xpos_end = 0.f;
-    float x = 0.f;
+    float                       w_tot      = 0.f;
+    float                       xpos_begin = 0.f;
+    float                       xpos_end   = 0.f;
+    float                       x          = 0.f;
     for (c = text.begin(); c != text.end(); c++) {
         Character ch = this->m_characters[*c];
-        if(c == text.begin()) {
+        if (c == text.begin()) {
             xpos_begin = x + ch.Bearing.x * scale;
         }
-        if(c == text.end()) {
+        if (c == text.end()) {
             xpos_end = x + ch.Bearing.x * scale;
         }
         w_tot += ch.Size.x * scale;
         x += (ch.Advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64)
         xpos_end = x;
     }
-    return xpos_end-xpos_begin;
+    return xpos_end - xpos_begin;
 }

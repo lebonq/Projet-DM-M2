@@ -11,18 +11,19 @@
 class RenderedObject {
 protected:
     glm::mat4 m_MMatrix;
-    Model* m_Model; //non owning pointer
+    Model*    m_Model; // non owning pointer
     int       m_PosMapX;
     int       m_PosMapY;
 
 public:
-    RenderedObject(Model* model,glm::mat4 mat, int map_x, int map_y);
+    RenderedObject(Model* model, glm::mat4 mat, int map_x, int map_y);
     virtual ~RenderedObject() = default;
-    void updateModelMatrix(const glm::mat4 mat){
+    void updateModelMatrix(const glm::mat4 mat)
+    {
         this->m_MMatrix = mat;
     }
     virtual void draw();
-    int getMapX() const
+    int          getMapX() const
     {
         return m_PosMapX;
     };

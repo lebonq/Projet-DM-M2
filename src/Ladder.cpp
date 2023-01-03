@@ -5,7 +5,7 @@
 #include "Ladder.hpp"
 
 Ladder::Ladder(int type, Model* model, const glm::mat4& mat, int mapX, int mapY)
-    : InteractiveObject(model,nullptr, mat, mapX, mapY) {}
+    : InteractiveObject(model, nullptr, mat, mapX, mapY) {}
 
 Ladder::~Ladder()
 {
@@ -13,7 +13,8 @@ Ladder::~Ladder()
     InteractiveObject::~InteractiveObject();
 }
 bool Ladder::getClicked(Player* player, std::string& message, bool* printMessage)
-{;
+{
+    ;
     return false;
 }
 void Ladder::draw()

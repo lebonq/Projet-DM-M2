@@ -43,19 +43,19 @@ void Map::changeLevel(int direction)
     // Si on est deja au RDC on ne fait rien
     if (this->m_currentLevel < 0) {
         this->m_currentLevel = 0;
-        this->m_message = "You are already at the ground floor";
+        this->m_message      = "You are already at the ground floor";
         this->m_printMessage = true;
         return;
     }
     // si on est deja tout en haut on fini le jeu
     if (this->m_currentLevel >= this->m_nLevels) {
         this->m_currentLevel = this->m_nLevels - 1;
-        this->m_message = "You have finished the game! Congrats !!! :)";
+        this->m_message      = "You have finished the game! Congrats !!! :)";
         this->m_gameFinished = true;
         this->m_printMessage = true;
         return;
     }
-    this->m_message = "You are now at floor " + std::to_string(this->m_currentLevel);
+    this->m_message      = "You are now at floor " + std::to_string(this->m_currentLevel);
     this->m_printMessage = true;
     this->loadMap(this->m_data["levels"][std::to_string(this->m_currentLevel)]["image"]);
     this->initWorldObject();
@@ -66,10 +66,10 @@ void Map::changeLevel(int direction)
 
 void Map::loadMap(const std::string& nameLevel)
 {
-    int               width, height;
+    int                       width, height;
     std::vector<unsigned int> image_data = Util::readImageFile(nameLevel, &width, &height);
-    this->m_width                = width;
-    this->m_height               = height;
+    this->m_width                        = width;
+    this->m_height                       = height;
 
     int cpt = 0;
     this->m_terrain.clear();
@@ -110,7 +110,6 @@ Map::~Map()
         delete interactiveObject;
     }
     delete this->m_player;
-
 }
 
 void Map::initWorldObject()
@@ -128,9 +127,9 @@ void Map::initWorldObject()
     glm::mat4 wallMatrix(1);
     glm::mat4 floorMatrix(1);
     glm::mat4 waterMatrix(1);
-    glm::mat4 smatrix(1.0f);//MMatrix for the ladder shadow
-    int x_sha = 0;
-    int y_sha = 0;
+    glm::mat4 smatrix(1.0f); // MMatrix for the ladder shadow
+    int       x_sha = 0;
+    int       y_sha = 0;
 
     wallMatrix = glm::translate(wallMatrix, glm::vec3(0, 0.5, 0.5));
     for (int y = 0; y < this->m_height; y++) {
@@ -302,9 +301,9 @@ void Map::initWorldObject()
                 if (this->m_terrain[index] == DM_PROJECT_MAP_EXIT) {
                     Model* ladder  = this->m_ModelsManager.getRefModel(DM_PROJECT_ID_MANAGER_LADDER);
                     this->m_ladder = new Ladder(DM_PROJECT_ID_MANAGER_LADDER, ladder, floorMatrix, x, y);
-                    smatrix = glm::translate(smatrix, glm::vec3(x + 1, 0.01f, y));
-                    x_sha = x;
-                    y_sha = y;
+                    smatrix        = glm::translate(smatrix, glm::vec3(x + 1, 0.01f, y));
+                    x_sha          = x;
+                    y_sha          = y;
                 }
 
                 // We place the ceiling
@@ -337,7 +336,7 @@ void Map::initWorldObject()
         }
         waterMatrix = glm::translate(waterMatrix, glm::vec3(-this->m_width, 0, 1));
     }
-    Model*    shadow = this->m_ModelsManager.getRefModel(DM_PROJECT_ID_MANAGER_SHADOW);
+    Model* shadow = this->m_ModelsManager.getRefModel(DM_PROJECT_ID_MANAGER_SHADOW);
     this->m_worldObjects.push_back(new WorldObject(DM_PROJECT_MAP_SHADOW, shadow, smatrix, x_sha, y_sha));
 }
 
@@ -386,22 +385,22 @@ void Map::initInteractiveObject()
         int       x          = door["pos_x"];
         int       y          = door["pos_y"];
         glm::mat4 mmatrix(1.0f);
-        mmatrix        = glm::translate(mmatrix, glm::vec3(x + 1, 0.50, y));
-        //orientate the door in function of the terrain
+        mmatrix = glm::translate(mmatrix, glm::vec3(x + 1, 0.50, y));
+        // orientate the door in function of the terrain
 
-        int element_down,element_up;
+        int element_down, element_up;
 
-        if (x < this->m_width - 1 && y < this->m_height -1 && x > 0 && y > 0) {
-            element_up = this->m_terrain[(y+1)* this->m_width + x];
-            element_down = this->m_terrain[(y-1)* this->m_width + x];
+        if (x < this->m_width - 1 && y < this->m_height - 1 && x > 0 && y > 0) {
+            element_up   = this->m_terrain[(y + 1) * this->m_width + x];
+            element_down = this->m_terrain[(y - 1) * this->m_width + x];
         }
         // si l'on sort du vecteur
         else {
-            element_up = DM_PROJECT_MAP_WALL; // l'élément est un mur car on veut draw des murs aux limites de la map
+            element_up   = DM_PROJECT_MAP_WALL; // l'élément est un mur car on veut draw des murs aux limites de la map
             element_down = DM_PROJECT_MAP_WALL; // l'élément est un mur car on veut draw des murs aux limites de la map
         }
 
-        if(element_up != DM_PROJECT_MAP_EMPTY && element_down != DM_PROJECT_MAP_EMPTY)
+        if (element_up != DM_PROJECT_MAP_EMPTY && element_down != DM_PROJECT_MAP_EMPTY)
             mmatrix = glm::rotate(mmatrix, glm::radians(90.0f), glm::vec3(0, 1, 0));
         Door* door_ptr = new Door(door_model, mmatrix, x, y, door["price"]);
         this->m_interactiveObjects.push_back(door_ptr);
@@ -417,24 +416,26 @@ void Map::drawStatic()
         }
         object->draw();
     }
-    //On draw uniquement les portes
+    // On draw uniquement les portes
     for (auto objectFacing : this->m_interactiveObjects) {
-        if((dynamic_cast<const Door*>(objectFacing) != nullptr) )objectFacing->draw(this->m_player);
+        if ((dynamic_cast<const Door*>(objectFacing) != nullptr))
+            objectFacing->draw(this->m_player);
     }
 }
 
 void Map::drawFacing()
 {
     Player* p = this->m_player;
-    //on trie les objets et monstre par leur distance au joueur, cela permet de gerer la transparence correctement
+    // on trie les objets et monstre par leur distance au joueur, cela permet de gerer la transparence correctement
     std::sort(begin(this->m_interactiveObjects),
-          end(this->m_interactiveObjects),
-          [p](const InteractiveObject* o1,const InteractiveObject* o2){ return sqrt(pow(p->getMapX() - o1->getMapX(), 2) + pow(p->getMapY() - o1->getMapY(), 2)) > sqrt(pow(p->getMapX() - o2->getMapX(), 2) + pow(p->getMapY() - o2->getMapY(),  2)); });
+              end(this->m_interactiveObjects),
+              [p](const InteractiveObject* o1, const InteractiveObject* o2) { return sqrt(pow(p->getMapX() - o1->getMapX(), 2) + pow(p->getMapY() - o1->getMapY(), 2)) > sqrt(pow(p->getMapX() - o2->getMapX(), 2) + pow(p->getMapY() - o2->getMapY(), 2)); });
 
     this->m_ladder->draw();
-    //on ne draw pas les portes
+    // on ne draw pas les portes
     for (auto objectFacing : this->m_interactiveObjects) {
-        if((dynamic_cast<const Door*>(objectFacing) == nullptr) )objectFacing->draw(this->m_player);
+        if ((dynamic_cast<const Door*>(objectFacing) == nullptr))
+            objectFacing->draw(this->m_player);
     }
 }
 
@@ -444,7 +445,8 @@ void Map::update(double current_time)
     // if 1 second has passed we update monster position
     if (current_time - this->m_monsterPreviousTime > 1000)
         for (auto o : this->m_interactiveObjects) {
-            if(!(dynamic_cast<const Monster*>(o) != nullptr))continue;
+            if (!(dynamic_cast<const Monster*>(o) != nullptr))
+                continue;
 
             Monster* monster = dynamic_cast<Monster*>(o);
 
@@ -457,10 +459,10 @@ void Map::update(double current_time)
             if ((abs(p_x - m_x) == 0 && abs(p_y - m_y) == 1) || (abs(p_x - m_x) == 1 && abs(p_y - m_y) == 0) || (p_x == m_x && p_y == m_y)) {
                 int lifeBefore = this->m_player->getLife();
                 m_player->getAttacked(monster); // player get attacked
-                int lifeAfter = this->m_player->getLife();
-                this->m_message = "You loose " + std::to_string(lifeBefore - lifeAfter) + " hp";
+                int lifeAfter        = this->m_player->getLife();
+                this->m_message      = "You loose " + std::to_string(lifeBefore - lifeAfter) + " hp";
                 this->m_printMessage = true;
-                this->m_playerIsHit = true;
+                this->m_playerIsHit  = true;
             }
             else {
                 // le monstre ne se deplace que si il est a 6 de distance maximum (distance cartesienne)
@@ -482,11 +484,12 @@ void Map::update(double current_time)
                     direction_x *= -1; // alors inverse la direction
                     cell_dir_x = m_y * this->getWidth() + m_x + direction_x;
                     //(Si cette nouvelle direct n'est pas vide OU que la porte est fermée OU que elle n'est pas sur la même ligne) ET que on ne veut pas se deaplcer en verticale
-                    if((cell_dir_x < this->m_terrain.size()) ||cell_dir_x >= 0) {
-                    if (((this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_EMPTY && this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_ENTRANCE && this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_EXIT) || isDoorOpenAtCell(cell_dir_x) == false || m_x + direction_x < 0 || m_x + direction_x >= this->getWidth()) && direction_y == 0) {
-                        direction_y = -(monster->getPreviousCell() - cell_dir_y) / this->getHeight(); // On force le deplacement vertical dans le sens opposé d'ou l'on vient
-                    }}
-                    else{
+                    if ((cell_dir_x < this->m_terrain.size()) || cell_dir_x >= 0) {
+                        if (((this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_EMPTY && this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_ENTRANCE && this->m_terrain[cell_dir_x] != DM_PROJECT_MAP_EXIT) || isDoorOpenAtCell(cell_dir_x) == false || m_x + direction_x < 0 || m_x + direction_x >= this->getWidth()) && direction_y == 0) {
+                            direction_y = -(monster->getPreviousCell() - cell_dir_y) / this->getHeight(); // On force le deplacement vertical dans le sens opposé d'ou l'on vient
+                        }
+                    }
+                    else {
                         direction_y = -(monster->getPreviousCell() - cell_dir_y) / this->getHeight(); // On force le deplacement vertical dans le sens opposé d'ou l'on vient
                     }
                 }
@@ -494,15 +497,14 @@ void Map::update(double current_time)
                 if ((this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EMPTY && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_ENTRANCE && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EXIT) || isDoorOpenAtCell(cell_dir_y) == false || monster->getPreviousCell() == cell_dir_y) {
                     direction_y *= -1; // inverse la direction
                     cell_dir_y = (m_y + direction_y) * this->getWidth() + m_x;
-                    if((cell_dir_y < this->m_terrain.size())||cell_dir_y >= 0) {
+                    if ((cell_dir_y < this->m_terrain.size()) || cell_dir_y >= 0) {
                         if (((this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EMPTY && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_ENTRANCE && this->m_terrain[cell_dir_y] != DM_PROJECT_MAP_EXIT) || isDoorOpenAtCell(cell_dir_y) == false || m_y + direction_y < 0 || m_y + direction_y >= this->getHeight()) && direction_x == 0) {
                             direction_x = -(monster->getPreviousCell() - cell_dir_x);
                         }
                     }
-                        else{
-                            direction_x = -(monster->getPreviousCell() - cell_dir_x);
-                        }
-
+                    else {
+                        direction_x = -(monster->getPreviousCell() - cell_dir_x);
+                    }
                 }
 
                 if (canItGoThere(m_x + direction_x, m_y) && direction_x != 0) {
@@ -517,15 +519,16 @@ void Map::update(double current_time)
         }
 
     for (auto obj : this->m_interactiveObjects) {
-        if((dynamic_cast<const Door*>(obj) == nullptr) )continue;
+        if ((dynamic_cast<const Door*>(obj) == nullptr))
+            continue;
         Door* door = dynamic_cast<Door*>(obj);
         door->update(current_time);
     }
 
     this->m_player->update();
 
-    if(*this->m_player->getDeadPtr()){
-        this->m_message = "You died. Press R to restart";
+    if (*this->m_player->getDeadPtr()) {
+        this->m_message      = "You died. Press R to restart";
         this->m_printMessage = true;
     }
 
@@ -571,7 +574,7 @@ void Map::interact()
                 it = this->m_interactiveObjects.erase(it);
                 delete object;
             }
-            else{
+            else {
                 ++it;
             }
         }
@@ -606,7 +609,8 @@ bool Map::canItGoThere(int x, int y)
 bool Map::isDoorOpenAt(int x, int y)
 {
     for (auto obj : this->m_interactiveObjects) {
-        if((dynamic_cast<const Door*>(obj) == nullptr) )continue;
+        if ((dynamic_cast<const Door*>(obj) == nullptr))
+            continue;
         Door* door = dynamic_cast<Door*>(obj);
         if (door->getMapX() == x && door->getMapY() == y) {
             if (door->isOpen())
