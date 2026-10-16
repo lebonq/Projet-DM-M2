@@ -1,5 +1,6 @@
 #include "include/ppm_io.h"
 #include <cstring>
+#include <cstdint>
 #include <fstream>
 #include <iostream>
 #include <memory>
