@@ -1,38 +1,74 @@
-# Dugeon Master Project
+# Dungeon Master — C++ / OpenGL dungeon crawler
 
-The movement is done with the ZQSD keys (or WASD if QWERTY keyboard). The A key turns the camera to the left (Q for QWERTY) and the E key to the right. The space bar allows you to interact with ladders, holes, doors, items and attack monsters. If the player dies, the R key will reload the game. The ladders allow you to go up to the next level, the holes to go down.
+A first-person dungeon crawler built as a master's-level graphics project. Explore three floors, fight monsters, collect items, and unlock doors in a custom C++/OpenGL engine.
 
-At any time, the player can check his statistics via the interface at the top right. A text is eventually displayed during an action to better understand what is happening in the game.
+## Video
 
-# Requierment
+**[Watch or download the 20-second video tour (1080p, 30 fps)](docs/media/dungeon-crawler-tour.mp4)**
 
-Dedicated GPU, to build CMake 3.20 and C++ 11.
+[![Video preview: skeleton corridor](docs/media/skeleton-corridor.png)](docs/media/dungeon-crawler-tour.mp4)
 
----
+The video shows four scenes with smooth camera movement: a goblin encounter, water and lighting, a skeleton corridor, and the mushroom boss. It is a silent, scripted camera tour rendered by the game, with gameplay simulation paused.
 
-# References
+## Screenshots
 
-## Graphics
+| Goblin encounter | Water and lighting |
+| --- | --- |
+| ![Goblin in a stone dungeon corridor](docs/media/dungeon-goblin.png) | ![Point-light shading across a flooded dungeon room](docs/media/water-and-lighting.png) |
+| Skeleton corridor | Mushroom boss |
+| ![Skeleton beside a flooded corridor](docs/media/skeleton-corridor.png) | ![Mushroom boss on the third floor](docs/media/mushroom-boss.png) |
 
-Item sont issus https://cainos.itch.io/pixel-art-icon-pack-rpg Pixel Art Icon Pack RPG par Cainos.
+## Features
 
-Monstres sont issus https://luizmelo.itch.io/monsters-creatures-fantasy Monsters Creatures Fantasy par LuizMelo.
+- Custom rendering loop, shader management, and texture/model managers.
+- Point-light shading in GLSL and camera-facing sprites for monsters and items.
+- An object-oriented gameplay layer for the player, monsters, items, doors, and ladders.
+- Combat, health and equipment bonuses, gold collection, and paid doors with opening animations.
+- Three floors connected by ladders and holes, with maps and entity data loaded from PPM and JSON files.
+- A text HUD showing health, gold, attack, and defense, plus interaction messages.
 
-Textures des murs, eau, sol et portes sont issues https://screamingbrainstudios.itch.io/tiny-texture-pack-2 Tiny texturepack 2 par	Screaming Brain Studios. (Upscale grâce à https://upscayl.github.io/ Upscayl)
- 
-Police d'écriture utilisée https://www.dafont.com/dungeon-sn.font Dungeon SN Font.
+## Build and run
 
-## Code C++ utilisées
+Requirements: CMake 3.20 or newer, a C++11-capable compiler, and an OpenGL 3.3-capable driver. GLFW's platform development dependencies are also required on Linux. CMake downloads JSON for Modern C++ and FreeType during configuration, so the first build needs internet access.
 
-La fonction GLSL `mat4  rotationMatrix()` dans le fichier `3D_Facing.vs.glsl` est issue du site de https://www.neilmendoza.com/glsl-rotation-about-an-arbitrary-axis/ Neil Mendoza.
+```sh
+git clone https://github.com/lebonq/Projet-DM-M2.git
+cd Projet-DM-M2
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --parallel
+./bin/Release/Projet_DM_Quentin_Lebon_exe
+```
 
-### Rendu de texte
+Run from the repository root so relative paths to `assets/` and `src/shaders/` resolve correctly. The executable path above is for a single-configuration Linux build.
 
-Pour cette partie du projet, j'ai suivi le site conseillé dans les ressources de TD : https://learnopengl.com/In-Practice/Text-Rendering LearnOpenGL section Text Rendering.
+## Controls
 
-Les fichiers `text.vs.glsl` and `text.fs.glsl` sont similaires au tutoriel (delta les noms de variables).
-La classe `TextRenderer.cpp `qui permet de stocker les glyphes, générer les quads correspondants à chaque lettre d'une string et calculer la taille (en pixel) d'une chaine de caractères. Le constructeur et la fonction `renderText()` utilisent du code du tutoriel, celui-ci a été modifié pour l'adapter pour à la POO.
+| Key (QWERTY) | Action |
+| --- | --- |
+| W / S | Move forward / backward |
+| A / D | Strafe left / right |
+| Q / E | Turn left / right |
+| Space | Interact, collect an item, attack, or use a ladder/hole |
+| R | Restart after death |
 
-## Bibliothèques utilisées
+On an AZERTY keyboard, the corresponding movement keys are ZQSD, with A/E for turning. The HUD appears in the top-right corner.
 
-GLFW, GLAD, Glimac, https://github.com/g-truc/glm}{GLM}, https://github.com/leimao/PPMIo PPMIO and https://github.com/nlohmann/json Json for modern C++.
+## Credits and references
+
+### Artwork and font
+
+- Item sprites: [Pixel Art Icon Pack RPG](https://cainos.itch.io/pixel-art-icon-pack-rpg) by Cainos.
+- Monster sprites: [Monsters Creatures Fantasy](https://luizmelo.itch.io/monsters-creatures-fantasy) by LuizMelo.
+- Wall, water, floor, and door textures: [Tiny Texture Pack 2](https://screamingbrainstudios.itch.io/tiny-texture-pack-2) by Screaming Brain Studios, upscaled with [Upscayl](https://upscayl.github.io/).
+- Font: [Dungeon SN](https://www.dafont.com/dungeon-sn.font).
+
+### Code references
+
+- The GLSL `rotationMatrix()` function in `src/shaders/3D_facing.vs.glsl` comes from [Neil Mendoza's arbitrary-axis rotation example](https://www.neilmendoza.com/glsl-rotation-about-an-arbitrary-axis/).
+- Text rendering follows the [LearnOpenGL text-rendering tutorial](https://learnopengl.com/In-Practice/Text-Rendering). The text shaders and parts of `TextRenderer.cpp` adapt that tutorial to the project's class structure.
+
+### Libraries
+
+GLFW, GLAD, Glimac, [GLM](https://github.com/g-truc/glm), [PPMIo](https://github.com/leimao/PPMIo), [JSON for Modern C++](https://github.com/nlohmann/json), and FreeType.
+
+Project code is licensed under the [MIT License](LICENSE). Third-party assets and libraries retain their respective licenses.
